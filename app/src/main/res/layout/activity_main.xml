@@ -9,24 +9,24 @@
     tools:context="com.gamesbykevin.a2048.MainActivity">
     <TableLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:stretchColumns="1">
-        <TableRow>
-            <Button
-                android:id="@+id/ButtonStart"
-                android:text="Start"
-                style="@style/MenuButton"
-                />
+        android:stretchColumns="0">
+        <TableRow style="@style/MenuButtonRow">
+            <Button android:id="@+id/ButtonStart" android:text="Start" style="@style/MenuButton" />
         </TableRow>
-        <TableRow>
-            <Button
-                android:id="@+id/ButtonOptions"
-                android:text="Options"
-                style="@style/MenuButton"
-                />
-
+        <TableRow style="@style/MenuButtonRow">
+            <Button android:id="@+id/ButtonOptions" android:text="Options" style="@style/MenuButton" />
+        </TableRow>
+        <TableRow style="@style/MenuButtonRow">
+            <Button android:id="@+id/ButtonRate" android:text="Rate" style="@style/MenuButton" />
+        </TableRow>
+        <TableRow style="@style/MenuButtonRow">
+            <Button android:id="@+id/ButtonMore" android:text="More" style="@style/MenuButton" />
+        </TableRow>
+        <TableRow style="@style/MenuButtonRow">
+            <Button android:id="@+id/ButtonExit" android:text="Exit" style="@style/MenuButton" />
         </TableRow>
     </TableLayout>
 </android.support.constraint.ConstraintLayout>

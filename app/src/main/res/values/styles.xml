@@ -21,7 +21,7 @@
 
     <style name="MenuButton">
         <item name="android:textSize">12pt</item>
-
+        <item name="android:layout_gravity">center</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/colorBlack</item>
@@ -34,4 +34,8 @@
         -->
     </style>
 
+    <style name="MenuButtonRow">
+        <item name="android:paddingBottom">15dip</item>
+        <item name="android:paddingTop">15dip</item>
+    </style>
 </resources>
