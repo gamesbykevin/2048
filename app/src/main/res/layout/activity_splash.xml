@@ -8,21 +8,17 @@
     android:background="@drawable/background"
     tools:context="com.gamesbykevin.a2048.SplashActivity">
 
-    <TableLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical">
+    <TableLayout style="@style/TableLayoutSplash">
         <TableRow>
             <ImageView
-                android:id="@+id/imageView1"
+                android:id="@+id/SiteLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/sitelogo" />
         </TableRow>
         <TableRow>
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/LoadingImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/loading" />

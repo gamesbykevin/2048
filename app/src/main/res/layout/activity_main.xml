@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+<LinearLayout
+-->
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,26 +10,35 @@
     android:orientation="horizontal"
     android:background="@drawable/background"
     tools:context="com.gamesbykevin.a2048.MainActivity">
+
     <TableLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:stretchColumns="0">
-        <TableRow style="@style/MenuButtonRow">
-            <Button android:id="@+id/ButtonStart" android:text="Start" style="@style/MenuButton" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+        <TableRow style="@style/RowMenu">
+            <ImageView android:src="@drawable/sitelogo" />
         </TableRow>
-        <TableRow style="@style/MenuButtonRow">
-            <Button android:id="@+id/ButtonOptions" android:text="Options" style="@style/MenuButton" />
+
+        <TableRow style="@style/RowMenu">
+            <Button android:id="@+id/ButtonStart" style="@style/ButtonMenu" android:text="Start" android:onClick="onClickStart" />
         </TableRow>
-        <TableRow style="@style/MenuButtonRow">
-            <Button android:id="@+id/ButtonRate" android:text="Rate" style="@style/MenuButton" />
+        <TableRow style="@style/RowMenu">
+            <Button android:id="@+id/ButtonOptions" style="@style/ButtonMenu" android:text="Options" android:onClick="onClickOptions" />
         </TableRow>
-        <TableRow style="@style/MenuButtonRow">
-            <Button android:id="@+id/ButtonMore" android:text="More" style="@style/MenuButton" />
+        <TableRow style="@style/RowMenu">
+            <Button android:id="@+id/ButtonRate" style="@style/ButtonMenu" android:text="Rate" android:onClick="onClickRate" />
         </TableRow>
-        <TableRow style="@style/MenuButtonRow">
-            <Button android:id="@+id/ButtonExit" android:text="Exit" style="@style/MenuButton" />
+        <TableRow style="@style/RowMenu">
+            <Button android:id="@+id/ButtonMore" style="@style/ButtonMenu" android:text="More" android:onClick="onClickMore" />
+        </TableRow>
+        <TableRow style="@style/RowMenu">
+            <Button android:id="@+id/ButtonExit" style="@style/ButtonMenu" android:text="Exit" android:onClick="onClickExit" />
+        </TableRow>
+        <TableRow style="@style/RowSocial">
+            <Button android:id="@+id/yt" android:background="@drawable/yt" style="@style/ButtonSocial" android:onClick="ButtonYoutube" />
+            <Button android:id="@+id/fb" android:background="@drawable/fb" style="@style/ButtonSocial" android:onClick="ButtonFacebook" />
+            <Button android:id="@+id/tw" android:background="@drawable/tw" style="@style/ButtonSocial" android:onClick="ButtonTwitter" />
+            <Button android:id="@+id/qn" android:background="@drawable/qn" style="@style/ButtonSocial" android:onClick="ButtonHelp" />
         </TableRow>
     </TableLayout>
 </android.support.constraint.ConstraintLayout>
