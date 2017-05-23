@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-<LinearLayout
--->
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:background="@drawable/background"
+    style="@style/ActivityPage"
     tools:context="com.gamesbykevin.a2048.MainActivity">
 
     <TableLayout
@@ -35,10 +29,7 @@
             <Button android:id="@+id/ButtonExit" style="@style/ButtonMenu" android:text="Exit" android:onClick="onClickExit" />
         </TableRow>
         <TableRow style="@style/RowSocial">
-            <Button android:id="@+id/yt" android:background="@drawable/yt" style="@style/ButtonSocial" android:onClick="ButtonYoutube" />
-            <Button android:id="@+id/fb" android:background="@drawable/fb" style="@style/ButtonSocial" android:onClick="ButtonFacebook" />
-            <Button android:id="@+id/tw" android:background="@drawable/tw" style="@style/ButtonSocial" android:onClick="ButtonTwitter" />
-            <Button android:id="@+id/qn" android:background="@drawable/qn" style="@style/ButtonSocial" android:onClick="ButtonHelp" />
+            <include layout="@layout/social_layout" />
         </TableRow>
     </TableLayout>
 </android.support.constraint.ConstraintLayout>

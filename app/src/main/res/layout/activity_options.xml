@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ActivityPage"
+    tools:context="com.gamesbykevin.a2048.OptionsActivity">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+        <TableRow style="@style/RowMenu">
+            <ImageView android:src="@drawable/sitelogo" />
+        </TableRow>
+
+        <TableRow style="@style/RowMenu">
+            <ToggleButton
+                style="@style/ButtonMenu"
+                android:id="@+id/ToggleButtonVibrate"
+                android:textOn="@string/vibrate_on"
+                android:textOff="@string/vibrate_off"
+                android:checked="true" />
+        </TableRow>
+        <TableRow style="@style/RowMenu">
+            <ToggleButton
+                style="@style/ButtonMenu"
+                android:id="@+id/ToggleButtonSound"
+                android:textOn="@string/sound_on"
+                android:textOff="@string/sound_off"
+                android:checked="true" />
+        </TableRow>
+        <TableRow style="@style/RowSocial">
+            <include layout="@layout/social_layout" />
+        </TableRow>
+    </TableLayout>
+</android.support.constraint.ConstraintLayout>

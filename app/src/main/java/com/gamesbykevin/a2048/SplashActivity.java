@@ -11,21 +11,29 @@ import android.view.View;
 
 public class SplashActivity extends AppCompatActivity {
 
+    /**
+     * The amount of time to display the splash screen (in milliseconds)
+     */
+    public static final long SPLASH_DELAY = 2500L;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        //delay a couple seconds before going to main page
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();
-
             }
 
-        }, 3000);
+        }, SPLASH_DELAY);
     }
 
+    @Override
+    public void onBackPressed() {
+        return;
+    }
 }
