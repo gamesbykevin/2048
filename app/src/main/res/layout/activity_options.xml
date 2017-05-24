@@ -19,6 +19,7 @@
                 android:id="@+id/ToggleButtonVibrate"
                 android:textOn="@string/vibrate_on"
                 android:textOff="@string/vibrate_off"
+                android:onClick="onClickVibrate"
                 android:checked="true" />
         </TableRow>
         <TableRow style="@style/RowMenu">
@@ -27,6 +28,7 @@
                 android:id="@+id/ToggleButtonSound"
                 android:textOn="@string/sound_on"
                 android:textOff="@string/sound_off"
+                android:onClick="onClickSound"
                 android:checked="true" />
         </TableRow>
         <TableRow style="@style/RowSocial">
