@@ -11,29 +11,21 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Log.i("2048","onCreate");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        Log.i("2048","onDestroy");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        Log.i("2048","onPause");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        Log.i("2048","onResume");
     }
 
     @Override
@@ -44,23 +36,34 @@ public class MainActivity extends BaseActivity {
 
     public void onClickStart(View view) {
         //start game
+        Intent intent = new Intent(this, GameActivity.class);
+        startActivity(intent);
     }
 
     public void onClickOptions(View view) {
         //start options activity
         Intent intent = new Intent(this, OptionsActivity.class);
         startActivity(intent);
+
+        //play sound effect
+        super.playSoundEffect();
     }
 
     public void onClickRate(View view) {
+
+        //open the url
         openUrl(URL_RATE);
     }
 
     public void onClickMore(View view) {
+
+        //open the url
         openUrl(URL_WEBSITE);
     }
 
     public void onClickExit(View view) {
+
+        //close activity altogether
         super.finish();
     }
 }

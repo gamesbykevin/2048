@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/ActivityPage"
     tools:context="com.gamesbykevin.a2048.MainActivity">
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center">
-        <TableRow style="@style/RowMenu">
-            <ImageView android:src="@drawable/sitelogo" />
-        </TableRow>
+    <include layout="@layout/layout_logo" />
 
+    <TableLayout style="@style/TableMenu">
         <TableRow style="@style/RowMenu">
             <Button android:id="@+id/ButtonStart" style="@style/ButtonMenu" android:text="Start" android:onClick="onClickStart" />
         </TableRow>
@@ -28,8 +23,7 @@
         <TableRow style="@style/RowMenu">
             <Button android:id="@+id/ButtonExit" style="@style/ButtonMenu" android:text="Exit" android:onClick="onClickExit" />
         </TableRow>
-        <TableRow style="@style/RowSocial">
-            <include layout="@layout/social_layout" />
-        </TableRow>
     </TableLayout>
-</android.support.constraint.ConstraintLayout>
+
+    <include layout="@layout/layout_social_icons" />
+</LinearLayout>

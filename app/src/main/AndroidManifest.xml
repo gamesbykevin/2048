@@ -33,7 +33,8 @@
         <activity
             android:name=".OptionsActivity"
             android:label="@string/title_activity_options"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".GameActivity"></activity>
     </application>
 
 </manifest>

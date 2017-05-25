@@ -1,0 +1,9 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView
+        android:src="@drawable/sitelogo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        />
+</merge>

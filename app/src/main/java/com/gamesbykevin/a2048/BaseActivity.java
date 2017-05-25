@@ -173,6 +173,9 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected void openUrl(final String url) {
 
+        //play sound effect
+        playSoundEffect();
+
         //if not established create the intent
         if (this.intent == null) {
             this.intent = new Intent(Intent.ACTION_VIEW);
