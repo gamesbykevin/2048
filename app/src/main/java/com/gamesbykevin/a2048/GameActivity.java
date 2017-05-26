@@ -16,10 +16,19 @@ public class GameActivity extends AppCompatActivity {
         //create our game view object
         this.gameView = new GameView(this);
 
-        this.gameView.getHolder().addCallback(this.gameView);
+        //add callback to game view so we can capture motion events
+        getGameView().getHolder().addCallback(getGameView());
 
         //make it the activity view
-        setContentView(this.gameView);
+        setContentView(getGameView());
+    }
+
+    /**
+     * Get the gamem view
+     * @return Our object containing game mechanics / rendering etc...
+     */
+    private GameView getGameView() {
+        return this.gameView;
     }
 
     @Override
@@ -27,9 +36,6 @@ public class GameActivity extends AppCompatActivity {
     {
         //call parent functionality
         super.onStart();
-
-        this.gameView.render();
-
     }
 
     @Override
@@ -42,11 +48,17 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
+        //pause the game view
+        getGameView().pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        //resume the game view
+        getGameView().resume();
     }
 
     @Override

@@ -12,8 +12,7 @@ import android.view.SurfaceView;
 /**
  * Created by Kevin on 5/24/2017.
  */
-
-public class GameView extends SurfaceView implements SurfaceHolder.Callback {
+public class GameView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
 
     //area where game play is rendered
     private final SurfaceHolder holder;
@@ -21,28 +20,84 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     //our canvas to render image(s)
     private Canvas canvas;
 
+    //our game mechanics will run on this thread
+    private Thread thread;
+
+    //keep our thread running
+    private volatile boolean running = true;
+
     public GameView(GameActivity activity) {
         super(activity);
 
+        //get the holder surface for rendering
         this.holder = getHolder();
+    }
+
+    @Override
+    public void run() {
+
+        //do we continue to loop
+        while (running) {
+
+            try {
+
+                //update the game state
+                update();
+
+                //render the image
+                draw();
+
+                //control the game speed
+                control();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Update the game state
+     */
+    private void update() {
 
     }
 
-    public void render() {
+    /**
+     * Make sure we maintain game speed
+     * @throws InterruptedException
+     */
+    private void control() throws InterruptedException {
+        this.thread.sleep(17);
+    }
+
+    /**
+     * Pause the game. Stop the main game thread
+     */
+    public void pause() {
+
+        //flag that we don't want our thread to continue running
+        this.running = false;
+
         try {
-            this.canvas = this.holder.lockCanvas();
-
-
-            //make sure no other threads are accessing the holder
-            synchronized (this.holder) {
-                //if the canvas object was obtained, render
-                draw(this.canvas);
-            }
-
-            this.holder.unlockCanvasAndPost(this.canvas);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            //wait for thread to finish
+            this.thread.join();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    /**
+     * When game is resumed start thread again
+     */
+    public void resume() {
+        this.running = true;
+
+        //create the thread
+        this.thread = new Thread(this);
+
+        //start the thread
+        this.thread.start();
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
@@ -62,28 +117,36 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         return true;
     }
 
-    @Override
-    public void onDraw(Canvas canvas) {
-        draw(canvas);
-    }
-
-    @Override
-    public void draw(Canvas canvas) {
+    /**
+     * Render the game image to screen surface
+     */
+    private void draw() {
         try {
-            super.draw(canvas);
 
-            //store the canvas state
-            final int savedState = canvas.save();
+            //get the canvas
+            this.canvas = this.holder.lockCanvas();
 
-            //red background
-            canvas.drawColor(Color.RED);
+            //make sure the canvas is available
+            if (this.canvas != null) {
 
-            canvas.drawText("Hi", 100, 100, new Paint());
+                //make sure no other threads are accessing the holder
+                synchronized (this.holder) {
 
-            this.canvas.restoreToCount(savedState);
+                    //store the canvas state
+                    final int savedState = this.canvas.save();
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
+                    //do our drawing
+                    this.canvas.drawColor(Color.RED);
+
+                    //restore the canvas state
+                    this.canvas.restoreToCount(savedState);
+                }
+
+                //let go and render image
+                this.holder.unlockCanvasAndPost(this.canvas);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
