@@ -10,6 +10,8 @@ import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import static com.gamesbykevin.a2048.MainActivity.DEBUG;
+
 /**
  * Created by Kevin on 5/22/2017.
  */
@@ -131,7 +133,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 getSoundSelection().start();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            MainActivity.handleException(e);
         }
     }
 

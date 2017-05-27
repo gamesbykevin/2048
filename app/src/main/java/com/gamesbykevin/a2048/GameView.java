@@ -1,13 +1,15 @@
 package com.gamesbykevin.a2048;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import java.util.Calendar;
+
+import static com.gamesbykevin.a2048.MainActivity.DEBUG;
+
 
 /**
  * Created by Kevin on 5/24/2017.
@@ -26,7 +28,49 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
     //keep our thread running
     private volatile boolean running = true;
 
+    //track the time to keep a steady game speed
+    private long previous;
+
+    /**
+     * Frames per second
+     */
+    public static final int FPS = 60;
+
+    /**
+     * The duration of each frame (milliseconds)
+     */
+    public static final long FRAME_DURATION = (long)(1000.0d / FPS);
+
+    /**
+     * How many milliseconds per second
+     */
+    public static final long MILLISECONDS_PER_SECOND = 1000L;
+
+    //count the number of frames for debugging purposes
+    private int frames = 0;
+
+    //keep track of time for debug purposes
+    private Calendar calendar = Calendar.getInstance();
+
+    /**
+     * Default dimensions this game was designed for
+     */
+    public static final int WIDTH = 480;
+
+    /**
+     * Default dimensions this game was designed for
+     */
+    public static final int HEIGHT = 800;
+
+    //get the ratio of the users screen compared to the default dimensions for the motion event
+    private float scaleMotionX, scaleMotionY;
+
+    //get the ratio of the users screen compared to the default dimensions for the render
+    private float scaleRenderX, scaleRenderY;
+
     public GameView(GameActivity activity) {
+
+        //call parent constructor
         super(activity);
 
         //get the holder surface for rendering
@@ -41,6 +85,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
 
             try {
 
+                //get the current time
+                this.previous = System.currentTimeMillis();
+
                 //update the game state
                 update();
 
@@ -51,7 +98,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
                 control();
 
             } catch (Exception e) {
-                e.printStackTrace();
+                MainActivity.handleException(e);
             }
         }
     }
@@ -60,7 +107,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
      * Update the game state
      */
     private void update() {
-
+        //game logic here?
     }
 
     /**
@@ -68,7 +115,48 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
      * @throws InterruptedException
      */
     private void control() throws InterruptedException {
-        this.thread.sleep(17);
+
+        //calculate how much time had passed
+        final long duration = System.currentTimeMillis() - this.previous;
+
+        //we want each loop to have the same duration to maintain fps
+        long remaining = (FRAME_DURATION > duration) ? FRAME_DURATION - duration : 1;
+
+        //log event id this loop is running slow
+        if (remaining <= 0)
+            MainActivity.logEvent("Slow: " + remaining);
+
+        //make sure time remaining is a valid number
+        remaining = (remaining <= 0) ? 1 : remaining;
+
+        //sleep the thread to maintain a steady game speed
+        this.thread.sleep(remaining);
+
+        //if debugging track performance
+        if (DEBUG)
+            trackProgress();
+    }
+
+    /**
+     * Track progress for debugging purposes
+     */
+    private void trackProgress() {
+
+        //keep track of the frames
+        this.frames++;
+
+        //if 1 second has passed, print fps counter
+        if (System.currentTimeMillis() - calendar.getTimeInMillis() >= MILLISECONDS_PER_SECOND) {
+
+            //print progress
+            MainActivity.logEvent("FPS: " + frames);
+
+            //reset timer for next update
+            calendar = Calendar.getInstance();
+
+            //reset frame count
+            this.frames = 0;
+        }
     }
 
     /**
@@ -83,7 +171,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
             //wait for thread to finish
             this.thread.join();
         } catch (Exception e) {
-            e.printStackTrace();
+            MainActivity.handleException(e);
         }
     }
 
@@ -101,28 +189,63 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+        //surface shouldn't change as we are keeping same orientation
     }
 
+    /**
+     * When the surface is created we need make calculations based on screen size.
+     * @param holder Object containing the surface
+     */
     public void surfaceCreated(SurfaceHolder holder) {
+        //store the ratio for the motion event
+        this.scaleMotionX = (float)WIDTH / getWidth();
+        this.scaleMotionY = (float)HEIGHT / getHeight();
+
+        //store the ratio for the render
+        this.scaleRenderX = getWidth() / (float)WIDTH;
+        this.scaleRenderY = getHeight() / (float)HEIGHT;
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
+        //we handle pause game in GameActivity, no need to do anything here
     }
 
     @Override
     public boolean onTouchEvent(final MotionEvent event) {
-        Log.i("2048", "Action: " + event.getAction());
 
-        //return true because we want to keep receiving touch events
-        return true;
+        try
+        {
+            //adjust the coordinates where touch event occurred
+            final float x = event.getRawX() * scaleMotionX;
+            final float y = event.getRawY() * scaleMotionY;
+
+            switch (event.getAction())
+            {
+                case MotionEvent.ACTION_DOWN:
+                    break;
+
+                case MotionEvent.ACTION_UP:
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            MainActivity.handleException(e);
+        }
+
+        MainActivity.logEvent("Action: " + event.getAction());
+        MainActivity.logEvent("Action Masked: " + event.getActionMasked());
+
+        //return parent result
+        return super.onTouchEvent(event);
     }
 
     /**
      * Render the game image to screen surface
      */
     private void draw() {
-        try {
 
+        try {
             //get the canvas
             this.canvas = this.holder.lockCanvas();
 
@@ -135,6 +258,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
                     //store the canvas state
                     final int savedState = this.canvas.save();
 
+                    //scale to the screen size
+                    this.canvas.scale(scaleRenderX, scaleRenderY);
+
                     //do our drawing
                     this.canvas.drawColor(Color.RED);
 
@@ -146,7 +272,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
                 this.holder.unlockCanvasAndPost(this.canvas);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            MainActivity.handleException(e);
         }
     }
 }

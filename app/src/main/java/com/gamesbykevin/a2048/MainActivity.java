@@ -7,6 +7,11 @@ import android.view.View;
 
 public class MainActivity extends BaseActivity {
 
+    /**
+     * Do we debug the application?
+     */
+    public static final boolean DEBUG = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,5 +70,24 @@ public class MainActivity extends BaseActivity {
 
         //close activity altogether
         super.finish();
+    }
+
+    public static void handleException(final Exception exception) {
+        //if not debugging, don't continue
+        if (!DEBUG)
+            return;
+
+        //handle process
+        exception.printStackTrace();
+    }
+
+    public static void logEvent(final String message) {
+
+        //if not debugging, don't continue
+        if (!DEBUG)
+            return;
+
+        //handle process
+        Log.i("2048", message);
     }
 }
