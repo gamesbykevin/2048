@@ -6,6 +6,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.gamesbykevin.a2048.game.GameManager;
+
 import java.util.Calendar;
 
 import static com.gamesbykevin.a2048.MainActivity.DEBUG;
@@ -68,6 +71,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
     //get the ratio of the users screen compared to the default dimensions for the render
     private float scaleRenderX, scaleRenderY;
 
+    //manage game specific objects
+    private GameManager manager;
+
     public GameView(GameActivity activity) {
 
         //call parent constructor
@@ -75,6 +81,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
 
         //get the holder surface for rendering
         this.holder = getHolder();
+
+        //create a new instance of game manager
+        this.manager = new GameManager();
     }
 
     @Override
@@ -101,13 +110,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
                 MainActivity.handleException(e);
             }
         }
-    }
-
-    /**
-     * Update the game state
-     */
-    private void update() {
-        //game logic here?
     }
 
     /**
@@ -241,6 +243,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
     }
 
     /**
+     * Update the game state
+     */
+    private void update() {
+        //update game logic here
+        this.manager.update();
+    }
+
+    /**
      * Render the game image to screen surface
      */
     private void draw() {
@@ -262,7 +272,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
                     this.canvas.scale(scaleRenderX, scaleRenderY);
 
                     //do our drawing
-                    this.canvas.drawColor(Color.RED);
+                    this.canvas.drawColor(Color.BLACK);
+
+                    //render game objects
+                    this.manager.draw(this.canvas);
 
                     //restore the canvas state
                     this.canvas.restoreToCount(savedState);
