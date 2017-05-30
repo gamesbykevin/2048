@@ -1,6 +1,7 @@
 package com.gamesbykevin.a2048;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;

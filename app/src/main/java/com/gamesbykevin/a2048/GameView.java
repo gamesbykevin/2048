@@ -83,7 +83,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
         this.holder = getHolder();
 
         //create a new instance of game manager
-        this.manager = new GameManager();
+        this.manager = new GameManager(activity);
     }
 
     @Override
@@ -224,9 +224,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
             switch (event.getAction())
             {
                 case MotionEvent.ACTION_DOWN:
+                    this.manager.onTouchEvent(event.getAction(), x, y);
                     break;
 
                 case MotionEvent.ACTION_UP:
+                    this.manager.onTouchEvent(event.getAction(), x, y);
                     break;
             }
         }
@@ -246,6 +248,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
      * Update the game state
      */
     private void update() {
+
         //update game logic here
         this.manager.update();
     }
