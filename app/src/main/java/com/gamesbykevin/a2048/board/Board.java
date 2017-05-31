@@ -7,6 +7,7 @@ package com.gamesbykevin.a2048.board;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
+import com.gamesbykevin.a2048.GameActivity;
 import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.androidframework.anim.Animation;
 import com.gamesbykevin.androidframework.base.Cell;
@@ -41,12 +42,22 @@ public class Board {
     /**
      * Dimensions of the border
      */
-    private static final int BORDER_DIMENSIONS = 102;
+    public static final int BORDER_DIMENSIONS = 102;
 
     /**
      * The thickness of the border outline
      */
     protected static final int BORDER_THICKNESS = 6;
+
+    /**
+     * Number of columns on our board
+     */
+    protected static final int COLUMNS = 4;
+
+    /**
+     * Number of rows on our board
+     */
+    protected static final int ROWS = 4;
 
     /**
      * Default constructor
@@ -81,34 +92,85 @@ public class Board {
         this.background.setHeight(ANIMATION_DIMENSIONS);
         this.background.getSpritesheet().add("Default", new Animation(spriteSheet, 0, 0, ANIMATION_DIMENSIONS, ANIMATION_DIMENSIONS));
 
-        addBlock(0,0);
-        addBlock(1,1);
-        addBlock(0,4);
+        //create some default blocks
+        spawn();
+    }
+
+    /**
+     * Create a block and place at a random place on the board that is available.<br>
+     * If the board is empty we will spawn 2 blocks, else we spawn 1 block
+     */
+    public void spawn() {
+
+        //create the list that will contain our available blocks
+        List<Cell> available = new ArrayList<>();
+
+        //check every location to see what is available
+        for (int col = 0; col < COLUMNS; col++) {
+            for (int row = 0; row < ROWS; row++) {
+                if (!hasBlock(col, row)) {
+                    available.add(new Cell(col, row));
+                }
+            }
+        }
+
+        //pick a random index
+        int index = GameActivity.RANDOM.nextInt(available.size());
+
+        //if the board is empty we will spawn 2 blocks
+        if (this.blocks.isEmpty()) {
+
+            //spawn one block at this random location
+            addBlock(available.get(index), GameActivity.RANDOM.nextBoolean() ? 2 : 4);
+
+            //remove from our list of available spawn points
+            available.remove(index);
+
+            //choose a new random spot
+            index = GameActivity.RANDOM.nextInt(available.size());
+
+            //spawn one block at a new random location again
+            addBlock(available.get(index), GameActivity.RANDOM.nextBoolean() ? 2 : 4);
+        } else {
+
+            //spawn one block at this random location
+            addBlock(available.get(index), GameActivity.RANDOM.nextBoolean() ? 2 : 4);
+        }
+    }
+
+    /**
+     *
+     * @param cell
+     * @param value
+     */
+    public void addBlock(Cell cell, int value) {
+       addBlock((int)cell.getCol(), (int)cell.getRow(), value);
     }
 
     /**
      *
      * @param col
      * @param row
+     * @param value
      */
-    public void addBlock(int col, int row) {
+    public void addBlock(int col, int row, int value) {
        Block block = new Block();
 
         //assign the location
         block.setCol(col);
         block.setRow(row);
 
-        block.setValue(2);
+        block.setValue(value);
 
         //add block to the list
         this.blocks.add(block);
     }
 
     /**
-     *
-     * @param col
-     * @param row
-     * @return
+     * Do we have a block at this location?
+     * @param col Column
+     * @param row Row
+     * @return true if a block exists at the specified space, false otherwise
      */
     public boolean hasBlock(final int col, final int row) {
 
@@ -142,9 +204,9 @@ public class Board {
      */
     public void draw(Canvas canvas) throws Exception {
 
-        //render the background first
-        for (int col = 0; col < 5; col++) {
-            for (int row = 0; row < 5; row++) {
+        //render the background tile first
+        for (int col = 0; col < COLUMNS; col++) {
+            for (int row = 0; row < ROWS; row++) {
 
                 this.background.setCol(col);
                 this.background.setRow(row);
@@ -178,8 +240,8 @@ public class Board {
         }
 
         //render the borders on top of the blocks
-        for (int col = 0; col < 5; col++) {
-            for (int row = 0; row < 5; row++) {
+        for (int col = 0; col < COLUMNS; col++) {
+            for (int row = 0; row < ROWS; row++) {
 
                 //assign the border coordinates
                 border.setX((START_X - BORDER_THICKNESS) + (col * (double)(BORDER_DIMENSIONS - BORDER_THICKNESS)));

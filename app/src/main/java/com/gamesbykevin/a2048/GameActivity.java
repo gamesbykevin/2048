@@ -4,14 +4,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
 
+import java.util.Random;
+
 public class GameActivity extends AppCompatActivity {
 
     //our game view where action takes place
     private GameView gameView;
 
+    /**
+     * Create a random object which the seed as the current time stamp
+     */
+    public static Random RANDOM;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //get the current timestamp
+        final long time = System.nanoTime();
+
+        //print the random seed
+        MainActivity.logEvent("Random seed :" + time);
+
+        //create our Random object
+        RANDOM = new Random(time);
 
         //create our game view object
         this.gameView = new GameView(this);
@@ -24,7 +40,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     /**
-     * Get the gamem view
+     * Get the game view
      * @return Our object containing game mechanics / rendering etc...
      */
     private GameView getGameView() {

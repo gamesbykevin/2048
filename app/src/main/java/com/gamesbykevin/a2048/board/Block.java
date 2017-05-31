@@ -25,12 +25,12 @@ public class Block extends Entity {
     /**
      * The starting coordinate of the north-west block
      */
-    protected static final int START_X = 8;
+    protected static final int START_X = 48;
 
     /**
      * The starting coordinate of the north-west block
      */
-    protected static final int START_Y = 100;
+    protected static final int START_Y = 125;
 
     /**
      * List of possible animations for the block
@@ -119,6 +119,14 @@ public class Block extends Entity {
      *
      * @return
      */
+    protected boolean hasTarget() {
+        return getTarget().hasLocation(this);
+    }
+
+    /**
+     *
+     * @return
+     */
     protected Cell getTarget() {
         return this.target;
     }
@@ -201,8 +209,8 @@ public class Block extends Entity {
     }
 
     /**
-     *
-     * @param block
+     * Assign the (x,y) rendering coordinates of an object
+     * @param block The object we want to update the render coordinates, preferably a Block
      */
     protected static void updateCoordinates(final Entity block) {
         block.setX(START_X + (block.getCol() * (double)(ANIMATION_DIMENSIONS + BORDER_THICKNESS)));

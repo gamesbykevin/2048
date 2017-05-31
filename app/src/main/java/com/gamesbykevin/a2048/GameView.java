@@ -221,16 +221,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
             final float x = event.getRawX() * scaleMotionX;
             final float y = event.getRawY() * scaleMotionY;
 
-            switch (event.getAction())
-            {
-                case MotionEvent.ACTION_DOWN:
-                    this.manager.onTouchEvent(event.getAction(), x, y);
-                    break;
-
-                case MotionEvent.ACTION_UP:
-                    this.manager.onTouchEvent(event.getAction(), x, y);
-                    break;
-            }
+            //update game accordingly
+            this.manager.onTouchEvent(event.getAction(), x, y);
         }
         catch (Exception e)
         {
@@ -240,8 +232,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
         MainActivity.logEvent("Action: " + event.getAction());
         MainActivity.logEvent("Action Masked: " + event.getActionMasked());
 
-        //return parent result
-        return super.onTouchEvent(event);
+        //return true to keep receiving touch events
+        return true;
     }
 
     /**
