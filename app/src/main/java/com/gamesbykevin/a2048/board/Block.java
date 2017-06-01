@@ -25,12 +25,12 @@ public class Block extends Entity {
     /**
      * The starting coordinate of the north-west block
      */
-    protected static final int START_X = 48;
+    public static final int START_X = 48;
 
     /**
      * The starting coordinate of the north-west block
      */
-    protected static final int START_Y = 125;
+    public static final int START_Y = 125;
 
     /**
      * List of possible animations for the block
@@ -68,6 +68,16 @@ public class Block extends Entity {
     }
 
     /**
+     * How fast do the blocks move?
+     */
+    protected static final float VELOCITY = 0.5f;
+
+    /**
+     * No velocity
+     */
+    protected static final float VELOCITY_NONE = 0.0f;
+
+    /**
      * Default constructor
      */
     protected Block() {
@@ -81,6 +91,65 @@ public class Block extends Entity {
         //assign the size at which we will render the  block
         setWidth(ANIMATION_DIMENSIONS);
         setHeight(ANIMATION_DIMENSIONS);
+    }
+
+    /**
+     * Update the block location based on (x,y) velocity
+     */
+    protected void update() {
+
+        //if we are not at our target update
+        if (!hasTarget()) {
+
+            //if the column does not match, we need to move horizontal
+            if (getCol() != getTarget().getCol()) {
+                if (getCol() > getTarget().getCol()) {
+                    setDX(-VELOCITY);
+                } else {
+                    setDX(VELOCITY);
+                }
+            }
+
+            //if the row does not match we need to move vertical
+            if (getRow() != getTarget().getRow()) {
+                if (getRow() > getTarget().getRow()) {
+                    setDY(-VELOCITY);
+                } else {
+                    setDY(VELOCITY);
+                }
+            }
+
+            //update our location
+            setCol(getCol() + getDX());
+            setRow(getRow() + getDY());
+
+            //check horizontal velocity
+            if (getDX() > 0) {
+                if (getCol() >= getTarget().getCol()) {
+                    setCol(getTarget().getCol());
+                    setDX(VELOCITY_NONE);
+                }
+
+            } else if (getDX() < 0) {
+                if (getCol() <= getTarget().getCol()) {
+                    setCol(getTarget().getCol());
+                    setDX(VELOCITY_NONE);
+                }
+            }
+
+            //check vertical velocity
+            if (getDY() > 0) {
+                if (getRow() >= getTarget().getRow()) {
+                    setRow(getTarget().getRow());
+                    setDY(VELOCITY_NONE);
+                }
+            } else if (getDY() < 0) {
+                if (getRow() <= getTarget().getRow()) {
+                    setRow(getTarget().getRow());
+                    setDY(VELOCITY_NONE);
+                }
+            }
+        }
     }
 
     /**
@@ -128,6 +197,9 @@ public class Block extends Entity {
      * @return
      */
     protected Cell getTarget() {
+        if (this.target == null)
+            this.target = new Cell();
+
         return this.target;
     }
 

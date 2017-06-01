@@ -59,6 +59,12 @@ public class Board {
      */
     protected static final int ROWS = 4;
 
+    //what is our score
+    private int score = 0;
+
+    //is the game over
+    private boolean gameover = false;
+
     /**
      * Default constructor
      */
@@ -94,6 +100,47 @@ public class Board {
 
         //create some default blocks
         spawn();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getScore() {
+        return this.score;
+    }
+
+    /**
+     *
+     * @param score
+     */
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<Block> getBlocks() {
+        return this.blocks;
+    }
+
+    /**
+     * Get a block at the desired location
+     * @param col Column
+     * @param row Row
+     * @return The block at the specified location, if none found null is returned
+     */
+    protected Block getBlock(int col, int row) {
+
+        //check each block in the list
+        for (int i = 0; i < getBlocks().size(); i++) {
+            if (getBlocks().get(i).hasLocation(col, row))
+                return getBlocks().get(i);
+        }
+
+        return null;
     }
 
     /**
@@ -136,6 +183,9 @@ public class Board {
             //spawn one block at this random location
             addBlock(available.get(index), GameActivity.RANDOM.nextBoolean() ? 2 : 4);
         }
+
+        //now that the new block has  spawned, check if the game is over
+        this.gameover = BoardHelper.isGameOver(this);
     }
 
     /**
@@ -160,10 +210,15 @@ public class Board {
         block.setCol(col);
         block.setRow(row);
 
+        //make the current location the target as well
+        block.setColTarget(col);
+        block.setRowTarget(row);
+
+        //assign the block value as well
         block.setValue(value);
 
         //add block to the list
-        this.blocks.add(block);
+        getBlocks().add(block);
     }
 
     /**
@@ -175,8 +230,8 @@ public class Board {
     public boolean hasBlock(final int col, final int row) {
 
         //check all the blocks
-        for (int i = 0; i < blocks.size(); i++) {
-            Cell cell = blocks.get(i);
+        for (int i = 0; i < getBlocks().size(); i++) {
+            Cell cell = getBlocks().get(i);
 
             //if the column and row matches, return true
             if ((int)cell.getCol() == col && (int)cell.getRow() == row)
@@ -192,10 +247,53 @@ public class Board {
      */
     public void update() {
 
-        //update all the blocks
-        for (int i = 0; i < blocks.size(); i++) {
+        //are all of the blocks at their target
+        final boolean hasTarget = hasTarget();
 
+        //update all the blocks
+        for (int i = 0; i < getBlocks().size(); i++) {
+            getBlocks().get(i).update();
         }
+
+        //if we weren't at the target but am now, we can update the merged blocks
+        if (!hasTarget && hasTarget()) {
+            BoardHelper.updateMerged(this);
+
+            //how do we check to see if the game is over?
+            if (BoardHelper.isGameOver(this)) {
+
+                //flag game over true
+                this.gameover = true;
+
+                MainActivity.logEvent("GAME OVER!!!!!!!!!!!");
+            }
+        }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isGameover() {
+        return this.gameover;
+    }
+
+    /**
+     * Are we at our target
+     * @return true if all blocks are at their target, false otherwise
+     */
+    public boolean hasTarget() {
+
+        //check every block
+        for (int i = 0; i < getBlocks().size(); i++) {
+
+            //if one block doesn't have the target we can't continue
+            if (!getBlocks().get(i).hasTarget())
+                return false;
+        }
+
+        //all blocks are at their target we return true
+        return true;
     }
 
     /**
@@ -218,9 +316,9 @@ public class Board {
         }
 
         //render all the blocks
-        for (int i = 0; i < blocks.size(); i++) {
+        for (int i = 0; i < getBlocks().size(); i++) {
 
-            final Block tmp = blocks.get(i);
+            final Block tmp = getBlocks().get(i);
 
             //update the entity position (col, row)
             block.setCol(tmp);

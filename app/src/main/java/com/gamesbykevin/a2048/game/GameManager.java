@@ -6,6 +6,8 @@ package com.gamesbykevin.a2048.game;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.MotionEvent;
 
 import com.gamesbykevin.a2048.GameActivity;
@@ -13,6 +15,7 @@ import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.board.Block;
 import com.gamesbykevin.a2048.board.Board;
+import com.gamesbykevin.a2048.board.BoardHelper;
 
 /**
  * The GameMananger class will keep all of our game object(s) logic
@@ -31,8 +34,18 @@ public class GameManager {
     //was down pressed
     private boolean pressed = false;
 
-    //which direction do we want to merge
-    private boolean north = false, south = false, east = false, west = false;
+    /**
+     * Different ways we can merge
+     */
+    public enum Merge {
+        North, South, East, West
+    }
+
+    //which way are we merging
+    private Merge merge = null;
+
+    //object used to render the score
+    private Paint paint;
 
     /**
      * Default constructor
@@ -50,8 +63,8 @@ public class GameManager {
 
     public boolean onTouchEvent(final int action, final float x, final float y) {
 
-        //don't continue if we have already swiped in a direction
-        if (north || south || west || east)
+        //don't continue if we are already merging
+        if (merge != null)
             return true;
 
         switch (action)
@@ -85,8 +98,8 @@ public class GameManager {
                     //calculate the y-coordinate difference
                     float diffY = (y > this.downY) ? y - this.downY : this.downY - y;
 
-                    //if we didn't swipe enough, no need to continue
-                    if (diffX < Board.BORDER_DIMENSIONS && diffY < Board.BORDER_DIMENSIONS)
+                    //if we didn't swipe long enough, don't continue
+                    if (diffX < Board.BORDER_DIMENSIONS / 2 && diffY < Board.BORDER_DIMENSIONS / 2)
                         return true;
 
                     //determine which way we are swiping
@@ -98,16 +111,16 @@ public class GameManager {
                             //we are swiping right
                             MainActivity.logEvent("Swiping Right");
 
-                            //flag east true
-                            this.east = true;
+                            //merging east
+                            this.merge = Merge.East;
 
                         } else {
 
                             //we are swiping left
                             MainActivity.logEvent("Swiping Left");
 
-                            //flag west true
-                            this.west = true;
+                            //merging west
+                            this.merge = Merge.West;
                         }
 
                     } else {
@@ -117,29 +130,42 @@ public class GameManager {
                             //we are swiping down
                             MainActivity.logEvent("Swiping Down");
 
-                            //flag south true
-                            this.south = true;
+                            //merging south
+                            this.merge = Merge.South;
 
                         } else {
 
                             //we are swiping up
                             MainActivity.logEvent("Swiping Up");
 
-                            //flag north true
-                            this.north = true;
+                            //merging north
+                            this.merge = Merge.North;
                         }
                     }
 
                     //update the blocks accordingly on where we want to head
-                    if (north) {
+                    switch (this.merge) {
 
-                    } else if (south) {
+                        case West:
+                            BoardHelper.mergeWest(getBoard());
+                            break;
 
-                    } else if (west) {
+                        case East:
+                            BoardHelper.mergeEast(getBoard());
+                            break;
 
-                    } else if (east) {
+                        case North:
+                            BoardHelper.mergeNorth(getBoard());
+                            break;
 
+                        case South:
+                            BoardHelper.mergeSouth(getBoard());
+                            break;
                     }
+
+                    //if all blocks are already at their target, then nothing will happen, go again
+                    if (getBoard().hasTarget())
+                        this.merge = null;
                 }
 
                 break;
@@ -152,7 +178,26 @@ public class GameManager {
      * Update game objects
      */
     public void update() {
-        this.board.update();
+
+        //if the blocks are at their target, we can merge again and spawn a new block
+        if (this.merge != null && getBoard().hasTarget()) {
+
+            //we can merge again
+            this.merge = null;
+
+            //spawn a new block
+            getBoard().spawn();
+        }
+
+        getBoard().update();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Board getBoard() {
+        return this.board;
     }
 
     /**
@@ -161,7 +206,22 @@ public class GameManager {
      */
     public void draw(Canvas canvas) {
         try {
-            this.board.draw(canvas);
+            //render the board
+            getBoard().draw(canvas);
+
+            if (this.paint == null) {
+                this.paint = new Paint();
+                this.paint.setStyle(Paint.Style.FILL);
+                this.paint.setTextSize(48f);
+                this.paint.setColor(Color.WHITE);
+            }
+
+            //render the current score
+            canvas.drawText("Score: " + getBoard().getScore(), Block.START_X, 75, paint);
+
+            if (getBoard().isGameover()) {
+                canvas.drawText("Game Over", Block.START_X, 700, paint);
+            }
         } catch (Exception e) {
             MainActivity.handleException(e);
         }
