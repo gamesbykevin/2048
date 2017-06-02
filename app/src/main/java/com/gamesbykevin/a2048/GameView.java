@@ -34,10 +34,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
     //track the time to keep a steady game speed
     private long previous;
 
+    private long previousUpdate;
+    private long previousDraw;
+    private long postUpdate;
+    private long postDraw;
+
     /**
      * Frames per second
      */
-    public static final int FPS = 60;
+    public static final int FPS = 30;
 
     /**
      * The duration of each frame (milliseconds)
@@ -122,11 +127,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
         final long duration = System.currentTimeMillis() - this.previous;
 
         //we want each loop to have the same duration to maintain fps
-        long remaining = (FRAME_DURATION > duration) ? FRAME_DURATION - duration : 1;
+        long remaining = FRAME_DURATION - duration;
 
         //log event id this loop is running slow
-        if (remaining <= 0)
+        if (remaining <= 0) {
             MainActivity.logEvent("Slow: " + remaining);
+            MainActivity.logEvent("Update duration: " + (this.postUpdate - this.previousUpdate));
+            MainActivity.logEvent("Draw   duration: " + (this.postDraw - this.previousDraw));
+        }
+
+        //make sure we sleep at least 1 millisecond
+        if (remaining < 1)
+            remaining = 1;
 
         //make sure time remaining is a valid number
         remaining = (remaining <= 0) ? 1 : remaining;
@@ -241,8 +253,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
      */
     private void update() {
 
+        //track time before update
+        this.previousUpdate = System.currentTimeMillis();
+
         //update game logic here
         this.manager.update();
+
+        //track time after update
+        this.postUpdate = System.currentTimeMillis();
     }
 
     /**
@@ -250,7 +268,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
      */
     private void draw() {
 
+        //track time before draw
+        this.previousDraw = System.currentTimeMillis();
+
         try {
+
             //get the canvas
             this.canvas = this.holder.lockCanvas();
 
@@ -282,5 +304,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
         } catch (Exception e) {
             MainActivity.handleException(e);
         }
+
+        //track time after draw
+        this.postDraw = System.currentTimeMillis();
     }
 }

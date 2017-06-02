@@ -1,15 +1,20 @@
 package com.gamesbykevin.a2048;
 
-import android.support.v7.app.AppCompatActivity;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.view.SurfaceHolder;
+import android.widget.LinearLayout;
+
+import com.gamesbykevin.a2048.opengl.GLSurf;
 
 import java.util.Random;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends BaseActivity {
 
     //our game view where action takes place
     private GameView gameView;
+
+    //our open GL surface view
+    private GLSurfaceView glSurfaceView;
 
     /**
      * Create a random object which the seed as the current time stamp
@@ -20,23 +25,29 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //set the content view
+        setContentView(R.layout.activity_game);
+
         //get the current timestamp
         final long time = System.nanoTime();
 
         //print the random seed
-        MainActivity.logEvent("Random seed :" + time);
+        MainActivity.logEvent("Random seed: " + time);
 
         //create our Random object
         RANDOM = new Random(time);
 
+        //obtain our opengl surface view object for reference
+        this.glSurfaceView = (GLSurf)findViewById(R.id.openglView);
+
         //create our game view object
-        this.gameView = new GameView(this);
+        //this.gameView = new GameView(this);
 
         //add callback to game view so we can capture motion events
-        getGameView().getHolder().addCallback(getGameView());
+        //getGameView().getHolder().addCallback(getGameView());
 
         //make it the activity view
-        setContentView(getGameView());
+        //setContentView(getGameView());
     }
 
     /**
@@ -66,7 +77,8 @@ public class GameActivity extends AppCompatActivity {
         super.onPause();
 
         //pause the game view
-        getGameView().pause();
+        //getGameView().pause();
+        glSurfaceView.onPause();
     }
 
     @Override
@@ -74,7 +86,8 @@ public class GameActivity extends AppCompatActivity {
         super.onResume();
 
         //resume the game view
-        getGameView().resume();
+        //getGameView().resume();
+        glSurfaceView.onResume();
     }
 
     @Override

@@ -187,6 +187,11 @@ public class GameManager {
 
             //spawn a new block
             getBoard().spawn();
+
+            //if the game is over vibrate the phone
+            if (getBoard().isGameover()) {
+                activity.vibrate();
+            }
         }
 
         getBoard().update();

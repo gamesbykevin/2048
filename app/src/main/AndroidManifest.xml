@@ -17,7 +17,6 @@
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -30,11 +29,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".OptionsActivity"
-            android:label="@string/title_activity_options"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".GameActivity"></activity>
+        <activity android:name=".OptionsActivity" android:label="@string/title_activity_options" android:theme="@style/AppTheme" />
+        <activity android:name=".GameActivity" android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

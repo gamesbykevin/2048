@@ -1,7 +1,6 @@
 package com.gamesbykevin.a2048;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -78,6 +77,9 @@ public class MainActivity extends BaseActivity {
         if (!DEBUG)
             return;
 
+        //log as error
+        Log.e("2048", exception.getMessage());
+
         //handle process
         exception.printStackTrace();
     }
@@ -88,7 +90,7 @@ public class MainActivity extends BaseActivity {
         if (!DEBUG)
             return;
 
-        //handle process
+        //log string as information
         Log.i("2048", message);
     }
 }

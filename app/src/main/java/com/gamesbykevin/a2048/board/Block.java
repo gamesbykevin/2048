@@ -70,7 +70,7 @@ public class Block extends Entity {
     /**
      * How fast do the blocks move?
      */
-    protected static final float VELOCITY = 0.5f;
+    protected static final float VELOCITY = 1.0f;
 
     /**
      * No velocity
