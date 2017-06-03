@@ -12,47 +12,55 @@ import com.gamesbykevin.a2048.opengl.GLRenderer;
 
 public class GLSurf extends GLSurfaceView {
 
-    private final GLRenderer mRenderer;
+    /**
+     * The version of open GL we are using
+     */
+    public static final int OPEN_GL_VERSION = 2;
+
+    /**
+     * Our object where we render our pixel data
+     */
+    private final GLRenderer glRenderer;
 
     public GLSurf(Context context) {
-        super(context);
 
-        // Create an OpenGL ES 2.0 context.
-        setEGLContextClientVersion(2);
-
-        // Set the Renderer for drawing on the GLSurfaceView
-        mRenderer = new GLRenderer(context);
-        setRenderer(mRenderer);
-
-        // Render the view only when there is a change in the drawing data
-        setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+        //call overloaded constructor
+        this(context, null);
     }
 
     public GLSurf(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         // Create an OpenGL ES 2.0 context.
-        setEGLContextClientVersion(2);
+        setEGLContextClientVersion(OPEN_GL_VERSION);
 
-        // Set the Renderer for drawing on the GLSurfaceView
-        mRenderer = new GLRenderer(context);
-        setRenderer(mRenderer);
+        //create a new instance of our renderer
+        this.glRenderer = new GLRenderer();
 
-        // Render the view only when there is a change in the drawing data
-        setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+        //set the renderer for drawing on the gl surface view
+        setRenderer(this.glRenderer);
+
+        //set render mode to only draw when there is a change in the drawing data
+        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
     @Override
     public void onPause() {
-        // TODO Auto-generated method stub
+
+        //call parent function
         super.onPause();
-        mRenderer.onPause();
+
+        //also pause our render
+        glRenderer.onPause();
     }
 
     @Override
     public void onResume() {
-        // TODO Auto-generated method stub
+
+        //call parent function
         super.onResume();
-        mRenderer.onResume();
+
+        //also resume our render
+        glRenderer.onResume();
     }
 }
