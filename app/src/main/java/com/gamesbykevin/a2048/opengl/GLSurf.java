@@ -35,7 +35,7 @@ public class GLSurf extends GLSurfaceView {
         setEGLContextClientVersion(OPEN_GL_VERSION);
 
         //create a new instance of our renderer
-        this.glRenderer = new GLRenderer();
+        this.glRenderer = new GLRenderer(context);
 
         //set the renderer for drawing on the gl surface view
         setRenderer(this.glRenderer);
