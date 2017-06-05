@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
+
+import com.gamesbykevin.a2048.GameView;
 import com.gamesbykevin.a2048.R;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -20,9 +22,11 @@ public class GLRenderer implements Renderer {
     //our square that we want to render
     private Sprite sprite;
 
+    private Sprite sprite2;
+
     private Context mContext;
 
-    // Our matrices
+    //our matrices
     private final float[] mtrxProjection = new float[16];
     private final float[] mtrxView = new float[16];
     private final float[] mtrxProjectionAndView = new float[16];
@@ -51,6 +55,7 @@ public class GLRenderer implements Renderer {
 
         //now that the surface is created, lets create our sprite image
         this.sprite = new Sprite(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.fb));
+        this.sprite2 = new Sprite(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.yt));
     }
 
     /**
@@ -64,6 +69,7 @@ public class GLRenderer implements Renderer {
 
         //draw the square
         this.sprite.draw(mtrxProjectionAndView);
+        this.sprite2.draw(mtrxProjectionAndView);
     }
 
     /**
@@ -74,21 +80,22 @@ public class GLRenderer implements Renderer {
      * @param height
      */
     public void onSurfaceChanged(GL10 unused, int width, int height) {
-        // Clear our matrices
-        for(int i=0; i<mtrxProjectionAndView.length; i++)
+
+        //clear our matrices
+        for(int i = 0; i < mtrxProjectionAndView.length; i++)
         {
             mtrxProjection[i] = 0.0f;
             mtrxView[i] = 0.0f;
             mtrxProjectionAndView[i] = 0.0f;
         }
 
-        // Setup our screen width and height for normal sprite translation.
-        Matrix.orthoM(mtrxProjection, 0, 0f, 480, 0.0f, 800, 0, 50);
+        //Setup our screen width and height for normal sprite translation.
+        Matrix.orthoM(mtrxProjection, 0, 0f, GameView.WIDTH, 0.0f, GameView.HEIGHT, 0, 50);
 
-        // Set the camera position (View matrix)
+        //Set the camera position (View matrix)
         Matrix.setLookAtM(mtrxView, 0, 0f, 0f, 1f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
-        // Calculate the projection and view transformation
+        //Calculate the projection and view transformation
         Matrix.multiplyMM(mtrxProjectionAndView, 0, mtrxProjection, 0, mtrxView, 0);
     }
 }
