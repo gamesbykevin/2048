@@ -9,8 +9,21 @@ import android.opengl.Matrix;
 import com.gamesbykevin.a2048.GameView;
 import com.gamesbykevin.a2048.R;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import static com.gamesbykevin.a2048.opengl.ShaderHelper.fs_Image;
+import static com.gamesbykevin.a2048.opengl.ShaderHelper.fs_SolidColor;
+import static com.gamesbykevin.a2048.opengl.ShaderHelper.loadShader;
+import static com.gamesbykevin.a2048.opengl.ShaderHelper.sp_Image;
+import static com.gamesbykevin.a2048.opengl.ShaderHelper.sp_SolidColor;
+import static com.gamesbykevin.a2048.opengl.ShaderHelper.vs_Image;
+import static com.gamesbykevin.a2048.opengl.ShaderHelper.vs_SolidColor;
 
 
 /**
@@ -19,10 +32,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class GLRenderer implements Renderer {
 
-    //our square that we want to render
-    private Sprite sprite;
-
-    private Sprite sprite2;
+    private ArrayList<Sprite> textures = new ArrayList<>();
 
     private Context mContext;
 
@@ -30,6 +40,9 @@ public class GLRenderer implements Renderer {
     private final float[] mtrxProjection = new float[16];
     private final float[] mtrxView = new float[16];
     private final float[] mtrxProjectionAndView = new float[16];
+
+    public static float uvs[];
+    public static FloatBuffer uvBuffer;
 
     public GLRenderer(Context context) {
         this.mContext = context;
@@ -54,8 +67,53 @@ public class GLRenderer implements Renderer {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         //now that the surface is created, lets create our sprite image
-        this.sprite = new Sprite(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.fb));
-        this.sprite2 = new Sprite(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.yt));
+        Sprite sprite1 = new Sprite(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.fb));
+        Sprite sprite2 = new Sprite(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.yt));
+
+        this.textures.add(sprite1);
+        this.textures.add(sprite2);
+
+        // Create our UV coordinates.
+        uvs = new float[] {
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f
+        };
+
+        //the texture buffer
+        ByteBuffer bb = ByteBuffer.allocateDirect(uvs.length * 4);
+        bb.order(ByteOrder.nativeOrder());
+        uvBuffer = bb.asFloatBuffer();
+        uvBuffer.put(uvs);
+        uvBuffer.position(0);
+
+        //create and assign our shaders etc...
+        setupShader();
+    }
+
+    private void setupShader() {
+
+        // Create the shaders, solid color
+        int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vs_SolidColor);
+        int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fs_SolidColor);
+
+        sp_SolidColor = GLES20.glCreateProgram();             // create empty OpenGL ES Program
+        GLES20.glAttachShader(sp_SolidColor, vertexShader);   // add the vertex shader to program
+        GLES20.glAttachShader(sp_SolidColor, fragmentShader); // add the fragment shader to program
+        GLES20.glLinkProgram(sp_SolidColor);                  // creates OpenGL ES program executables
+
+        // Create the shaders, images
+        vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vs_Image);
+        fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fs_Image);
+
+        sp_Image = GLES20.glCreateProgram();             // create empty OpenGL ES Program
+        GLES20.glAttachShader(sp_Image, vertexShader);   // add the vertex shader to program
+        GLES20.glAttachShader(sp_Image, fragmentShader); // add the fragment shader to program
+        GLES20.glLinkProgram(sp_Image);                  // creates OpenGL ES program executables
+
+        //set our shader program
+        GLES20.glUseProgram(sp_Image);
     }
 
     /**
@@ -68,8 +126,9 @@ public class GLRenderer implements Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
         //draw the square
-        this.sprite.draw(mtrxProjectionAndView);
-        this.sprite2.draw(mtrxProjectionAndView);
+        for (Sprite sprite : textures) {
+            sprite.draw(mtrxProjectionAndView);
+        }
     }
 
     /**

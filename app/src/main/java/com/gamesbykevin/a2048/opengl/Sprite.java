@@ -12,6 +12,7 @@ import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.Random;
 
+import static com.gamesbykevin.a2048.opengl.GLRenderer.uvBuffer;
 import static com.gamesbykevin.a2048.opengl.ShaderHelper.fs_Image;
 import static com.gamesbykevin.a2048.opengl.ShaderHelper.fs_SolidColor;
 import static com.gamesbykevin.a2048.opengl.ShaderHelper.loadShader;
@@ -29,129 +30,93 @@ public class Sprite {
     // Geometric variables
     public static float vertices[];
     public static short indices[];
-    public static float uvs[];
     public FloatBuffer vertexBuffer;
     public ShortBuffer drawListBuffer;
-    public FloatBuffer uvBuffer;
+
+    //each texture id is unique
+    private final int textureId;
 
     public Sprite(Bitmap bitmap) {
 
-        // Create the shaders, solid color
-        int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vs_SolidColor);
-        int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fs_SolidColor);
-
-        sp_SolidColor = GLES20.glCreateProgram();             // create empty OpenGL ES Program
-        GLES20.glAttachShader(sp_SolidColor, vertexShader);   // add the vertex shader to program
-        GLES20.glAttachShader(sp_SolidColor, fragmentShader); // add the fragment shader to program
-        GLES20.glLinkProgram(sp_SolidColor);                  // creates OpenGL ES program executables
-
-        // Create the shaders, images
-        vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vs_Image);
-        fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fs_Image);
-
-        sp_Image = GLES20.glCreateProgram();             // create empty OpenGL ES Program
-        GLES20.glAttachShader(sp_Image, vertexShader);   // add the vertex shader to program
-        GLES20.glAttachShader(sp_Image, fragmentShader); // add the fragment shader to program
-        GLES20.glLinkProgram(sp_Image);                  // creates OpenGL ES program executables
-
-        // Set our shader programm
-        GLES20.glUseProgram(sp_Image);
-
         //set the triangle coordinates
         setupTriangle();
-
-        //set the texture data
-        setupImage(bitmap);
-    }
-
-    public void setupImage(final Bitmap bitmap) {
-
-        // Create our UV coordinates.
-        uvs = new float[] {
-            0.0f, 0.0f,
-            0.0f, 1.0f,
-            1.0f, 1.0f,
-            1.0f, 0.0f
-        };
-
-        // The texture buffer
-        ByteBuffer bb = ByteBuffer.allocateDirect(uvs.length * 4);
-        bb.order(ByteOrder.nativeOrder());
-        uvBuffer = bb.asFloatBuffer();
-        uvBuffer.put(uvs);
-        uvBuffer.position(0);
 
         //Generate Textures, if more needed, alter these numbers.
         int[] textureNames = new int[1];
         GLES20.glGenTextures(1, textureNames, 0);
 
-        //bind the texture to the texture name
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        //bind the texture in open gl
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureNames[0]);
 
         // Set filtering
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
 
-        // Load the bitmap into the bound texture.
+        //load the bitmap into the bound texture.
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
 
-        // We are done using the bitmap so we should recycle it.
+        //since the bitmap has been loaded into open gl recycle it.
         bitmap.recycle();
+
+        //throw exception if the texture was not loaded successfully
+        if (textureNames[0] == 0) {
+            throw new RuntimeException("Error loading texture.");
+        }
+
+        //store the textureId reference accordingly
+        this.textureId = textureNames[0];
     }
 
-    /**
-     * Our square image will consist of 2 triangles
-     */
     public void setupTriangle() {
+
+        int x, y;
 
         switch (new Random().nextInt(4)) {
             case 0:
-                // We have to create the vertices of our triangle.
-                vertices = new float[]{
-                        0f, GameView.HEIGHT, 0f,
-                        0f, GameView.HEIGHT - 100, 0f,
-                        100f, GameView.HEIGHT - 100, 0f,
-                        100f, GameView.HEIGHT, 0f
-                };
+                x = 0;
+                y = GameView.HEIGHT;
                 break;
 
             case 1:
-                vertices = new float[]{
-                        GameView.WIDTH - 100, GameView.HEIGHT, 0f,
-                        GameView.WIDTH - 100, GameView.HEIGHT - 100, 0f,
-                        GameView.WIDTH, GameView.HEIGHT - 100, 0f,
-                        GameView.WIDTH, GameView.HEIGHT, 0f
-                };
+                x = GameView.WIDTH - 100;
+                y = GameView.HEIGHT;
                 break;
 
             case 2:
-                // We have to create the vertices of our triangle.
-                vertices = new float[]{
-                        0f, 100, 0f,
-                        0f, 0, 0f,
-                        100f, 0, 0f,
-                        100f, 100, 0f
-                };
+                x = 0;
+                y = 100;
                 break;
 
             case 3:
             default:
-                vertices = new float[]{
-                        GameView.WIDTH - 100, 100, 0f,
-                        GameView.WIDTH - 100, 0, 0f,
-                        GameView.WIDTH, 0, 0f,
-                        GameView.WIDTH, 100, 0f
-                };
+                x = GameView.WIDTH - 100;
+                y = 100;
                 break;
         }
 
-                /*
-            10.0f, 200f, 0.0f, // north west corner
-            10.0f, 100f, 0.0f, // south west corner
-            210f, 100f, 0.0f, // south east corner
-            210f, 200f, 0.0f, // north east corner
-            */
+
+        //this will flip the image
+        if (new Random().nextBoolean()) {
+
+            //display image normal
+            vertices = new float[]{
+                x, y, 0f,
+                x, y - 100, 0f,
+                x + 100, y - 100, 0f,
+                x + 100, y, 0f
+            };
+
+        } else {
+
+            //display image upside down, facing the opposite direction
+            vertices = new float[]{
+                x + 100, y - 100, 0f,
+                x + 100, y, 0f,
+                x, y, 0f,
+                x, y - 100, 0f
+            };
+
+        }
 
         //order of vertex rendering
         if (indices == null)
@@ -192,17 +157,22 @@ public class Sprite {
         // Prepare the texture coordinates
         GLES20.glVertexAttribPointer(mTexCoordLoc, 2, GLES20.GL_FLOAT, false, 0, uvBuffer);
 
-        // Get handle to shape's transformation matrix
+        //get handle to shape's transformation matrix
         int mtrxhandle = GLES20.glGetUniformLocation(sp_Image, "uMVPMatrix");
 
-        // Apply the projection and view transformation
+        //apply the projection and view transformation
         GLES20.glUniformMatrix4fv(mtrxhandle, 1, false, m, 0);
 
-        // Get handle to textures locations
+        //get handle to textures locations
         int mSamplerLoc = GLES20.glGetUniformLocation(sp_Image, "s_texture" );
 
-        // Set the sampler texture unit to 0, where we have saved the texture.
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+
+        //set the sampler texture unit to 0, where we have saved the texture.
         GLES20.glUniform1i(mSamplerLoc, 0);
+
+        //bind the correct texture before we draw it
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, this.textureId);
 
         //Draw the triangle
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, indices.length, GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
