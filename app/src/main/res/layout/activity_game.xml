@@ -8,7 +8,7 @@
     android:id="@+id/layoutGame"
     tools:context="com.gamesbykevin.a2048.GameActivity">
 
-    <com.gamesbykevin.a2048.opengl.GLSurf
+    <com.gamesbykevin.a2048.opengl.OpenGLSurfaceView
         android:id="@+id/openglView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

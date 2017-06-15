@@ -2,9 +2,8 @@ package com.gamesbykevin.a2048;
 
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.widget.LinearLayout;
 
-import com.gamesbykevin.a2048.opengl.GLSurf;
+import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
 
 import java.util.Random;
 
@@ -38,7 +37,7 @@ public class GameActivity extends BaseActivity {
         RANDOM = new Random(time);
 
         //obtain our opengl surface view object for reference
-        this.glSurfaceView = (GLSurf)findViewById(R.id.openglView);
+        this.glSurfaceView = (OpenGLSurfaceView)findViewById(R.id.openglView);
 
         //create our game view object
         //this.gameView = new GameView(this);

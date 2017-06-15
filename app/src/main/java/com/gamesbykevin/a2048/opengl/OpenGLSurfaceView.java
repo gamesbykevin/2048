@@ -4,41 +4,39 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
-import com.gamesbykevin.a2048.opengl.GLRenderer;
-
 /**
  * Created by Kevin on 6/1/2017.
  */
 
-public class GLSurf extends GLSurfaceView {
+public class OpenGLSurfaceView extends GLSurfaceView {
 
     /**
      * The version of open GL we are using
      */
-    public static final int OPEN_GL_VERSION = 2;
+    public static final int OPEN_GL_VERSION = 1;
 
     /**
      * Our object where we render our pixel data
      */
-    private final GLRenderer glRenderer;
+    private final OpenGLRenderer openGlRenderer;
 
-    public GLSurf(Context context) {
+    public OpenGLSurfaceView(Context context) {
 
         //call overloaded constructor
         this(context, null);
     }
 
-    public GLSurf(Context context, AttributeSet attrs) {
+    public OpenGLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        // Create an OpenGL ES 2.0 context.
+        // Create an OpenGL ES 1.0 context.
         setEGLContextClientVersion(OPEN_GL_VERSION);
 
         //create a new instance of our renderer
-        this.glRenderer = new GLRenderer(context);
+        this.openGlRenderer = new OpenGLRenderer(context);
 
         //set the renderer for drawing on the gl surface view
-        setRenderer(this.glRenderer);
+        setRenderer(this.openGlRenderer);
 
         //set render mode to only draw when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
@@ -51,7 +49,7 @@ public class GLSurf extends GLSurfaceView {
         super.onPause();
 
         //also pause our render
-        glRenderer.onPause();
+        openGlRenderer.onPause();
     }
 
     @Override
@@ -61,6 +59,6 @@ public class GLSurf extends GLSurfaceView {
         super.onResume();
 
         //also resume our render
-        glRenderer.onResume();
+        openGlRenderer.onResume();
     }
 }
