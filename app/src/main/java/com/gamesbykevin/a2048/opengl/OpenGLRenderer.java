@@ -1,24 +1,22 @@
 package com.gamesbykevin.a2048.opengl;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
-import android.opengl.GLU;
-import android.opengl.GLUtils;
-import android.opengl.Matrix;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 
-import com.gamesbykevin.a2048.GameView;
+import com.gamesbykevin.a2048.GameActivity;
+import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.R;
+import com.gamesbykevin.a2048.game.GameManager;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import static com.gamesbykevin.a2048.MainActivity.DEBUG;
 
 /**
  * Created by Kevin on 6/1/2017.
@@ -26,12 +24,17 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class OpenGLRenderer implements Renderer {
 
-    private Context mContext;
 
-    private int[] textures;
+    private final Context activity;
 
-    public OpenGLRenderer(Context context) {
-        this.mContext = context;
+    private Sprite sprite1, sprite2;
+
+    //get the ratio of the users screen compared to the default dimensions for the render
+    private float scaleRenderX, scaleRenderY;
+
+    public OpenGLRenderer(Context activity) {
+
+        this.activity = activity;
     }
 
     public void onPause() {
@@ -47,69 +50,44 @@ public class OpenGLRenderer implements Renderer {
      * @param gl
      * @param config
      */
+    @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
-        //create int array with the number of textures we want
-        textures = new int[1];
+        this.sprite1 = new Sprite(BitmapFactory.decodeResource(activity.getResources(), R.drawable.blocks), gl);
+        this.sprite2 = new Sprite(BitmapFactory.decodeResource(activity.getResources(), R.drawable.yt), gl);
 
-        // Tell OpenGL to generate textures.
-        gl.glGenTextures(1, textures, 0);
+        gl.glEnable(GL10.GL_TEXTURE_2D);
+        gl.glEnable(GL10.GL_ALPHA_TEST);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.fb);
+        //show alpha if greater than 0.01f
+        gl.glAlphaFunc(GL10.GL_GREATER, 0.01f);
 
-        //bind the bitmap to the texture id
-        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
-
-        //Delete the textures.
-        //gl.glDeleteTextures(1, textures, 0);
-
-        //Set the background color to black ( rgba ).
-        gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
-
-        FloatBuffer byteBuf = ByteBuffer.allocateDirect(textures.length * 4);
-        byteBuf.order(ByteOrder.nativeOrder());
-        textureBuffer = byteBuf.asFloatBuffer();
-        textureBuffer.put(textureCoordinates);
-        textureBuffer.position(0);
-
-        /*
-        //Enable Smooth Shading, default not really needed.
-        gl.glShadeModel(GL10.GL_SMOOTH);
-
-        //Depth buffer setup.
-        gl.glClearDepthf(1.0f);
-
-        //Enables depth testing.
-        gl.glEnable(GL10.GL_DEPTH_TEST);
-
-        //The type of depth testing to do.
-        gl.glDepthFunc(GL10.GL_LEQUAL);
-
-        //Really nice perspective calculations.
-        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
-        */
+        gl.glEnable(GL10.GL_BLEND);
+        gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
     }
 
     /**
      * Called for each redraw of the view
      * @param gl
      */
+    @Override
     public void onDrawFrame(GL10 gl) {
 
-        // Clears the screen and depth buffer.
+        //clears the screen and depth buffer.
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
-        // Telling OpenGL to enable textures.
-        gl.glEnable(GL10.GL_TEXTURE_2D);
+        //reset the projection matrix
+        gl.glLoadIdentity();
 
-        // Tell OpenGL where our texture is located.
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
+        //scale to our game dimensions to match the users screen
+        gl.glScalef(scaleRenderX, scaleRenderY, 0.0f);
 
-        // Tell OpenGL to enable the use of UV coordinates.
-        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 
-        // Telling OpenGL where our UV coordinates are.
-        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+
+        //render game objects
+
+        sprite1.draw(gl, 0, 0, OpenGLSurfaceView.WIDTH, OpenGLSurfaceView.WIDTH);
+        sprite2.draw(gl, 240, 600, 64, 64);
     }
 
     /**
@@ -119,32 +97,35 @@ public class OpenGLRenderer implements Renderer {
      * @param width
      * @param height
      */
+    @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
 
-        // Sets the current view port to the new size.
+        //store the ratio for the render
+        this.scaleRenderX = width / (float)OpenGLSurfaceView.WIDTH;
+        this.scaleRenderY = height / (float)OpenGLSurfaceView.HEIGHT;
+
+        //sets the current view port to the new size of the screen
         gl.glViewport(0, 0, width, height);
 
-        // Select the projection matrix
+        //reset the projection matrix back to its default state
+        gl.glLoadIdentity();
+
+        //select the projection matrix
         gl.glMatrixMode(GL10.GL_PROJECTION);
 
-        // Reset the projection matrix
-        gl.glLoadIdentity();
+        //set dimensions
+        gl.glOrthof(0.0f, width, height, 0.0f, 1.0f, -1.0f);
 
-        // Calculate the aspect ratio of the window
-        GLU.gluPerspective(gl, 45.0f, (float) width / (float) height, 0.1f, 100.0f);
-
-        // Select the modelview matrix
+        //select the model view matrix
         gl.glMatrixMode(GL10.GL_MODELVIEW);
 
-        // Reset the modelview matrix
-        gl.glLoadIdentity();
+        //enable 2d textures
+        gl.glEnable(GL10.GL_TEXTURE_2D);
 
+        //enable alpha blending with textures
+        gl.glEnable(GL10.GL_BLEND);
 
-
-        //portion of the image to render, this is the whole bitmap
-        float textureCoordinates[] = {0.0f, 1.0f,
-                1.0f, 1.0f,
-                0.0f, 0.0f,
-                1.0f, 0.0f };
+        //add blend function for alpha
+        gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
     }
 }

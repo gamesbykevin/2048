@@ -21,6 +21,7 @@ import java.util.List;
 import static com.gamesbykevin.a2048.board.Block.ANIMATION_DIMENSIONS;
 import static com.gamesbykevin.a2048.board.Block.START_X;
 import static com.gamesbykevin.a2048.board.Block.START_Y;
+import static com.gamesbykevin.a2048.GameActivity.getRandomObject;
 
 /**
  * The game board where the action takes place
@@ -162,26 +163,26 @@ public class Board {
         }
 
         //pick a random index
-        int index = GameActivity.RANDOM.nextInt(available.size());
+        int index = getRandomObject().nextInt(available.size());
 
         //if the board is empty we will spawn 2 blocks
         if (this.blocks.isEmpty()) {
 
             //spawn one block at this random location
-            addBlock(available.get(index), GameActivity.RANDOM.nextBoolean() ? 2 : 4);
+            addBlock(available.get(index), getRandomObject().nextBoolean() ? 2 : 4);
 
             //remove from our list of available spawn points
             available.remove(index);
 
             //choose a new random spot
-            index = GameActivity.RANDOM.nextInt(available.size());
+            index = getRandomObject().nextInt(available.size());
 
             //spawn one block at a new random location again
-            addBlock(available.get(index), GameActivity.RANDOM.nextBoolean() ? 2 : 4);
+            addBlock(available.get(index), getRandomObject().nextBoolean() ? 2 : 4);
         } else {
 
             //spawn one block at this random location
-            addBlock(available.get(index), GameActivity.RANDOM.nextBoolean() ? 2 : 4);
+            addBlock(available.get(index), getRandomObject().nextBoolean() ? 2 : 4);
         }
 
         //now that the new block has  spawned, check if the game is over
@@ -189,9 +190,9 @@ public class Board {
     }
 
     /**
-     *
-     * @param cell
-     * @param value
+     * Add a block to the board
+     * @param cell The desired position
+     * @param value The value of the block
      */
     public void addBlock(Cell cell, int value) {
        addBlock((int)cell.getCol(), (int)cell.getRow(), value);

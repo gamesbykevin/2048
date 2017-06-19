@@ -4,6 +4,7 @@ package com.gamesbykevin.a2048.game;
  * Created by Kevin on 5/26/2017.
  */
 
+import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -26,7 +27,7 @@ public class GameManager {
     private Board board;
 
     //store our activity reference
-    private final GameActivity activity;
+    private final Context activity;
 
     //keep track of the pressed down coordinates
     private float downX, downY;
@@ -50,7 +51,7 @@ public class GameManager {
     /**
      * Default constructor
      */
-    public GameManager(final GameActivity activity) {
+    public GameManager(final Context activity) {
 
         //store our activity reference
         this.activity = activity;
@@ -190,7 +191,7 @@ public class GameManager {
 
             //if the game is over vibrate the phone
             if (getBoard().isGameover()) {
-                activity.vibrate();
+                //activity.vibrate();
             }
         }
 
@@ -210,7 +211,10 @@ public class GameManager {
      * @param canvas Surface used for rendering pixels
      */
     public void draw(Canvas canvas) {
+
         try {
+
+            /*
             //render the board
             getBoard().draw(canvas);
 
@@ -227,6 +231,7 @@ public class GameManager {
             if (getBoard().isGameover()) {
                 canvas.drawText("Game Over", Block.START_X, 700, paint);
             }
+            */
         } catch (Exception e) {
             MainActivity.handleException(e);
         }

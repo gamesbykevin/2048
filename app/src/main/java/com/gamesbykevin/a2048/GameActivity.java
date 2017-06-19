@@ -18,26 +18,20 @@ public class GameActivity extends BaseActivity {
     /**
      * Create a random object which the seed as the current time stamp
      */
-    public static Random RANDOM;
+    private static Random RANDOM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //call parent
         super.onCreate(savedInstanceState);
 
         //set the content view
         setContentView(R.layout.activity_game);
 
-        //get the current timestamp
-        final long time = System.nanoTime();
-
-        //print the random seed
-        MainActivity.logEvent("Random seed: " + time);
-
-        //create our Random object
-        RANDOM = new Random(time);
-
-        //obtain our opengl surface view object for reference
+        //obtain our open gl surface view object for reference
         this.glSurfaceView = (OpenGLSurfaceView)findViewById(R.id.openglView);
+
 
         //create our game view object
         //this.gameView = new GameView(this);
@@ -47,6 +41,27 @@ public class GameActivity extends BaseActivity {
 
         //make it the activity view
         //setContentView(getGameView());
+    }
+
+    /**
+     * Get our random object.<br>
+     * If object is null a new instance will be instantiated
+     * @return Random object used to generate random events
+     */
+    public static Random getRandomObject() {
+        if (RANDOM == null) {
+
+            //get the current timestamp
+            final long time = System.nanoTime();
+
+            //create our Random object
+            RANDOM = new Random(time);
+
+            //print the random seed
+            MainActivity.logEvent("Random seed: " + time);
+        }
+
+        return RANDOM;
     }
 
     /**
