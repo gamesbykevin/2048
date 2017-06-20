@@ -292,7 +292,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
                     this.canvas.drawColor(Color.BLACK);
 
                     //render game objects
-                    this.manager.draw(this.canvas);
+                    //this.manager.draw(this.canvas);
 
                     //restore the canvas state
                     this.canvas.restoreToCount(savedState);

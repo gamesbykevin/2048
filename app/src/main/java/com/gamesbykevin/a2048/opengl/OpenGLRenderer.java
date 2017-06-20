@@ -1,22 +1,20 @@
 package com.gamesbykevin.a2048.opengl;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLSurfaceView.Renderer;
-import android.view.MotionEvent;
-import android.view.SurfaceHolder;
+import android.opengl.GLUtils;
+import android.support.v7.app.WindowDecorActionBar;
 
-import com.gamesbykevin.a2048.GameActivity;
 import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.game.GameManager;
 
-import java.util.Calendar;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import static com.gamesbykevin.a2048.MainActivity.DEBUG;
+import static com.gamesbykevin.a2048.board.Block.ANIMATION_DIMENSIONS;
 
 /**
  * Created by Kevin on 6/1/2017.
@@ -24,17 +22,20 @@ import static com.gamesbykevin.a2048.MainActivity.DEBUG;
 
 public class OpenGLRenderer implements Renderer {
 
-
+    //our activity reference
     private final Context activity;
 
-    private Sprite sprite1, sprite2;
+    //our game manager for rendering
+    private final GameManager manager;
 
     //get the ratio of the users screen compared to the default dimensions for the render
     private float scaleRenderX, scaleRenderY;
 
-    public OpenGLRenderer(Context activity) {
+    private int[] textures;
 
+    public OpenGLRenderer(Context activity, GameManager manager) {
         this.activity = activity;
+        this.manager = manager;
     }
 
     public void onPause() {
@@ -53,8 +54,20 @@ public class OpenGLRenderer implements Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
-        this.sprite1 = new Sprite(BitmapFactory.decodeResource(activity.getResources(), R.drawable.blocks), gl);
-        this.sprite2 = new Sprite(BitmapFactory.decodeResource(activity.getResources(), R.drawable.yt), gl);
+        //load 15 textures into our array
+        this.textures = new int[15];
+
+        Bitmap spriteSheet = BitmapFactory.decodeResource(activity.getResources(), R.drawable.blocks);
+
+        for (int i = 0; i < textures.length - 1; i++) {
+
+            Bitmap tmp = Bitmap.createBitmap(spriteSheet, i * ANIMATION_DIMENSIONS, 0, ANIMATION_DIMENSIONS, ANIMATION_DIMENSIONS);
+
+            loadTexture(tmp, gl, textures, i);
+        }
+
+        //load the texture
+        loadTexture(BitmapFactory.decodeResource(activity.getResources(), R.drawable.border), gl, textures, textures.length - 1);
 
         gl.glEnable(GL10.GL_TEXTURE_2D);
         gl.glEnable(GL10.GL_ALPHA_TEST);
@@ -64,6 +77,27 @@ public class OpenGLRenderer implements Renderer {
 
         gl.glEnable(GL10.GL_BLEND);
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+    }
+
+    public int loadTexture(Bitmap bitmap, GL10 gl, int[] textures, int index) {
+
+        //our container to generate the textures
+        gl.glGenTextures(1, textures, index);
+
+        //bind the texture id
+        gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[index]);
+
+        //add bitmap to texture
+        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+
+        //we no longer need the resource
+        bitmap.recycle();
+
+        //display texture id
+        MainActivity.logEvent("Texture id: " + textures[index]);
+
+        //return our texture id
+        return textures[index];
     }
 
     /**
@@ -82,12 +116,8 @@ public class OpenGLRenderer implements Renderer {
         //scale to our game dimensions to match the users screen
         gl.glScalef(scaleRenderX, scaleRenderY, 0.0f);
 
-
-
         //render game objects
-
-        sprite1.draw(gl, 0, 0, OpenGLSurfaceView.WIDTH, OpenGLSurfaceView.WIDTH);
-        sprite2.draw(gl, 240, 600, 64, 64);
+        this.manager.draw(gl, this.textures);
     }
 
     /**

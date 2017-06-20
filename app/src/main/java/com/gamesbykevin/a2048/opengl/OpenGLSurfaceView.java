@@ -99,20 +99,20 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         //store our activity reference
         this.activity = activity;
 
+        //create a new instance of game manager
+        this.manager = new GameManager(activity);
+
         //create an OpenGL ES 1.0 context.
         setEGLContextClientVersion(OPEN_GL_VERSION);
 
         //create a new instance of our renderer
-        this.openGlRenderer = new OpenGLRenderer(activity);
+        this.openGlRenderer = new OpenGLRenderer(activity, this.manager);
 
         //set the renderer for drawing on the gl surface view
         setRenderer(this.openGlRenderer);
 
         //set render mode to only draw when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-
-        //create a new instance of game manager
-        this.manager = new GameManager(activity);
     }
 
     /**

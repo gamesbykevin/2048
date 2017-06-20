@@ -1,5 +1,6 @@
 package com.gamesbykevin.a2048.board;
 
+import com.gamesbykevin.a2048.base.EntityItem;
 import com.gamesbykevin.androidframework.base.Cell;
 import com.gamesbykevin.androidframework.base.Entity;
 
@@ -9,7 +10,7 @@ import static com.gamesbykevin.a2048.board.Board.BORDER_THICKNESS;
  * Created by Kevin on 5/29/2017.
  */
 
-public class Block extends Entity {
+public class Block extends EntityItem {
 
     //what is the value of this block
     private int value = 0;
@@ -20,7 +21,7 @@ public class Block extends Entity {
     /**
      * Size of animation on sprite sheet
      */
-    protected static final int ANIMATION_DIMENSIONS = 90;
+    public static final int ANIMATION_DIMENSIONS = 90;
 
     /**
      * The starting coordinate of the north-west block

@@ -18,6 +18,8 @@ import com.gamesbykevin.a2048.board.Block;
 import com.gamesbykevin.a2048.board.Board;
 import com.gamesbykevin.a2048.board.BoardHelper;
 
+import javax.microedition.khronos.opengles.GL10;
+
 /**
  * The GameMananger class will keep all of our game object(s) logic
  */
@@ -57,9 +59,9 @@ public class GameManager {
         this.activity = activity;
 
         //create a new game board
-        this.board = new Board(
-            BitmapFactory.decodeResource(activity.getResources(), R.drawable.blocks),
-            BitmapFactory.decodeResource(activity.getResources(), R.drawable.border));
+        this.board = new Board();
+            //BitmapFactory.decodeResource(activity.getResources(), R.drawable.blocks),
+            //BitmapFactory.decodeResource(activity.getResources(), R.drawable.border));
     }
 
     public boolean onTouchEvent(final int action, final float x, final float y) {
@@ -208,11 +210,14 @@ public class GameManager {
 
     /**
      * Render the game objects
-     * @param canvas Surface used for rendering pixels
+     * @param gl Surface used for rendering pixels
      */
-    public void draw(Canvas canvas) {
+    public void draw(GL10 gl, final int[] textures) {
 
         try {
+
+            getBoard().assignTextures(textures);
+            getBoard().draw(gl);
 
             /*
             //render the board

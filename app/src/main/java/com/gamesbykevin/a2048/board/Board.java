@@ -7,16 +7,17 @@ package com.gamesbykevin.a2048.board;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-import com.gamesbykevin.a2048.GameActivity;
 import com.gamesbykevin.a2048.MainActivity;
+import com.gamesbykevin.a2048.base.EntityItem;
 import com.gamesbykevin.androidframework.anim.Animation;
 import com.gamesbykevin.androidframework.base.Cell;
 
 import com.gamesbykevin.a2048.board.Block.AnimationKey;
-import com.gamesbykevin.androidframework.base.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.microedition.khronos.opengles.GL10;
 
 import static com.gamesbykevin.a2048.board.Block.ANIMATION_DIMENSIONS;
 import static com.gamesbykevin.a2048.board.Block.START_X;
@@ -35,10 +36,10 @@ public class Board {
     private Block block;
 
     //the border of the board
-    private Entity border;
+    private EntityItem border;
 
     //the background of each block
-    private Entity background;
+    private EntityItem background;
 
     /**
      * Dimensions of the border
@@ -69,7 +70,7 @@ public class Board {
     /**
      * Default constructor
      */
-    public Board(final Bitmap spriteSheet, final Bitmap borderImage) {
+    public Board() {//final Bitmap spriteSheet, final Bitmap borderImage) {
 
         //create new array list to contain all the blocks
         this.blocks = new ArrayList<>();
@@ -77,6 +78,7 @@ public class Board {
         //create a new entity
         this.block = new Block();
 
+        /*
         //map out all of the animations so we can use for rendering
         for (AnimationKey key : AnimationKey.values()) {
 
@@ -86,18 +88,19 @@ public class Board {
             //add the animation to our sprite sheet for our entity
             this.block.getSpritesheet().add(key, anim);
         }
+        */
 
         //create border and set default values
-        this.border = new Entity();
+        this.border = new EntityItem();
         this.border.setWidth(BORDER_DIMENSIONS);
         this.border.setHeight(BORDER_DIMENSIONS);
-        this.border.getSpritesheet().add("Default", new Animation(borderImage));
+        //this.border.getSpritesheet().add("Default", new Animation(borderImage));
 
         //create the background and set default values
-        this.background = new Entity();
+        this.background = new EntityItem();
         this.background.setWidth(ANIMATION_DIMENSIONS);
         this.background.setHeight(ANIMATION_DIMENSIONS);
-        this.background.getSpritesheet().add("Default", new Animation(spriteSheet, 0, 0, ANIMATION_DIMENSIONS, ANIMATION_DIMENSIONS));
+        //this.background.getSpritesheet().add("Default", new Animation(spriteSheet, 0, 0, ANIMATION_DIMENSIONS, ANIMATION_DIMENSIONS));
 
         //create some default blocks
         spawn();
@@ -298,10 +301,83 @@ public class Board {
     }
 
     /**
-     * Render the game objects
-     * @param canvas Surface used for rendering pixels
+     * Make sure each object on the board has the correct texture id
+     * @param textures Array of texture ids for each image to be rendered
      */
-    public void draw(Canvas canvas) throws Exception {
+    public void assignTextures(final int[] textures) {
+
+        //assign texture id for the background
+        this.background.setTextureId(textures[0]);
+
+        //assign texture id for the border
+        this.border.setTextureId(textures[textures.length - 1]);
+
+        //assign texture id for each block
+        for (int i = 0; i < getBlocks().size(); i++) {
+            final Block tmp = getBlocks().get(i);
+
+            switch (tmp.getValue()) {
+                case 2:
+                default:
+                    tmp.setTextureId(textures[1]);
+                    break;
+
+                case 4:
+                    tmp.setTextureId(textures[2]);
+                    break;
+
+                case 8:
+                    tmp.setTextureId(textures[3]);
+                    break;
+
+                case 16:
+                    tmp.setTextureId(textures[4]);
+                    break;
+
+                case 32:
+                    tmp.setTextureId(textures[5]);
+                    break;
+
+                case 64:
+                    tmp.setTextureId(textures[6]);
+                    break;
+
+                case 128:
+                    tmp.setTextureId(textures[7]);
+                    break;
+
+                case 256:
+                    tmp.setTextureId(textures[8]);
+                    break;
+
+                case 512:
+                    tmp.setTextureId(textures[9]);
+                    break;
+
+                case 1024:
+                    tmp.setTextureId(textures[10]);
+                    break;
+
+                case 2048:
+                    tmp.setTextureId(textures[11]);
+                    break;
+
+                case 4096:
+                    tmp.setTextureId(textures[12]);
+                    break;
+
+                case 8192:
+                    tmp.setTextureId(textures[13]);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Render the game objects
+     * @param gl Surface used for rendering pixels
+     */
+    public void draw(GL10 gl) throws Exception {
 
         //render the background tile first
         for (int col = 0; col < COLUMNS; col++) {
@@ -312,7 +388,7 @@ public class Board {
 
                 Block.updateCoordinates(this.background);
 
-                this.background.render(canvas);
+                this.background.render(gl);
             }
         }
 
@@ -332,10 +408,11 @@ public class Board {
             block.setValue(tmp.getValue());
 
             //assign the correct animation
-            block.assignAnimation();
+            //block.assignAnimation();
+            block.setTextureId(tmp.getTextureId());
 
             //render the block
-            block.render(canvas);
+            block.render(gl);
         }
 
         //render the borders on top of the blocks
@@ -347,7 +424,7 @@ public class Board {
                 border.setY((START_Y - BORDER_THICKNESS) + (row * (double)(BORDER_DIMENSIONS - BORDER_THICKNESS)));
 
                 //render the border at the current location
-                border.render(canvas);
+                border.render(gl);
             }
         }
     }
