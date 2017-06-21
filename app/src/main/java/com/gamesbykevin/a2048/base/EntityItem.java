@@ -23,17 +23,17 @@ public class EntityItem extends com.gamesbykevin.androidframework.base.Entity {
     private FloatBuffer textureBuffer;
 
     private float[] vertices = {
-            0.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 1.0f, 0.0f
+        0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+        1.0f, 1.0f, 0.0f
     };
 
     private float[] textures = {
-            0.0f, 0.0f,
-            0.0f, 1.0f,
-            1.0f, 0.0f,
-            1.0f, 1.0f
+        0.0f, 0.0f,
+        0.0f, 1.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f
     };
 
     private int textureId;
@@ -75,14 +75,20 @@ public class EntityItem extends com.gamesbykevin.androidframework.base.Entity {
 
         //MainActivity.logEvent("" + x + "," + y + "," + w + "," + h);
 
+        //use for quick transformations so it will only apply to this object
+        gl.glPushMatrix();
+
         //assign render coordinates
         gl.glTranslatef(x, y, 0.0f);
 
         //assign dimensions
         gl.glScalef(w, h, 0.0f);
 
+        //enable texture rendering
+        gl.glEnable(GL10.GL_TEXTURE_2D);
+
         //assign texture we want to use
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
+        gl.glBindTexture(GL10.GL_TEXTURE_2D, getTextureId());
 
         //enable client state for our render
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
@@ -96,6 +102,9 @@ public class EntityItem extends com.gamesbykevin.androidframework.base.Entity {
 
         //render our texture based on the texture and vertex coordinates
         gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, vertices.length / 3);
+
+        //after rendering remove the transformation since we only needed it for this object
+        gl.glPopMatrix();
 
         //now that we are done, undo client state to prevent any render issues
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);

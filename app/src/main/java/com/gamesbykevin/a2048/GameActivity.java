@@ -9,9 +9,6 @@ import java.util.Random;
 
 public class GameActivity extends BaseActivity {
 
-    //our game view where action takes place
-    private GameView gameView;
-
     //our open GL surface view
     private GLSurfaceView glSurfaceView;
 
@@ -62,14 +59,6 @@ public class GameActivity extends BaseActivity {
         }
 
         return RANDOM;
-    }
-
-    /**
-     * Get the game view
-     * @return Our object containing game mechanics / rendering etc...
-     */
-    private GameView getGameView() {
-        return this.gameView;
     }
 
     @Override

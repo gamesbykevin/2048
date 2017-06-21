@@ -4,15 +4,10 @@ package com.gamesbykevin.a2048.board;
  * Created by Kevin on 5/26/2017.
  */
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 
 import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.base.EntityItem;
-import com.gamesbykevin.androidframework.anim.Animation;
 import com.gamesbykevin.androidframework.base.Cell;
-
-import com.gamesbykevin.a2048.board.Block.AnimationKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,29 +73,15 @@ public class Board {
         //create a new entity
         this.block = new Block();
 
-        /*
-        //map out all of the animations so we can use for rendering
-        for (AnimationKey key : AnimationKey.values()) {
-
-            //create animation at location x-coordinate
-            Animation anim = new Animation(spriteSheet, key.getX(), 0, ANIMATION_DIMENSIONS, ANIMATION_DIMENSIONS);
-
-            //add the animation to our sprite sheet for our entity
-            this.block.getSpritesheet().add(key, anim);
-        }
-        */
-
         //create border and set default values
         this.border = new EntityItem();
         this.border.setWidth(BORDER_DIMENSIONS);
         this.border.setHeight(BORDER_DIMENSIONS);
-        //this.border.getSpritesheet().add("Default", new Animation(borderImage));
 
         //create the background and set default values
         this.background = new EntityItem();
         this.background.setWidth(ANIMATION_DIMENSIONS);
         this.background.setHeight(ANIMATION_DIMENSIONS);
-        //this.background.getSpritesheet().add("Default", new Animation(spriteSheet, 0, 0, ANIMATION_DIMENSIONS, ANIMATION_DIMENSIONS));
 
         //create some default blocks
         spawn();
@@ -420,8 +401,8 @@ public class Board {
             for (int row = 0; row < ROWS; row++) {
 
                 //assign the border coordinates
-                border.setX((START_X - BORDER_THICKNESS) + (col * (double)(BORDER_DIMENSIONS - BORDER_THICKNESS)));
-                border.setY((START_Y - BORDER_THICKNESS) + (row * (double)(BORDER_DIMENSIONS - BORDER_THICKNESS)));
+                border.setX((START_X - BORDER_THICKNESS) + (col * (double) (BORDER_DIMENSIONS - BORDER_THICKNESS)));
+                border.setY((START_Y - BORDER_THICKNESS) + (row * (double) (BORDER_DIMENSIONS - BORDER_THICKNESS)));
 
                 //render the border at the current location
                 border.render(gl);

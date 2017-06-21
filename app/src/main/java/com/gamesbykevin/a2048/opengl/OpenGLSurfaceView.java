@@ -37,7 +37,6 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
 
     //track the time to keep a steady game speed
     private long previous;
-
     private long previousUpdate;
     private long previousDraw;
     private long postUpdate;
@@ -74,15 +73,10 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
      */
     public static final int HEIGHT = 800;
 
-    //get the ratio of the users screen compared to the default dimensions for the motion event
-    private float scaleMotionX, scaleMotionY;
-
-    //get the ratio of the users screen compared to the default dimensions for the render
-    private float scaleRenderX, scaleRenderY;
-
     //manage game specific objects
     private GameManager manager;
 
+    //store context to access resources
     private final Context activity;
 
     public OpenGLSurfaceView(Context activity) {
@@ -109,7 +103,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         this.openGlRenderer = new OpenGLRenderer(activity, this.manager);
 
         //set the renderer for drawing on the gl surface view
-        setRenderer(this.openGlRenderer);
+        setRenderer(getOpenGlRenderer());
 
         //set render mode to only draw when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
@@ -125,7 +119,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         super.onPause();
 
         //also pause our render
-        this.openGlRenderer.onPause();
+        getOpenGlRenderer().onPause();
 
         //flag that we don't want our thread to continue running
         this.running = false;
@@ -148,7 +142,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         super.onResume();
 
         //also resume our render
-        this.openGlRenderer.onResume();
+        getOpenGlRenderer().onResume();
 
         //flag running true
         this.running = true;
@@ -248,8 +242,11 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         try
         {
             //adjust the coordinates where touch event occurred
-            final float x = event.getRawX() * scaleMotionX;
-            final float y = event.getRawY() * scaleMotionY;
+            final float x = event.getRawX() * getOpenGlRenderer().scaleMotionX;
+            final float y = event.getRawY() * getOpenGlRenderer().scaleMotionY;
+
+            MainActivity.logEvent("raw:   (" + event.getRawX() + ", " + event.getRawY() + ")");
+            MainActivity.logEvent("scale: (" + x + ", " + y + ")");
 
             //update game accordingly
             this.manager.onTouchEvent(event.getAction(), x, y);
@@ -261,6 +258,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
 
         MainActivity.logEvent("Action: " + event.getAction());
         MainActivity.logEvent("Action Masked: " + event.getActionMasked());
+
 
         //return true to keep receiving touch events
         return true;
@@ -301,5 +299,9 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
 
         //track time after draw
         this.postDraw = System.currentTimeMillis();
+    }
+
+    private OpenGLRenderer getOpenGlRenderer() {
+        return this.openGlRenderer;
     }
 }

@@ -34,44 +34,9 @@ public class Block extends EntityItem {
     public static final int START_Y = 125;
 
     /**
-     * List of possible animations for the block
-     */
-    protected enum AnimationKey {
-        Empty(0),
-        Two(90),
-        Four(180),
-        Eight(270),
-        Sixteen(360),
-        ThirtyTwo(450),
-        SixtyFour(540),
-        OneHundredTwentyEight(630),
-        TwoHundredFiftySix(720),
-        FiveHundredTwelve(810),
-        OneThousandTwentyFour(900),
-        TwoThousandFortyEight(990),
-        FourThousandNinetySix(1080),
-        EightThousandOneHundredNinetyTwo(1170);
-
-        //the x-coordinate where the animation takes place
-        private int x;
-
-        private AnimationKey(int x) {
-            this.x = x;
-        }
-
-        /**
-         *
-         * @return
-         */
-        protected int getX() {
-            return this.x;
-        }
-    }
-
-    /**
      * How fast do the blocks move?
      */
-    protected static final float VELOCITY = 1.0f;
+    protected static final float VELOCITY = 0.25f;
 
     /**
      * No velocity
@@ -202,76 +167,6 @@ public class Block extends EntityItem {
             this.target = new Cell();
 
         return this.target;
-    }
-
-    /**
-     *
-     * @throws Exception
-     */
-    protected void assignAnimation() throws Exception {
-
-        //assign animation based on the value
-        switch (getValue()) {
-
-           case 0:
-               getSpritesheet().setKey(AnimationKey.Empty);
-               break;
-
-           case 2:
-               getSpritesheet().setKey(AnimationKey.Two);
-               break;
-
-           case 4:
-               getSpritesheet().setKey(AnimationKey.Four);
-               break;
-
-           case 8:
-               getSpritesheet().setKey(AnimationKey.Eight);
-               break;
-
-           case 16:
-               getSpritesheet().setKey(AnimationKey.Sixteen);
-               break;
-
-           case 32:
-               getSpritesheet().setKey(AnimationKey.ThirtyTwo);
-               break;
-
-           case 64:
-               getSpritesheet().setKey(AnimationKey.SixtyFour);
-               break;
-
-           case 128:
-               getSpritesheet().setKey(AnimationKey.OneHundredTwentyEight);
-               break;
-
-           case 256:
-               getSpritesheet().setKey(AnimationKey.TwoHundredFiftySix);
-               break;
-
-           case 512:
-               getSpritesheet().setKey(AnimationKey.FiveHundredTwelve);
-               break;
-
-           case 1024:
-               getSpritesheet().setKey(AnimationKey.OneThousandTwentyFour);
-               break;
-
-           case 2048:
-               getSpritesheet().setKey(AnimationKey.TwoThousandFortyEight);
-               break;
-
-           case 4096:
-               getSpritesheet().setKey(AnimationKey.FourThousandNinetySix);
-               break;
-
-           case 8192:
-               getSpritesheet().setKey(AnimationKey.EightThousandOneHundredNinetyTwo);
-               break;
-
-            default:
-                throw new Exception("The current value is not assigned: " + getValue());
-        }
     }
 
     /**

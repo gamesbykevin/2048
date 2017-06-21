@@ -31,6 +31,10 @@ public class OpenGLRenderer implements Renderer {
     //get the ratio of the users screen compared to the default dimensions for the render
     private float scaleRenderX, scaleRenderY;
 
+    //get the ratio of the users screen compared to the default dimensions for the motion event
+    public float scaleMotionX = 0, scaleMotionY = 0;
+
+    //maintain list of texture id's so we can access when rendering textures
     private int[] textures;
 
     public OpenGLRenderer(Context activity, GameManager manager) {
@@ -81,20 +85,44 @@ public class OpenGLRenderer implements Renderer {
 
     public int loadTexture(Bitmap bitmap, GL10 gl, int[] textures, int index) {
 
-        //our container to generate the textures
-        gl.glGenTextures(1, textures, index);
+        try {
+            //our container to generate the textures
+            gl.glGenTextures(1, textures, index);
 
-        //bind the texture id
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[index]);
+            //bind the texture id
+            gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[index]);
 
-        //add bitmap to texture
-        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+            if (true) {
+                //we want smoother images
+                gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+                gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);
+            } else {
+                //not smoother images
+                gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
+                gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
+            }
 
-        //we no longer need the resource
-        bitmap.recycle();
+            //allow any size texture
+            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
 
-        //display texture id
-        MainActivity.logEvent("Texture id: " + textures[index]);
+            //allow any size texture
+            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
+
+            //add bitmap to texture
+            GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+
+            //we no longer need the resource
+            bitmap.recycle();
+
+            if (textures[index] == 0) {
+                throw new Exception("Error loading texture: " + index);
+            } else {
+                //display texture id
+                MainActivity.logEvent("Texture loaded id: " + textures[index]);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //return our texture id
         return textures[index];
@@ -133,6 +161,10 @@ public class OpenGLRenderer implements Renderer {
         //store the ratio for the render
         this.scaleRenderX = width / (float)OpenGLSurfaceView.WIDTH;
         this.scaleRenderY = height / (float)OpenGLSurfaceView.HEIGHT;
+
+        //store the ratio when touching the screen
+        this.scaleMotionX = (float)OpenGLSurfaceView.WIDTH / width;
+        this.scaleMotionY = (float)OpenGLSurfaceView.HEIGHT / height;
 
         //sets the current view port to the new size of the screen
         gl.glViewport(0, 0, width, height);
