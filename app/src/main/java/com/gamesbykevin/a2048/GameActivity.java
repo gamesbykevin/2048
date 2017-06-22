@@ -2,6 +2,8 @@ package com.gamesbykevin.a2048;
 
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
 
@@ -28,16 +30,6 @@ public class GameActivity extends BaseActivity {
 
         //obtain our open gl surface view object for reference
         this.glSurfaceView = (OpenGLSurfaceView)findViewById(R.id.openglView);
-
-
-        //create our game view object
-        //this.gameView = new GameView(this);
-
-        //add callback to game view so we can capture motion events
-        //getGameView().getHolder().addCallback(getGameView());
-
-        //make it the activity view
-        //setContentView(getGameView());
     }
 
     /**
@@ -62,8 +54,7 @@ public class GameActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         //call parent functionality
         super.onStart();
     }

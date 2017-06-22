@@ -5,7 +5,6 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.gamesbykevin.a2048.GameActivity;
 import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.game.GameManager;
 

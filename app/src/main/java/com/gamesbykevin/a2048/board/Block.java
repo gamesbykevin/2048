@@ -119,48 +119,48 @@ public class Block extends EntityItem {
     }
 
     /**
-     *
-     * @param value
+     * Assign the block value
+     * @param value The desired value 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, etc...
      */
     protected void setValue(int value) {
         this.value = value;
     }
 
     /**
-     *
-     * @return
+     * Retrieve the block value
+     * @return The assigned block value 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, etc...
      */
     protected int getValue() {
         return this.value;
     }
 
     /**
-     *
-     * @param col
+     * Assign the column target
+     * @param col The desired location for our block
      */
     protected void setColTarget(double col) {
         this.target.setCol(col);
     }
 
     /**
-     *
-     * @param row
+     * Assign the row target
+     * @param row The desired location for our block
      */
     protected void setRowTarget(double row) {
         this.target.setRow(row);
     }
 
     /**
-     *
-     * @return
+     * Do we have our target location
+     * @return true if the target location matches our own, false otherwise
      */
     protected boolean hasTarget() {
         return getTarget().hasLocation(this);
     }
 
     /**
-     *
-     * @return
+     * Get the target
+     * @return The location where we want the block to head at
      */
     protected Cell getTarget() {
         if (this.target == null)
