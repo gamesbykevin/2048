@@ -73,8 +73,6 @@ public class EntityItem extends com.gamesbykevin.androidframework.base.Entity {
         w = (float)getWidth();
         h = (float)getHeight();
 
-        //MainActivity.logEvent("" + x + "," + y + "," + w + "," + h);
-
         //use for quick transformations so it will only apply to this object
         gl.glPushMatrix();
 

@@ -282,6 +282,9 @@ public class BoardHelper {
                     //update block value
                     block.setValue(block.getValue() + tmp.getValue());
 
+                    //flag the block to expand
+                    block.setExpand(true);
+
                     //add to our total score
                     board.setScore(board.getScore() + block.getValue());
 
@@ -290,6 +293,7 @@ public class BoardHelper {
 
                     //keep the index inbounds
                     j--;
+                    i--;
                 }
             }
         }

@@ -70,6 +70,11 @@ public class GameManager {
         if (merge != null)
             return true;
 
+        //if blocks are currently expanding/collapsing we can't do anything yet
+        if (!getBoard().hasCompletedChange())
+            return true;
+
+
         switch (action)
         {
             case MotionEvent.ACTION_DOWN:
@@ -166,7 +171,7 @@ public class GameManager {
                             break;
                     }
 
-                    //if all blocks are already at their target, then nothing will happen, go again
+                    //after merging, if all blocks are already at the target nothing will happen
                     if (getBoard().hasTarget())
                         this.merge = null;
                 }

@@ -256,11 +256,33 @@ public class Board {
     }
 
     /**
-     *
-     * @return
+     * Is the game over?
+     * @return true = yes, otherwise false
      */
     public boolean isGameover() {
         return this.gameover;
+    }
+
+    /**
+     * Have all the blocks completed expanding/collapsing
+     * @return true if finished, false otherwise
+     */
+    public boolean hasCompletedChange() {
+
+        //check every block
+        for (int i = 0; i < getBlocks().size(); i++) {
+
+            //if block is expanding, return false
+            if (getBlocks().get(i).hasExpand())
+                return false;
+
+            //if block is collapsing, return false
+            if (getBlocks().get(i).hasCollapse())
+                return false;
+        }
+
+        //if all completed return true
+        return true;
     }
 
     /**
@@ -373,24 +395,17 @@ public class Board {
             }
         }
 
-        //render all the blocks
+        //render all the blocks that aren't expanding/collapsing
         for (int i = 0; i < getBlocks().size(); i++) {
 
             final Block tmp = getBlocks().get(i);
 
-            //update the entity position (col, row)
-            block.setCol(tmp);
-            block.setRow(tmp);
+            //skip blocks that are in transition
+            if (tmp.hasExpand() || tmp.hasCollapse())
+                continue;
 
-            //calculate the x,y render coordinates
-            block.updateCoordinates();
-
-            //match the value that we are rendering
-            block.setValue(tmp.getValue());
-
-            //assign the correct animation
-            //block.assignAnimation();
-            block.setTextureId(tmp.getTextureId());
+            //update block attributes
+            updateBlock(tmp);
 
             //render the block
             block.render(gl);
@@ -408,5 +423,45 @@ public class Board {
                 border.render(gl);
             }
         }
+
+        //now render all the blocks that are expanding/collapsing
+        for (int i = 0; i < getBlocks().size(); i++) {
+
+            final Block tmp = getBlocks().get(i);
+
+            //skip blocks that aren't in transition
+            if (!tmp.hasExpand() && !tmp.hasCollapse())
+                continue;
+
+            //update block attributes
+            updateBlock(tmp);
+
+            //render the block
+            block.render(gl);
+        }
+    }
+
+    /**
+     * Update our block instance
+     * @param tmp The block containing the attributes we want to assign
+     */
+    private void updateBlock(final Block tmp) {
+
+        //update the entity position (col, row)
+        block.setCol(tmp);
+        block.setRow(tmp);
+
+        //update the dimensions as well
+        block.setWidth(tmp);
+        block.setHeight(tmp);
+
+        //calculate the x,y render coordinates
+        block.updateCoordinates();
+
+        //match the value that we are rendering
+        block.setValue(tmp.getValue());
+
+        //assign the correct animation
+        block.setTextureId(tmp.getTextureId());
     }
 }

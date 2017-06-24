@@ -1,8 +1,11 @@
 package com.gamesbykevin.a2048.board;
 
+import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.base.EntityItem;
 import com.gamesbykevin.androidframework.base.Cell;
 import com.gamesbykevin.androidframework.base.Entity;
+
+import javax.microedition.khronos.opengles.GL10;
 
 import static com.gamesbykevin.a2048.board.Board.BORDER_THICKNESS;
 
@@ -24,6 +27,16 @@ public class Block extends EntityItem {
     public static final int ANIMATION_DIMENSIONS = 90;
 
     /**
+     * The max dimensions allowed for this block
+     */
+    public static final int DIMENSIONS_MAX = (int)(ANIMATION_DIMENSIONS * 1.25);
+
+    /**
+     * How fast do we expand/collapse
+     */
+    private static final float DIMENSION_CHANGE_VELOCITY = 1.5f;
+
+    /**
      * The starting coordinate of the north-west block
      */
     public static final int START_X = 48;
@@ -43,6 +56,9 @@ public class Block extends EntityItem {
      */
     protected static final float VELOCITY_NONE = 0.0f;
 
+    //did we already expand and collapse the block
+    private boolean expand, collapse;
+
     /**
      * Default constructor
      */
@@ -57,10 +73,16 @@ public class Block extends EntityItem {
         //assign the size at which we will render the  block
         setWidth(ANIMATION_DIMENSIONS);
         setHeight(ANIMATION_DIMENSIONS);
+
+        //expand at first
+        setExpand(true);
+
+        //we don't need to collapse yet
+        setCollapse(false);
     }
 
     /**
-     * Update the block location based on (x,y) velocity
+     * Update the block location based on (x,y) velocity etc...
      */
     protected void update() {
 
@@ -115,7 +137,83 @@ public class Block extends EntityItem {
                     setDY(VELOCITY_NONE);
                 }
             }
+        } else {
+
+            //if expand, let's update the block size
+            if (hasExpand()) {
+
+                //if collapsing
+                if (hasCollapse()) {
+
+                    //shrink the block size
+                    setWidth(getWidth() - DIMENSION_CHANGE_VELOCITY);
+                    setHeight(getHeight() - DIMENSION_CHANGE_VELOCITY);
+
+                    //if we hit our collapse limit, we are done
+                    if (getWidth() <= ANIMATION_DIMENSIONS || getHeight() <= ANIMATION_DIMENSIONS) {
+
+                        //set the block size
+                        setWidth(ANIMATION_DIMENSIONS);
+                        setHeight(ANIMATION_DIMENSIONS);
+
+                        //stop collapsing
+                        setCollapse(false);
+
+                        //stop expanding
+                        setExpand(false);
+                    }
+
+                } else {
+
+                    //if not collapsing expand the block size
+                    setWidth(getWidth() + DIMENSION_CHANGE_VELOCITY);
+                    setHeight(getHeight() + DIMENSION_CHANGE_VELOCITY);
+
+                    //if we hit our expand limit, start collapsing
+                    if (getWidth() >= DIMENSIONS_MAX || getHeight() >= DIMENSIONS_MAX) {
+
+                        //set the block size
+                        setWidth(DIMENSIONS_MAX);
+                        setHeight(DIMENSIONS_MAX);
+
+                        //start collapsing
+                        setCollapse(true);
+                    }
+                }
+            }
         }
+    }
+
+    /**
+     * Assign the block to expand
+     * @param expand true if we want the block to expand, false otherwise
+     */
+    public void setExpand(boolean expand) {
+        this.expand = expand;
+    }
+
+    /**
+     * Assign the block to collapse
+     * @param collapse true if we want the block to collapse, false otherwise
+     */
+    public void setCollapse(boolean collapse) {
+        this.collapse = collapse;
+    }
+
+    /**
+     * Is the block able to expand?
+     * @return true = yes, false = no
+     */
+    public boolean hasExpand() {
+        return this.expand;
+    }
+
+    /**
+     * Is the block able to collapse?
+     * @return true = yes, false = no
+     */
+    public boolean hasCollapse() {
+        return this.collapse;
     }
 
     /**
@@ -151,7 +249,7 @@ public class Block extends EntityItem {
     }
 
     /**
-     * Do we have our target location
+     * Do we have our target location?
      * @return true if the target location matches our own, false otherwise
      */
     protected boolean hasTarget() {
@@ -183,5 +281,28 @@ public class Block extends EntityItem {
     protected static void updateCoordinates(final Entity block) {
         block.setX(START_X + (block.getCol() * (double)(ANIMATION_DIMENSIONS + BORDER_THICKNESS)));
         block.setY(START_Y + (block.getRow() * (double)(ANIMATION_DIMENSIONS + BORDER_THICKNESS)));
+    }
+
+    @Override
+    public void render(GL10 gl) {
+
+        //store the coordinate
+        final double x = getX();
+        final double y = getY();
+
+        //calculate the middle location
+        double middleX = getX() + (ANIMATION_DIMENSIONS / 2);
+        double middleY = getY() + (ANIMATION_DIMENSIONS / 2);
+
+        //offset the coordinate
+        super.setX(middleX - (getWidth() / 2));
+        super.setY(middleY - (getHeight() / 2));
+
+        //render the block
+        super.render(gl);
+
+        //restore coordinates
+        super.setX(x);
+        super.setY(y);
     }
 }
