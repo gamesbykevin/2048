@@ -1,5 +1,8 @@
 package com.gamesbykevin.a2048.board;
 
+import com.gamesbykevin.a2048.MainActivity;
+import com.gamesbykevin.a2048.game.GameManager;
+
 import java.util.List;
 
 /**
@@ -9,13 +12,44 @@ import java.util.List;
 public class BoardHelper {
 
     /**
+     * Merge the blocks on the board
+     * @param board The board we are merging
+     * @param merge The direction of the merge
+     */
+    public static void merge(Board board, GameManager.Merge merge) throws Exception {
+
+        //merge the board accordingly
+        switch (merge) {
+
+            case North:
+                mergeNorth(board);
+                break;
+
+            case South:
+                mergeSouth(board);
+                break;
+
+            case West:
+                mergeWest(board);
+                break;
+
+            case East:
+                mergeEast(board);
+                break;
+
+            default:
+                throw new Exception("Merge not handled here: " + merge.toString());
+        }
+    }
+
+    /**
      * Merge the blocks towards the west
      * @param board Board containing our blocks to merge
      */
-    public static void mergeWest(Board board) {
+    private static void mergeWest(Board board) {
 
         //check every row
-        for (int row = 0; row < Board.ROWS; row++) {
+        for (int row = 0; row < board.getRows(); row++) {
 
             //the previous value block
             int previousValue = -1;
@@ -27,7 +61,7 @@ public class BoardHelper {
             int columnNoMerge = 0;
 
             //check each column in the row one by one starting in the west
-            for (int col = 0; col < Board.COLUMNS; col++) {
+            for (int col = 0; col < board.getCols(); col++) {
 
                 //get the block at the current position
                 Block block = board.getBlock(col, row);
@@ -73,22 +107,22 @@ public class BoardHelper {
      * Merge the blocks towards the east
      * @param board Board containing our blocks to merge
      */
-    public static void mergeEast(Board board) {
+    private static void mergeEast(Board board) {
 
         //check every row
-        for (int row = 0; row < Board.ROWS; row++) {
+        for (int row = 0; row < board.getRows(); row++) {
 
             //the previous value block
             int previousValue = -1;
 
             //the east column of the last block that we can merge with
-            int columnMerge = Board.COLUMNS - 1;
+            int columnMerge = board.getCols() - 1;
 
             //if we can't merge what is the next block
-            int columnNoMerge = Board.COLUMNS - 1;
+            int columnNoMerge = board.getCols() - 1;
 
             //check each column in the row one by one starting in the east
-            for (int col = Board.COLUMNS - 1; col >= 0; col--) {
+            for (int col = board.getCols() - 1; col >= 0; col--) {
 
                 //get the block at the current position
                 Block block = board.getBlock(col, row);
@@ -134,10 +168,10 @@ public class BoardHelper {
      * Merge the blocks towards the north
      * @param board Board containing our blocks to merge
      */
-    public static void mergeNorth(Board board) {
+    private static void mergeNorth(Board board) {
 
         //check each column
-        for (int col = 0; col < Board.COLUMNS; col++) {
+        for (int col = 0; col < board.getCols(); col++) {
 
             //the previous value block
             int previousValue = -1;
@@ -149,7 +183,7 @@ public class BoardHelper {
             int rowNoMerge = 0;
 
             //check each row one by one starting in the north
-            for (int row = 0; row < Board.ROWS; row++) {
+            for (int row = 0; row < board.getRows(); row++) {
 
                 //get the block at the current position
                 Block block = board.getBlock(col, row);
@@ -195,22 +229,22 @@ public class BoardHelper {
      * Merge the blocks towards the south
      * @param board Board containing our blocks to merge
      */
-    public static void mergeSouth(Board board) {
+    private static void mergeSouth(Board board) {
 
         //check each column
-        for (int col = 0; col < Board.COLUMNS; col++) {
+        for (int col = 0; col < board.getCols(); col++) {
 
             //the previous value block
             int previousValue = -1;
 
             //the south row of the last block that we can merge with
-            int rowMerge = Board.ROWS - 1;
+            int rowMerge = board.getRows() - 1;
 
             //if we can't merge what is the next block
-            int rowNoMerge = Board.ROWS - 1;
+            int rowNoMerge = board.getRows() - 1;
 
             //check each row one by one starting in the south
-            for (int row = Board.ROWS - 1; row >= 0; row--) {
+            for (int row = board.getRows() - 1; row >= 0; row--) {
 
                 //get the block at the current position
                 Block block = board.getBlock(col, row);
@@ -259,6 +293,7 @@ public class BoardHelper {
      */
     protected static void updateMerged(Board board) {
 
+        //get the list of blocks from our board
         List<Block> blocks = board.getBlocks();
 
         for (int i = 0; i < blocks.size(); i++) {
@@ -267,7 +302,7 @@ public class BoardHelper {
             final Block block = blocks.get(i);
 
             //check if any other blocks are at the same location so we can merge and update the score
-            for (int j = i + 1; j < blocks.size(); j++) {
+            for (int j = 0; j < blocks.size(); j++) {
 
                 //check the potential match
                 final Block tmp = blocks.get(j);
@@ -278,6 +313,20 @@ public class BoardHelper {
 
                 //if both of these blocks are at the same location we can merge
                 if (block.hasLocation(tmp)) {
+
+                    //both blocks have to have the same value or else they can't merge together
+                    if (block.getValue() != tmp.getValue()) {
+
+                        //for some reason we tried to merge these blocks
+                        MainActivity.logEvent("Block 1: (" + block.getCol() + ", " + block.getRow() + ") " + block.getValue());
+                        MainActivity.logEvent("Block 2: (" + tmp.getCol() + ", " + tmp.getRow() + ") " + tmp.getValue());
+
+                        //skip to the next block
+                        continue;
+                    }
+
+                    MainActivity.logEvent("Merged 1: (" + block.getCol() + ", " + block.getRow() + ") " + block.getValue());
+                    MainActivity.logEvent("Merged 2: (" + tmp.getCol() + ", " + tmp.getRow() + ") " + tmp.getValue());
 
                     //update block value
                     block.setValue(block.getValue() + tmp.getValue());
@@ -291,9 +340,11 @@ public class BoardHelper {
                     //remove the extra block
                     blocks.remove(j);
 
-                    //keep the index inbounds
-                    j--;
+                    //move back index
                     i--;
+
+                    //since we can only merge two blocks at a time, exit the loop
+                    break;
                 }
             }
         }
@@ -307,8 +358,8 @@ public class BoardHelper {
     protected static boolean isGameOver(Board board) {
 
         //check every available place on the board
-        for (int col = 0; col < Board.COLUMNS; col++) {
-            for (int row = 0; row < Board.ROWS; row++) {
+        for (int col = 0; col < board.getCols(); col++) {
+            for (int row = 0; row < board.getRows(); row++) {
 
                 //get the current block
                 Block block = board.getBlock(col, row);

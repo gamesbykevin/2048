@@ -49,15 +49,18 @@ public class Board {
     /**
      * Number of columns on our board
      */
-    protected static final int COLUMNS = 4;
+    protected static final int DEFAULT_COLUMNS = 4;
 
     /**
      * Number of rows on our board
      */
-    protected static final int ROWS = 4;
+    protected static final int DEFAULT_ROWS = 4;
 
     //what is our score
     private int score = 0;
+
+    //the size of the board
+    private int cols, rows;
 
     //is the game over
     private boolean gameover = false;
@@ -65,7 +68,7 @@ public class Board {
     /**
      * Default constructor
      */
-    public Board() {//final Bitmap spriteSheet, final Bitmap borderImage) {
+    public Board() {
 
         //create new array list to contain all the blocks
         this.blocks = new ArrayList<>();
@@ -83,8 +86,44 @@ public class Board {
         this.background.setWidth(ANIMATION_DIMENSIONS);
         this.background.setHeight(ANIMATION_DIMENSIONS);
 
+        //set the size of the board
+        setCols(DEFAULT_COLUMNS);
+        setRows(DEFAULT_ROWS);
+
         //create some default blocks
         spawn();
+    }
+
+    /**
+     *
+     * @param cols
+     */
+    public void setCols(int cols) {
+        this.cols = cols;
+    }
+
+    /**
+     *
+     * @param rows
+     */
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getCols() {
+        return this.cols;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getRows() {
+        return this.rows;
     }
 
     /**
@@ -136,10 +175,9 @@ public class Board {
 
         //create the list that will contain our available blocks
         List<Cell> available = new ArrayList<>();
-
         //check every location to see what is available
-        for (int col = 0; col < COLUMNS; col++) {
-            for (int row = 0; row < ROWS; row++) {
+        for (int col = 0; col < getCols(); col++) {
+            for (int row = 0; row < getRows(); row++) {
                 if (!hasBlock(col, row)) {
                     available.add(new Cell(col, row));
                 }
@@ -171,6 +209,10 @@ public class Board {
 
         //now that the new block has  spawned, check if the game is over
         this.gameover = BoardHelper.isGameOver(this);
+
+        //notify if game over
+        if (isGameover())
+            MainActivity.logEvent("GAME OVER!!!!!!!!!!!");
     }
 
     /**
@@ -243,15 +285,6 @@ public class Board {
         //if we weren't at the target but am now, we can update the merged blocks
         if (!hasTarget && hasTarget()) {
             BoardHelper.updateMerged(this);
-
-            //how do we check to see if the game is over?
-            if (BoardHelper.isGameOver(this)) {
-
-                //flag game over true
-                this.gameover = true;
-
-                MainActivity.logEvent("GAME OVER!!!!!!!!!!!");
-            }
         }
     }
 
@@ -383,8 +416,8 @@ public class Board {
     public void draw(GL10 gl) throws Exception {
 
         //render the background tile first
-        for (int col = 0; col < COLUMNS; col++) {
-            for (int row = 0; row < ROWS; row++) {
+        for (int col = 0; col < getCols(); col++) {
+            for (int row = 0; row < getRows(); row++) {
 
                 this.background.setCol(col);
                 this.background.setRow(row);
@@ -411,6 +444,7 @@ public class Board {
             block.render(gl);
         }
 
+        /*
         //render the borders on top of the blocks
         for (int col = 0; col < COLUMNS; col++) {
             for (int row = 0; row < ROWS; row++) {
@@ -423,8 +457,9 @@ public class Board {
                 border.render(gl);
             }
         }
+        */
 
-        //now render all the blocks that are expanding/collapsing
+        //now render all the blocks that are expanding/collapsing so they appear on the top
         for (int i = 0; i < getBlocks().size(); i++) {
 
             final Block tmp = getBlocks().get(i);

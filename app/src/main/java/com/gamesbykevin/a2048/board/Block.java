@@ -2,6 +2,7 @@ package com.gamesbykevin.a2048.board;
 
 import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.base.EntityItem;
+import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
 import com.gamesbykevin.androidframework.base.Cell;
 import com.gamesbykevin.androidframework.base.Entity;
 
@@ -34,7 +35,7 @@ public class Block extends EntityItem {
     /**
      * How fast do we expand/collapse
      */
-    private static final float DIMENSION_CHANGE_VELOCITY = 1.5f;
+    private static final float DIMENSION_CHANGE_VELOCITY = (ANIMATION_DIMENSIONS / (OpenGLSurfaceView.FPS / 2));//1.5f;
 
     /**
      * The starting coordinate of the north-west block

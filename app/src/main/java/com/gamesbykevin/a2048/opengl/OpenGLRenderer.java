@@ -14,6 +14,7 @@ import com.gamesbykevin.a2048.game.GameManager;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import static com.gamesbykevin.a2048.GameActivity.MANAGER;
 import static com.gamesbykevin.a2048.board.Block.ANIMATION_DIMENSIONS;
 
 /**
@@ -25,9 +26,6 @@ public class OpenGLRenderer implements Renderer {
     //our activity reference
     private final Context activity;
 
-    //our game manager for rendering
-    private final GameManager manager;
-
     //get the ratio of the users screen compared to the default dimensions for the render
     private float scaleRenderX, scaleRenderY;
 
@@ -37,41 +35,57 @@ public class OpenGLRenderer implements Renderer {
     //maintain list of texture id's so we can access when rendering textures
     private int[] textures;
 
-    public OpenGLRenderer(Context activity, GameManager manager) {
+    public OpenGLRenderer(Context activity) {
         this.activity = activity;
-        this.manager = manager;
     }
 
     public void onPause() {
-
+        //do we do anything here?
     }
 
     public void onResume() {
+        //re-load the textures if needed
+    }
 
+    /**
+     * Called for each redraw of the view
+     * @param gl Object used for rendering textures
+     */
+    @Override
+    public void onDrawFrame(GL10 gl) {
+
+        //clears the screen and depth buffer.
+        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+
+        //reset the projection matrix
+        gl.glLoadIdentity();
+
+        //scale to our game dimensions to match the users screen
+        gl.glScalef(scaleRenderX, scaleRenderY, 0.0f);
+
+        //render game objects
+        MANAGER.draw(gl, this.textures);
     }
 
     /**
      * Called once to set up the view's OpenGL ES environment
-     * @param gl
+     * @param gl Open gl object for rendering
      * @param config
      */
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        //do we need to to anything here?
+    }
 
-        //load 15 textures into our array
-        this.textures = new int[15];
-
-        Bitmap spriteSheet = BitmapFactory.decodeResource(activity.getResources(), R.drawable.blocks);
-
-        for (int i = 0; i < textures.length - 1; i++) {
-
-            Bitmap tmp = Bitmap.createBitmap(spriteSheet, i * ANIMATION_DIMENSIONS, 0, ANIMATION_DIMENSIONS, ANIMATION_DIMENSIONS);
-
-            loadTexture(tmp, gl, textures, i);
-        }
-
-        //load the texture
-        loadTexture(BitmapFactory.decodeResource(activity.getResources(), R.drawable.border), gl, textures, textures.length - 1);
+    /**
+     *  Called if the geometry of the view changes.<br>
+     *  For example when the device's screen orientation changes
+     * @param gl OpenGL object
+     * @param width pixel width of surface
+     * @param height pixel height of surface
+     */
+    @Override
+    public void onSurfaceChanged(GL10 gl, int width, int height) {
 
         gl.glEnable(GL10.GL_TEXTURE_2D);
         gl.glEnable(GL10.GL_ALPHA_TEST);
@@ -81,6 +95,41 @@ public class OpenGLRenderer implements Renderer {
 
         gl.glEnable(GL10.GL_BLEND);
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
+        //store the ratio for the render
+        this.scaleRenderX = width / (float)OpenGLSurfaceView.WIDTH;
+        this.scaleRenderY = height / (float)OpenGLSurfaceView.HEIGHT;
+
+        //store the ratio when touching the screen
+        this.scaleMotionX = (float)OpenGLSurfaceView.WIDTH / width;
+        this.scaleMotionY = (float)OpenGLSurfaceView.HEIGHT / height;
+
+        //sets the current view port to the new size of the screen
+        gl.glViewport(0, 0, width, height);
+
+        //reset the projection matrix back to its default state
+        gl.glLoadIdentity();
+
+        //select the projection matrix
+        gl.glMatrixMode(GL10.GL_PROJECTION);
+
+        //set rendering dimensions
+        gl.glOrthof(0.0f, width, height, 0.0f, 1.0f, -1.0f);
+
+        //select the model view matrix
+        gl.glMatrixMode(GL10.GL_MODELVIEW);
+
+        //enable 2d textures
+        gl.glEnable(GL10.GL_TEXTURE_2D);
+
+        //enable alpha blending with textures
+        gl.glEnable(GL10.GL_BLEND);
+
+        //add blend function for alpha
+        gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
+        //load our textures
+        loadTextures(gl);
     }
 
     public int loadTexture(Bitmap bitmap, GL10 gl, int[] textures, int index) {
@@ -128,66 +177,25 @@ public class OpenGLRenderer implements Renderer {
         return textures[index];
     }
 
-    /**
-     * Called for each redraw of the view
-     * @param gl
-     */
-    @Override
-    public void onDrawFrame(GL10 gl) {
+    private void loadTextures(GL10 gl) {
 
-        //clears the screen and depth buffer.
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+        //load 15 textures into our array
+        this.textures = new int[15];
 
-        //reset the projection matrix
-        gl.glLoadIdentity();
+        //get the sprite sheet containing all our animations
+        Bitmap spriteSheet = BitmapFactory.decodeResource(activity.getResources(), R.drawable.blocks);
 
-        //scale to our game dimensions to match the users screen
-        gl.glScalef(scaleRenderX, scaleRenderY, 0.0f);
+        //load every texture that we need
+        for (int i = 0; i < textures.length - 1; i++) {
 
-        //render game objects
-        this.manager.draw(gl, this.textures);
-    }
+            //retrieve the current bitmap
+            Bitmap tmp = Bitmap.createBitmap(spriteSheet, i * ANIMATION_DIMENSIONS, 0, ANIMATION_DIMENSIONS, ANIMATION_DIMENSIONS);
 
-    /**
-     *  Called if the geometry of the view changes.<br>
-     *  For example when the device's screen orientation changes
-     * @param gl
-     * @param width
-     * @param height
-     */
-    @Override
-    public void onSurfaceChanged(GL10 gl, int width, int height) {
+            //load the individual texture
+            loadTexture(tmp, gl, textures, i);
+        }
 
-        //store the ratio for the render
-        this.scaleRenderX = width / (float)OpenGLSurfaceView.WIDTH;
-        this.scaleRenderY = height / (float)OpenGLSurfaceView.HEIGHT;
-
-        //store the ratio when touching the screen
-        this.scaleMotionX = (float)OpenGLSurfaceView.WIDTH / width;
-        this.scaleMotionY = (float)OpenGLSurfaceView.HEIGHT / height;
-
-        //sets the current view port to the new size of the screen
-        gl.glViewport(0, 0, width, height);
-
-        //reset the projection matrix back to its default state
-        gl.glLoadIdentity();
-
-        //select the projection matrix
-        gl.glMatrixMode(GL10.GL_PROJECTION);
-
-        //set dimensions
-        gl.glOrthof(0.0f, width, height, 0.0f, 1.0f, -1.0f);
-
-        //select the model view matrix
-        gl.glMatrixMode(GL10.GL_MODELVIEW);
-
-        //enable 2d textures
-        gl.glEnable(GL10.GL_TEXTURE_2D);
-
-        //enable alpha blending with textures
-        gl.glEnable(GL10.GL_BLEND);
-
-        //add blend function for alpha
-        gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+        //load the texture
+        loadTexture(BitmapFactory.decodeResource(activity.getResources(), R.drawable.border), gl, textures, textures.length - 1);
     }
 }

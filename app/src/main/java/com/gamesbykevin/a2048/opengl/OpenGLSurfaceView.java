@@ -10,6 +10,7 @@ import com.gamesbykevin.a2048.game.GameManager;
 
 import java.util.Calendar;
 
+import static com.gamesbykevin.a2048.GameActivity.MANAGER;
 import static com.gamesbykevin.a2048.MainActivity.DEBUG;
 
 /**
@@ -26,7 +27,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
     /**
      * Our object where we render our pixel data
      */
-    private final OpenGLRenderer openGlRenderer;
+    private OpenGLRenderer openGlRenderer;
 
     //our game mechanics will run on this thread
     private Thread thread;
@@ -72,9 +73,6 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
      */
     public static final int HEIGHT = 800;
 
-    //manage game specific objects
-    private GameManager manager;
-
     //store context to access resources
     private final Context activity;
 
@@ -92,20 +90,25 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         //store our activity reference
         this.activity = activity;
 
-        //create a new instance of game manager
-        this.manager = new GameManager(activity);
-
         //create an OpenGL ES 1.0 context.
         setEGLContextClientVersion(OPEN_GL_VERSION);
 
         //create a new instance of our renderer
-        this.openGlRenderer = new OpenGLRenderer(activity, this.manager);
+        this.openGlRenderer = new OpenGLRenderer(this.activity);
 
         //set the renderer for drawing on the gl surface view
         setRenderer(getOpenGlRenderer());
 
         //set render mode to only draw when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+    }
+
+    /**
+     * Get our OpenGL Renderer
+     * @return Object used for all texture mapping
+     */
+    private OpenGLRenderer getOpenGlRenderer() {
+        return this.openGlRenderer;
     }
 
     /**
@@ -117,15 +120,14 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         //call parent function
         super.onPause();
 
-        //also pause our render
-        getOpenGlRenderer().onPause();
-
         //flag that we don't want our thread to continue running
         this.running = false;
 
         try {
+
             //wait for thread to finish
             this.thread.join();
+
         } catch (Exception e) {
             MainActivity.handleException(e);
         }
@@ -139,9 +141,6 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
 
         //call parent function
         super.onResume();
-
-        //also resume our render
-        getOpenGlRenderer().onResume();
 
         //flag running true
         this.running = true;
@@ -244,11 +243,12 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
             final float x = event.getRawX() * getOpenGlRenderer().scaleMotionX;
             final float y = event.getRawY() * getOpenGlRenderer().scaleMotionY;
 
+            //display log events
             MainActivity.logEvent("raw:   (" + event.getRawX() + ", " + event.getRawY() + ")");
             MainActivity.logEvent("scale: (" + x + ", " + y + ")");
 
             //update game accordingly
-            this.manager.onTouchEvent(event.getAction(), x, y);
+            MANAGER.onTouchEvent(event.getAction(), x, y);
         }
         catch (Exception e)
         {
@@ -258,7 +258,6 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         MainActivity.logEvent("Action: " + event.getAction());
         MainActivity.logEvent("Action Masked: " + event.getActionMasked());
 
-
         //return true to keep receiving touch events
         return true;
     }
@@ -266,13 +265,13 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
     /**
      * Update the game state
      */
-    private void update() {
+    private void update() throws Exception {
 
         //track time before update
         this.previousUpdate = System.currentTimeMillis();
 
         //update game logic here
-        this.manager.update();
+        MANAGER.update();
 
         //track time after update
         this.postUpdate = System.currentTimeMillis();
@@ -289,7 +288,6 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         try {
 
             //render game objects
-            //this.manager.draw(this.canvas);
             requestRender();
 
         } catch (Exception e) {
@@ -298,9 +296,5 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
 
         //track time after draw
         this.postDraw = System.currentTimeMillis();
-    }
-
-    private OpenGLRenderer getOpenGlRenderer() {
-        return this.openGlRenderer;
     }
 }

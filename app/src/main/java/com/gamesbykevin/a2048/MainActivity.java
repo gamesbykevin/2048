@@ -40,12 +40,14 @@ public class MainActivity extends BaseActivity {
     }
 
     public void onClickStart(View view) {
+
         //start game
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
     }
 
     public void onClickOptions(View view) {
+
         //start options activity
         Intent intent = new Intent(this, OptionsActivity.class);
         startActivity(intent);

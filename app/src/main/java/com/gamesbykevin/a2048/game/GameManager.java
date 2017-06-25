@@ -47,8 +47,8 @@ public class GameManager {
     //which way are we merging
     private Merge merge = null;
 
-    //object used to render the score
-    private Paint paint;
+    //do we want to try and merge
+    private boolean flagMerge = false;
 
     /**
      * Default constructor
@@ -60,21 +60,27 @@ public class GameManager {
 
         //create a new game board
         this.board = new Board();
-            //BitmapFactory.decodeResource(activity.getResources(), R.drawable.blocks),
-            //BitmapFactory.decodeResource(activity.getResources(), R.drawable.border));
     }
 
     public boolean onTouchEvent(final int action, final float x, final float y) {
 
+        //don't continue if we are in the process of merging
+        if (flagMerge)
+            return true;
+
         //don't continue if we are already merging
         if (merge != null)
+            return true;
+
+        //if the game is over we can't continue
+        if (getBoard().isGameover())
             return true;
 
         //if blocks are currently expanding/collapsing we can't do anything yet
         if (!getBoard().hasCompletedChange())
             return true;
 
-
+        //determine the appropriate action
         switch (action)
         {
             case MotionEvent.ACTION_DOWN:
@@ -151,29 +157,8 @@ public class GameManager {
                         }
                     }
 
-                    //update the blocks accordingly on where we want to head
-                    switch (this.merge) {
-
-                        case West:
-                            BoardHelper.mergeWest(getBoard());
-                            break;
-
-                        case East:
-                            BoardHelper.mergeEast(getBoard());
-                            break;
-
-                        case North:
-                            BoardHelper.mergeNorth(getBoard());
-                            break;
-
-                        case South:
-                            BoardHelper.mergeSouth(getBoard());
-                            break;
-                    }
-
-                    //after merging, if all blocks are already at the target nothing will happen
-                    if (getBoard().hasTarget())
-                        this.merge = null;
+                    //flag that we want to merge next game update
+                    flagMerge = true;
                 }
 
                 break;
@@ -185,24 +170,41 @@ public class GameManager {
     /**
      * Update game objects
      */
-    public void update() {
+    public void update() throws Exception {
 
-        //if the blocks are at their target, we can merge again and spawn a new block
-        if (this.merge != null && getBoard().hasTarget()) {
+        //do we need to check for a merge
+        if (flagMerge) {
 
-            //we can merge again
-            this.merge = null;
+            //update the blocks accordingly on where we want to head
+            BoardHelper.merge(getBoard(), this.merge);
 
-            //spawn a new block
-            getBoard().spawn();
+            //after merging, if all blocks are already at the target nothing will happen
+            if (getBoard().hasTarget())
+                this.merge = null;
 
-            //if the game is over vibrate the phone
-            if (getBoard().isGameover()) {
-                //activity.vibrate();
+            //flag false now that we are complete
+            flagMerge = false;
+
+        } else {
+
+            //if the blocks are at their target, we can merge again and spawn a new block
+            if (this.merge != null && getBoard().hasTarget()) {
+
+                //we can merge again
+                this.merge = null;
+
+                //spawn a new block
+                getBoard().spawn();
+
+                //if the game is over vibrate the phone
+                if (getBoard().isGameover()) {
+                    //activity.vibrate();
+                }
             }
-        }
 
-        getBoard().update();
+            //update the state of the blocks on the board
+            getBoard().update();
+        }
     }
 
     /**
