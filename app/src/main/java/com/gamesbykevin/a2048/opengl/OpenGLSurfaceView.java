@@ -1,6 +1,8 @@
 package com.gamesbykevin.a2048.opengl;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -45,7 +47,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
     /**
      * Frames per second
      */
-    public static final int FPS = 60;
+    public static final int FPS = 90;
 
     /**
      * The duration of each frame (milliseconds)
@@ -57,7 +59,9 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
      */
     public static final long MILLISECONDS_PER_SECOND = 1000L;
 
-    //count the number of frames for debugging purposes
+    /**
+     * Count the number of frames for debugging purposes
+     */
     private int frames = 0;
 
     //keep track of time for debug purposes
@@ -218,7 +222,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
     private void trackProgress() {
 
         //keep track of the frames
-        this.frames++;
+        frames++;
 
         //if 1 second has passed, print fps counter
         if (System.currentTimeMillis() - calendar.getTimeInMillis() >= MILLISECONDS_PER_SECOND) {
@@ -230,7 +234,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
             calendar = Calendar.getInstance();
 
             //reset frame count
-            this.frames = 0;
+            frames = 0;
         }
     }
 

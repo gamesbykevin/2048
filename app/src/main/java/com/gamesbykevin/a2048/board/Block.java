@@ -19,33 +19,13 @@ public class Block extends EntityItem {
     //what is the value of this block
     private int value = 0;
 
-    //where are we targeting to go
+    //where are we targeting to go?
     private Cell target;
 
     /**
      * Size of animation on sprite sheet
      */
     public static final int ANIMATION_DIMENSIONS = 90;
-
-    /**
-     * The max dimensions allowed for this block
-     */
-    public static final int DIMENSIONS_MAX = (int)(ANIMATION_DIMENSIONS * 1.25);
-
-    /**
-     * How fast do we expand/collapse
-     */
-    private static final float DIMENSION_CHANGE_VELOCITY = (ANIMATION_DIMENSIONS / (OpenGLSurfaceView.FPS / 2));//1.5f;
-
-    /**
-     * The starting coordinate of the north-west block
-     */
-    public static final int START_X = 48;
-
-    /**
-     * The starting coordinate of the north-west block
-     */
-    public static final int START_Y = 125;
 
     /**
      * How fast do the blocks move?
@@ -56,6 +36,29 @@ public class Block extends EntityItem {
      * No velocity
      */
     protected static final float VELOCITY_NONE = 0.0f;
+
+    //the size of each block on this board
+    public static int BLOCK_DIMENSIONS;
+
+    /**
+     * The starting coordinate of the north-west block
+     */
+    public static int START_X = 48;
+
+    /**
+     * The starting coordinate of the north-west block
+     */
+    public static int START_Y = 125;
+
+    /**
+     * The max dimensions allowed for this block
+     */
+    public static int DIMENSIONS_MAX;
+
+    /**
+     * How fast do we expand/collapse
+     */
+    public static float DIMENSION_CHANGE_VELOCITY;
 
     //did we already expand and collapse the block
     private boolean expand, collapse;
@@ -72,8 +75,8 @@ public class Block extends EntityItem {
         this.target = new Cell();
 
         //assign the size at which we will render the  block
-        setWidth(ANIMATION_DIMENSIONS);
-        setHeight(ANIMATION_DIMENSIONS);
+        setWidth(BLOCK_DIMENSIONS);
+        setHeight(BLOCK_DIMENSIONS);
 
         //expand at first
         setExpand(true);
@@ -151,11 +154,11 @@ public class Block extends EntityItem {
                     setHeight(getHeight() - DIMENSION_CHANGE_VELOCITY);
 
                     //if we hit our collapse limit, we are done
-                    if (getWidth() <= ANIMATION_DIMENSIONS || getHeight() <= ANIMATION_DIMENSIONS) {
+                    if (getWidth() <= BLOCK_DIMENSIONS || getHeight() <= BLOCK_DIMENSIONS) {
 
                         //set the block size
-                        setWidth(ANIMATION_DIMENSIONS);
-                        setHeight(ANIMATION_DIMENSIONS);
+                        setWidth(BLOCK_DIMENSIONS);
+                        setHeight(BLOCK_DIMENSIONS);
 
                         //stop collapsing
                         setCollapse(false);
@@ -280,8 +283,99 @@ public class Block extends EntityItem {
      * @param block The object we want to update the render coordinates, preferably a Block
      */
     protected static void updateCoordinates(final Entity block) {
-        block.setX(START_X + (block.getCol() * (double)(ANIMATION_DIMENSIONS + BORDER_THICKNESS)));
-        block.setY(START_Y + (block.getRow() * (double)(ANIMATION_DIMENSIONS + BORDER_THICKNESS)));
+        block.setX(START_X + (block.getCol() * (double)(BLOCK_DIMENSIONS + BORDER_THICKNESS)));
+        block.setY(START_Y + (block.getRow() * (double)(BLOCK_DIMENSIONS + BORDER_THICKNESS)));
+    }
+
+    /**
+     * Update our block instance
+     * @param tmp The block containing the attributes we want to assign
+     */
+    protected void updateBlock(Block tmp) {
+
+        //update the entity position (col, row)
+        setCol(tmp);
+        setRow(tmp);
+
+        //update the dimensions as well
+        setWidth(tmp);
+        setHeight(tmp);
+
+        //calculate the x,y render coordinates
+        updateCoordinates();
+
+        //match the value that we are rendering
+        setValue(tmp.getValue());
+
+        //assign the correct animation
+        setTextureId(tmp.getTextureId());
+    }
+
+    /**
+     * Make sure the block is assigned the correct texture for rendering
+     * @param textures Array of texture ids resembling each image to be rendered
+     */
+    public void assignTextures(final int[] textures) {
+
+        //assign texture id for the block
+        switch (getValue()) {
+
+            default:
+                setTextureId(textures[0]);
+                break;
+
+            case 2:
+                setTextureId(textures[1]);
+                break;
+
+            case 4:
+                setTextureId(textures[2]);
+                break;
+
+            case 8:
+                setTextureId(textures[3]);
+                break;
+
+            case 16:
+                setTextureId(textures[4]);
+                break;
+
+            case 32:
+                setTextureId(textures[5]);
+                break;
+
+            case 64:
+                setTextureId(textures[6]);
+                break;
+
+            case 128:
+                setTextureId(textures[7]);
+                break;
+
+            case 256:
+                setTextureId(textures[8]);
+                break;
+
+            case 512:
+                setTextureId(textures[9]);
+                break;
+
+            case 1024:
+                setTextureId(textures[10]);
+                break;
+
+            case 2048:
+                setTextureId(textures[11]);
+                break;
+
+            case 4096:
+                setTextureId(textures[12]);
+                break;
+
+            case 8192:
+                setTextureId(textures[13]);
+                break;
+        }
     }
 
     @Override
@@ -292,8 +386,8 @@ public class Block extends EntityItem {
         final double y = getY();
 
         //calculate the middle location
-        double middleX = getX() + (ANIMATION_DIMENSIONS / 2);
-        double middleY = getY() + (ANIMATION_DIMENSIONS / 2);
+        double middleX = getX() + (BLOCK_DIMENSIONS / 2);
+        double middleY = getY() + (BLOCK_DIMENSIONS / 2);
 
         //offset the coordinate
         super.setX(middleX - (getWidth() / 2));

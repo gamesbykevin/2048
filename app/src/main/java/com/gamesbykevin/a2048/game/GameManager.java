@@ -5,23 +5,21 @@ package com.gamesbykevin.a2048.game;
  */
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.view.MotionEvent;
 
-import com.gamesbykevin.a2048.GameActivity;
 import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.R;
-import com.gamesbykevin.a2048.board.Block;
 import com.gamesbykevin.a2048.board.Board;
 import com.gamesbykevin.a2048.board.BoardHelper;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import static com.gamesbykevin.a2048.board.Block.BLOCK_DIMENSIONS;
+import static com.gamesbykevin.a2048.board.Block.START_X;
+import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.glText;
+
 /**
- * The GameMananger class will keep all of our game object(s) logic
+ * The Game Mananger class will keep all of our game object(s) logic
  */
 public class GameManager {
 
@@ -50,6 +48,12 @@ public class GameManager {
     //do we want to try and merge
     private boolean flagMerge = false;
 
+    //the name of our font file
+    public static final String FONT_FILE_NAME = "font.ttf";
+
+    //the font size of the text
+    public static final int FONT_SIZE = 36;
+
     /**
      * Default constructor
      */
@@ -59,7 +63,7 @@ public class GameManager {
         this.activity = activity;
 
         //create a new game board
-        this.board = new Board();
+        this.board = new Board(8, 8);
     }
 
     public boolean onTouchEvent(final int action, final float x, final float y) {
@@ -113,7 +117,7 @@ public class GameManager {
                     float diffY = (y > this.downY) ? y - this.downY : this.downY - y;
 
                     //if we didn't swipe long enough, don't continue
-                    if (diffX < Board.BORDER_DIMENSIONS / 2 && diffY < Board.BORDER_DIMENSIONS / 2)
+                    if (diffX < BLOCK_DIMENSIONS / 2 && diffY < BLOCK_DIMENSIONS / 2)
                         return true;
 
                     //determine which way we are swiping
@@ -135,9 +139,10 @@ public class GameManager {
 
                             //merging west
                             this.merge = Merge.West;
-                        }
 
+                        }
                     } else {
+
                         //if the y difference is greater than x then we are swiping vertical
                         if (y > this.downY) {
 
@@ -223,29 +228,54 @@ public class GameManager {
 
         try {
 
+            //assign the appropriate textures
             getBoard().assignTextures(textures);
+
+            //draw everything on the board
             getBoard().draw(gl);
 
-            /*
-            //render the board
-            getBoard().draw(canvas);
+            //draw our text on-screen
+            drawText(gl);
 
-            if (this.paint == null) {
-                this.paint = new Paint();
-                this.paint.setStyle(Paint.Style.FILL);
-                this.paint.setTextSize(48f);
-                this.paint.setColor(Color.WHITE);
-            }
-
-            //render the current score
-            canvas.drawText("Score: " + getBoard().getScore(), Block.START_X, 75, paint);
-
-            if (getBoard().isGameover()) {
-                canvas.drawText("Game Over", Block.START_X, 700, paint);
-            }
-            */
         } catch (Exception e) {
             MainActivity.handleException(e);
         }
+    }
+
+    /**
+     * Render any text on screen using custom font
+     * @param gl Object used to render image
+     */
+    public void drawText(GL10 gl) {
+
+        // Set to ModelView mode
+        gl.glMatrixMode( GL10.GL_MODELVIEW );           // Activate Model View Matrix
+        gl.glLoadIdentity();                            // Load Identity Matrix
+
+        // enable texture + alpha blending
+        // NOTE: this is required for text rendering! we could incorporate it into
+        // the GLText class, but then it would be called multiple times (which impacts performance).
+        gl.glEnable( GL10.GL_TEXTURE_2D );              // Enable Texture Mapping
+        gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
+        gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
+
+        //TEST: render the entire font texture
+        //gl.glColor4f(1.0f, 0.0f, 0.0f, 1.0f);     // Set Color to Use
+        //glText.drawTexture(100, 100);            // Draw the Entire Texture
+
+        // TEST: render some strings with the font
+        glText.begin( 1.0f, 1.0f, 1.0f, 1.0f );         // (r, g, b) alpha
+        glText.draw( "Score:" + getBoard().getScore(), START_X, 25);
+        glText.end();                                   // End Text Rendering
+
+        if (getBoard().isGameover()) {
+            glText.begin( 1.0f, 1.0f, 1.0f, 1.0f );         // (r, g, b) alpha
+            glText.draw("Game Over", START_X, 25 + glText.getCharHeight());
+            glText.end();
+        }
+
+        // disable texture + alpha
+        gl.glDisable( GL10.GL_BLEND );                  // Disable Alpha Blend
+        gl.glDisable( GL10.GL_TEXTURE_2D );             // Disable Texture Mapping
     }
 }

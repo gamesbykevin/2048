@@ -4,9 +4,9 @@ package com.gamesbykevin.a2048.board;
  * Created by Kevin on 5/26/2017.
  */
 
-
 import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.base.EntityItem;
+import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
 import com.gamesbykevin.androidframework.base.Cell;
 
 import java.util.ArrayList;
@@ -14,10 +14,15 @@ import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import static com.gamesbykevin.a2048.GameActivity.getRandomObject;
 import static com.gamesbykevin.a2048.board.Block.ANIMATION_DIMENSIONS;
+import static com.gamesbykevin.a2048.board.Block.BLOCK_DIMENSIONS;
 import static com.gamesbykevin.a2048.board.Block.START_X;
 import static com.gamesbykevin.a2048.board.Block.START_Y;
-import static com.gamesbykevin.a2048.GameActivity.getRandomObject;
+import static com.gamesbykevin.a2048.board.Block.DIMENSIONS_MAX;
+import static com.gamesbykevin.a2048.board.Block.DIMENSION_CHANGE_VELOCITY;
+import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.HEIGHT;
+import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.WIDTH;
 
 /**
  * The game board where the action takes place
@@ -30,21 +35,13 @@ public class Board {
     //this entity will be used for all the block rendering
     private Block block;
 
-    //the border of the board
-    private EntityItem border;
-
     //the background of each block
     private EntityItem background;
 
     /**
-     * Dimensions of the border
+     * The pixel thickness of the border outline
      */
-    public static final int BORDER_DIMENSIONS = 102;
-
-    /**
-     * The thickness of the border outline
-     */
-    protected static final int BORDER_THICKNESS = 6;
+    protected static final int BORDER_THICKNESS = 10;
 
     /**
      * Number of columns on our board
@@ -56,19 +53,29 @@ public class Board {
      */
     protected static final int DEFAULT_ROWS = 4;
 
+    //the amount of space on each side of the board
+    private static final int PADDING = 10;
+
     //what is our score
     private int score = 0;
 
     //the size of the board
     private int cols, rows;
 
-    //is the game over
+    //is the game over?
     private boolean gameover = false;
 
     /**
      * Default constructor
      */
-    public Board() {
+    public Board(final int cols, final int rows) {
+
+        //set the size of the board
+        setCols(cols);
+        setRows(rows);
+
+        //figure out the pixel dimensions
+        assignLogistics();
 
         //create new array list to contain all the blocks
         this.blocks = new ArrayList<>();
@@ -76,27 +83,59 @@ public class Board {
         //create a new entity
         this.block = new Block();
 
-        //create border and set default values
-        this.border = new EntityItem();
-        this.border.setWidth(BORDER_DIMENSIONS);
-        this.border.setHeight(BORDER_DIMENSIONS);
-
         //create the background and set default values
         this.background = new EntityItem();
-        this.background.setWidth(ANIMATION_DIMENSIONS);
-        this.background.setHeight(ANIMATION_DIMENSIONS);
-
-        //set the size of the board
-        setCols(DEFAULT_COLUMNS);
-        setRows(DEFAULT_ROWS);
+        this.background.setWidth(BLOCK_DIMENSIONS);
+        this.background.setHeight(BLOCK_DIMENSIONS);
 
         //create some default blocks
         spawn();
     }
 
     /**
-     *
-     * @param cols
+     * Assign the size, xy, etc... coordinates for the board
+     */
+    private void assignLogistics() {
+
+        //amount of space we can render the board and elements
+        int dimension = WIDTH - (PADDING * 2);
+
+        //calculate the amount of space available after subtracting the borders
+        dimension = dimension - ((getCols() + 1) * BORDER_THICKNESS);
+
+        //amount of pixel space per block
+        int remaining = (int)(dimension / getCols());
+
+        //make sure the block size is an even number
+        if (remaining % 2 != 0) {
+            remaining--;
+        }
+
+        //assign the dimensions of a single block
+        BLOCK_DIMENSIONS = remaining;
+
+        int middleX = (int)(WIDTH  * .5);
+        START_Y     = (int)(HEIGHT * .15);
+
+        //the total width of the blocks
+        int blockWidth = (getCols() * BLOCK_DIMENSIONS);
+
+        //the total width of the borders
+        int borderWidth = (getCols() + 1) * BORDER_THICKNESS;
+
+        //now that we know the middle and block dimensions we can find the start x,y
+        START_X = middleX - ((blockWidth + borderWidth) / 2);
+
+        //determine the maximum dimensions before we collapse
+        DIMENSIONS_MAX = (int)(BLOCK_DIMENSIONS * 1.5);
+
+        //determine how fast we expand/collapse
+        DIMENSION_CHANGE_VELOCITY = (BLOCK_DIMENSIONS / (OpenGLSurfaceView.FPS / 4));
+    }
+
+    /**
+     * Assign the columns
+     * @param cols The total number of columns in the puzzle
      */
     public void setCols(int cols) {
         this.cols = cols;
@@ -336,75 +375,24 @@ public class Board {
         return true;
     }
 
-    /**
-     * Make sure each object on the board has the correct texture id
-     * @param textures Array of texture ids for each image to be rendered
-     */
-    public void assignTextures(final int[] textures) {
+    public void assignTextures(int[] textures) {
 
-        //assign texture id for the background
+        //assign to background
         this.background.setTextureId(textures[0]);
 
-        //assign texture id for the border
-        this.border.setTextureId(textures[textures.length - 1]);
+        //check every block
+        for (int col = 0; col < getCols(); col++) {
+            for (int row = 0; row < getRows(); row++) {
 
-        //assign texture id for each block
-        for (int i = 0; i < getBlocks().size(); i++) {
-            final Block tmp = getBlocks().get(i);
+                //get the current block
+                Block block = getBlock(col, row);
 
-            switch (tmp.getValue()) {
-                case 2:
-                default:
-                    tmp.setTextureId(textures[1]);
-                    break;
+                //if the block doesn't exist here, skip to the next
+                if (block == null)
+                    continue;
 
-                case 4:
-                    tmp.setTextureId(textures[2]);
-                    break;
-
-                case 8:
-                    tmp.setTextureId(textures[3]);
-                    break;
-
-                case 16:
-                    tmp.setTextureId(textures[4]);
-                    break;
-
-                case 32:
-                    tmp.setTextureId(textures[5]);
-                    break;
-
-                case 64:
-                    tmp.setTextureId(textures[6]);
-                    break;
-
-                case 128:
-                    tmp.setTextureId(textures[7]);
-                    break;
-
-                case 256:
-                    tmp.setTextureId(textures[8]);
-                    break;
-
-                case 512:
-                    tmp.setTextureId(textures[9]);
-                    break;
-
-                case 1024:
-                    tmp.setTextureId(textures[10]);
-                    break;
-
-                case 2048:
-                    tmp.setTextureId(textures[11]);
-                    break;
-
-                case 4096:
-                    tmp.setTextureId(textures[12]);
-                    break;
-
-                case 8192:
-                    tmp.setTextureId(textures[13]);
-                    break;
+                //assign the appropriate texture
+                block.assignTextures(textures);
             }
         }
     }
@@ -415,15 +403,25 @@ public class Board {
      */
     public void draw(GL10 gl) throws Exception {
 
-        //render the background tile first
+        //render the border
+
+
+        //render the background tiles
         for (int col = 0; col < getCols(); col++) {
             for (int row = 0; row < getRows(); row++) {
 
+                //assign the current location
                 this.background.setCol(col);
                 this.background.setRow(row);
 
+                //assign dimensions
+                this.background.setWidth(BLOCK_DIMENSIONS);
+                this.background.setHeight(BLOCK_DIMENSIONS);
+
+                //calculate x,y render coordinates
                 Block.updateCoordinates(this.background);
 
+                //render the background
                 this.background.render(gl);
             }
         }
@@ -438,26 +436,11 @@ public class Board {
                 continue;
 
             //update block attributes
-            updateBlock(tmp);
+            block.updateBlock(tmp);
 
             //render the block
             block.render(gl);
         }
-
-        /*
-        //render the borders on top of the blocks
-        for (int col = 0; col < COLUMNS; col++) {
-            for (int row = 0; row < ROWS; row++) {
-
-                //assign the border coordinates
-                border.setX((START_X - BORDER_THICKNESS) + (col * (double) (BORDER_DIMENSIONS - BORDER_THICKNESS)));
-                border.setY((START_Y - BORDER_THICKNESS) + (row * (double) (BORDER_DIMENSIONS - BORDER_THICKNESS)));
-
-                //render the border at the current location
-                border.render(gl);
-            }
-        }
-        */
 
         //now render all the blocks that are expanding/collapsing so they appear on the top
         for (int i = 0; i < getBlocks().size(); i++) {
@@ -469,34 +452,10 @@ public class Board {
                 continue;
 
             //update block attributes
-            updateBlock(tmp);
+            block.updateBlock(tmp);
 
             //render the block
             block.render(gl);
         }
-    }
-
-    /**
-     * Update our block instance
-     * @param tmp The block containing the attributes we want to assign
-     */
-    private void updateBlock(final Block tmp) {
-
-        //update the entity position (col, row)
-        block.setCol(tmp);
-        block.setRow(tmp);
-
-        //update the dimensions as well
-        block.setWidth(tmp);
-        block.setHeight(tmp);
-
-        //calculate the x,y render coordinates
-        block.updateCoordinates();
-
-        //match the value that we are rendering
-        block.setValue(tmp.getValue());
-
-        //assign the correct animation
-        block.setTextureId(tmp.getTextureId());
     }
 }

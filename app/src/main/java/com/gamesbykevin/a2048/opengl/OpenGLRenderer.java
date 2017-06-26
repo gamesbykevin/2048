@@ -1,21 +1,24 @@
 package com.gamesbykevin.a2048.opengl;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ConfigurationInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLUtils;
-import android.support.v7.app.WindowDecorActionBar;
 
 import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.R;
-import com.gamesbykevin.a2048.game.GameManager;
+import com.gamesbykevin.a2048.opengl.text.GLText;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import static com.gamesbykevin.a2048.GameActivity.MANAGER;
 import static com.gamesbykevin.a2048.board.Block.ANIMATION_DIMENSIONS;
+import static com.gamesbykevin.a2048.game.GameManager.FONT_FILE_NAME;
+import static com.gamesbykevin.a2048.game.GameManager.FONT_SIZE;
 
 /**
  * Created by Kevin on 6/1/2017.
@@ -38,6 +41,9 @@ public class OpenGLRenderer implements Renderer {
     public OpenGLRenderer(Context activity) {
         this.activity = activity;
     }
+
+    //our object to render gl text
+    public static GLText glText;
 
     public void onPause() {
         //do we do anything here?
@@ -74,7 +80,8 @@ public class OpenGLRenderer implements Renderer {
      */
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        //do we need to to anything here?
+        //display the version of open gl
+        MainActivity.logEvent("OpenGL Version: " + gl.glGetString(GL10.GL_VERSION));
     }
 
     /**
@@ -87,6 +94,11 @@ public class OpenGLRenderer implements Renderer {
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
 
+        //create new text rendering object
+        glText = new GLText(gl, activity.getAssets());
+        glText.load(FONT_FILE_NAME, FONT_SIZE, 2, 2);
+
+        //enable 2d textures and the ability to render alpha pixels
         gl.glEnable(GL10.GL_TEXTURE_2D);
         gl.glEnable(GL10.GL_ALPHA_TEST);
 
@@ -180,7 +192,7 @@ public class OpenGLRenderer implements Renderer {
     private void loadTextures(GL10 gl) {
 
         //load 15 textures into our array
-        this.textures = new int[15];
+        this.textures = new int[14];
 
         //get the sprite sheet containing all our animations
         Bitmap spriteSheet = BitmapFactory.decodeResource(activity.getResources(), R.drawable.blocks);
@@ -194,8 +206,5 @@ public class OpenGLRenderer implements Renderer {
             //load the individual texture
             loadTexture(tmp, gl, textures, i);
         }
-
-        //load the texture
-        loadTexture(BitmapFactory.decodeResource(activity.getResources(), R.drawable.border), gl, textures, textures.length - 1);
     }
 }
