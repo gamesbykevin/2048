@@ -15,14 +15,7 @@ import java.util.List;
 import javax.microedition.khronos.opengles.GL10;
 
 import static com.gamesbykevin.a2048.GameActivity.getRandomObject;
-import static com.gamesbykevin.a2048.board.Block.ANIMATION_DIMENSIONS;
 import static com.gamesbykevin.a2048.board.Block.BLOCK_DIMENSIONS;
-import static com.gamesbykevin.a2048.board.Block.START_X;
-import static com.gamesbykevin.a2048.board.Block.START_Y;
-import static com.gamesbykevin.a2048.board.Block.DIMENSIONS_MAX;
-import static com.gamesbykevin.a2048.board.Block.DIMENSION_CHANGE_VELOCITY;
-import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.HEIGHT;
-import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.WIDTH;
 
 /**
  * The game board where the action takes place
@@ -41,7 +34,7 @@ public class Board {
     /**
      * The pixel thickness of the border outline
      */
-    protected static final int BORDER_THICKNESS = 10;
+    protected static final int BORDER_THICKNESS = 5;
 
     /**
      * Number of columns on our board
@@ -54,7 +47,7 @@ public class Board {
     protected static final int DEFAULT_ROWS = 4;
 
     //the amount of space on each side of the board
-    private static final int PADDING = 10;
+    protected static int PADDING = 10;
 
     //what is our score
     private int score = 0;
@@ -74,8 +67,8 @@ public class Board {
         setCols(cols);
         setRows(rows);
 
-        //figure out the pixel dimensions
-        assignLogistics();
+        //figure out the pixel dimensions, etc...
+        BoardHelper.assignLogistics(this);
 
         //create new array list to contain all the blocks
         this.blocks = new ArrayList<>();
@@ -90,47 +83,6 @@ public class Board {
 
         //create some default blocks
         spawn();
-    }
-
-    /**
-     * Assign the size, xy, etc... coordinates for the board
-     */
-    private void assignLogistics() {
-
-        //amount of space we can render the board and elements
-        int dimension = WIDTH - (PADDING * 2);
-
-        //calculate the amount of space available after subtracting the borders
-        dimension = dimension - ((getCols() + 1) * BORDER_THICKNESS);
-
-        //amount of pixel space per block
-        int remaining = (int)(dimension / getCols());
-
-        //make sure the block size is an even number
-        if (remaining % 2 != 0) {
-            remaining--;
-        }
-
-        //assign the dimensions of a single block
-        BLOCK_DIMENSIONS = remaining;
-
-        int middleX = (int)(WIDTH  * .5);
-        START_Y     = (int)(HEIGHT * .15);
-
-        //the total width of the blocks
-        int blockWidth = (getCols() * BLOCK_DIMENSIONS);
-
-        //the total width of the borders
-        int borderWidth = (getCols() + 1) * BORDER_THICKNESS;
-
-        //now that we know the middle and block dimensions we can find the start x,y
-        START_X = middleX - ((blockWidth + borderWidth) / 2);
-
-        //determine the maximum dimensions before we collapse
-        DIMENSIONS_MAX = (int)(BLOCK_DIMENSIONS * 1.5);
-
-        //determine how fast we expand/collapse
-        DIMENSION_CHANGE_VELOCITY = (BLOCK_DIMENSIONS / (OpenGLSurfaceView.FPS / 4));
     }
 
     /**

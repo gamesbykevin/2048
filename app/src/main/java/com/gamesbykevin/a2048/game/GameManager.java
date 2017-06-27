@@ -63,7 +63,7 @@ public class GameManager {
         this.activity = activity;
 
         //create a new game board
-        this.board = new Board(8, 8);
+        this.board = new Board(5, 5);
     }
 
     public boolean onTouchEvent(final int action, final float x, final float y) {
@@ -81,8 +81,8 @@ public class GameManager {
             return true;
 
         //if blocks are currently expanding/collapsing we can't do anything yet
-        if (!getBoard().hasCompletedChange())
-            return true;
+        //if (!getBoard().hasCompletedChange())
+        //    return true;
 
         //determine the appropriate action
         switch (action)

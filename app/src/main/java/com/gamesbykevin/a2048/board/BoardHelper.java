@@ -2,8 +2,19 @@ package com.gamesbykevin.a2048.board;
 
 import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.game.GameManager;
+import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
 
 import java.util.List;
+
+import static com.gamesbykevin.a2048.board.Block.BLOCK_DIMENSIONS;
+import static com.gamesbykevin.a2048.board.Block.DIMENSIONS_MAX;
+import static com.gamesbykevin.a2048.board.Block.DIMENSION_CHANGE_VELOCITY;
+import static com.gamesbykevin.a2048.board.Block.START_X;
+import static com.gamesbykevin.a2048.board.Block.START_Y;
+import static com.gamesbykevin.a2048.board.Board.BORDER_THICKNESS;
+import static com.gamesbykevin.a2048.board.Board.PADDING;
+import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.HEIGHT;
+import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.WIDTH;
 
 /**
  * Created by Kevin on 5/31/2017.
@@ -388,5 +399,54 @@ public class BoardHelper {
 
         //we couldn't find any moves, so the game is over
         return true;
+    }
+
+    /**
+     * Assign the size, xy, etc... coordinates for the board
+     */
+    protected static void assignLogistics(Board board) {
+
+        //amount of space we can render the board and elements
+        int dimension = WIDTH - (PADDING * 2);
+
+        //calculate the amount of space available after subtracting the borders
+        dimension = dimension - ((board.getCols() + 1) * BORDER_THICKNESS);
+
+        //amount of pixel space per block
+        int remaining = (int)(dimension / board.getCols());
+
+        //make sure the block size is an even number
+        if (remaining % 2 != 0) {
+            remaining--;
+        }
+
+        //lets make the dimensions a nice even number
+        int goodSize = 1024;
+
+        //continue to check until we found the ideal dimension
+        while (goodSize > remaining) {
+            goodSize -= 8;
+        }
+
+        //assign the dimensions of a single block
+        BLOCK_DIMENSIONS = goodSize;
+
+        int middleX = (int)(WIDTH  * .5);
+        START_Y     = (int)(HEIGHT * .15);
+
+        //the total width of the blocks
+        int blockWidth = (board.getCols() * BLOCK_DIMENSIONS);
+
+        //the total width of the borders
+        int borderWidth = (board.getCols() + 1) * BORDER_THICKNESS;
+
+        //now that we know the middle and block dimensions we can find the start x,y
+        START_X = middleX - ((blockWidth + borderWidth) / 2);
+
+        //determine the maximum dimensions before we collapse
+        DIMENSIONS_MAX = (int)(BLOCK_DIMENSIONS * 1.5);
+
+        //determine how fast we expand/collapse
+        DIMENSION_CHANGE_VELOCITY = (BLOCK_DIMENSIONS / (OpenGLSurfaceView.FPS / 4));
     }
 }
