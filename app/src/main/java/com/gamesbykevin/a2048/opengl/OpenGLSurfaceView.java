@@ -47,7 +47,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
     /**
      * Frames per second
      */
-    public static final int FPS = 90;
+    public static final int FPS = 60;
 
     /**
      * The duration of each frame (milliseconds)
@@ -124,6 +124,9 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         //call parent function
         super.onPause();
 
+        //pause the open gl renderer
+        getOpenGlRenderer().onPause();
+
         //flag that we don't want our thread to continue running
         this.running = false;
 
@@ -145,6 +148,9 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
 
         //call parent function
         super.onResume();
+
+        //resume the open gl renderer
+        getOpenGlRenderer().onResume();
 
         //flag running true
         this.running = true;
@@ -243,6 +249,10 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
 
         try
         {
+            //we can't continue game input if the game is over
+            if (MANAGER.isGameOver())
+                return true;
+
             //adjust the coordinates where touch event occurred
             final float x = event.getRawX() * getOpenGlRenderer().scaleMotionX;
             final float y = event.getRawY() * getOpenGlRenderer().scaleMotionY;

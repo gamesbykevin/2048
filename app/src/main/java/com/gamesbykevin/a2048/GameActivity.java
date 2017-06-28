@@ -1,8 +1,12 @@
 package com.gamesbykevin.a2048;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -32,6 +36,9 @@ public class GameActivity extends BaseActivity {
     //has the activity been paused
     private boolean paused = false;
 
+    //our layout for the game over screen
+    private LinearLayout gameOverLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -46,6 +53,9 @@ public class GameActivity extends BaseActivity {
 
         //obtain our open gl surface view object for reference
         this.glSurfaceView = (OpenGLSurfaceView)findViewById(R.id.openglView);
+
+        //obtain the game over layout so we can choose when to display it
+        this.gameOverLayout = (LinearLayout)findViewById(R.id.gameOverLayout);
     }
 
     /**
@@ -129,6 +139,38 @@ public class GameActivity extends BaseActivity {
             //resume the game view
             glSurfaceView.onResume();
         }
+
+        //determine if the game over screen is displayed
+        if (MANAGER.isGameOver()) {
+            showGameOverScreen();
+        } else {
+            hideGameOverScreen();
+        }
+    }
+
+    public void hideGameOverScreen() {
+        this.gameOverLayout.setVisibility(View.INVISIBLE);
+    }
+
+    public void showGameOverScreen() {
+
+        //run task on ui thread to update
+        this.runOnUiThread(new Runnable(){
+            @Override
+            public void run() {
+                //make layout visible
+                gameOverLayout.setVisibility(View.VISIBLE);
+
+                //force layout to redraw
+                gameOverLayout.invalidate();
+
+                //bring layout to the front
+                gameOverLayout.bringToFront();
+
+                //need to set visibility of one of the child buttons to get whole view to display
+                ((Button)findViewById(R.id.ButtonStart)).setVisibility(VISIBLE);
+            }
+        });
     }
 
     @Override

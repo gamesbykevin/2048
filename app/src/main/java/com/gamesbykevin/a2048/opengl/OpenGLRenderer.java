@@ -1,16 +1,18 @@
 package com.gamesbykevin.a2048.opengl;
 
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.pm.ConfigurationInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.opengl.GLES10;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLUtils;
 
+import com.gamesbykevin.a2048.GameActivity;
 import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.opengl.text.GLText;
+
+import java.nio.IntBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -19,6 +21,8 @@ import static com.gamesbykevin.a2048.GameActivity.MANAGER;
 import static com.gamesbykevin.a2048.board.Block.ANIMATION_DIMENSIONS;
 import static com.gamesbykevin.a2048.game.GameManager.FONT_FILE_NAME;
 import static com.gamesbykevin.a2048.game.GameManager.FONT_SIZE;
+import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.HEIGHT;
+import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.WIDTH;
 
 /**
  * Created by Kevin on 6/1/2017.
@@ -50,7 +54,7 @@ public class OpenGLRenderer implements Renderer {
     }
 
     public void onResume() {
-        //re-load the textures if needed
+        //re-load the textures if needed?
     }
 
     /**
@@ -109,12 +113,12 @@ public class OpenGLRenderer implements Renderer {
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
         //store the ratio for the render
-        this.scaleRenderX = width / (float)OpenGLSurfaceView.WIDTH;
-        this.scaleRenderY = height / (float)OpenGLSurfaceView.HEIGHT;
+        this.scaleRenderX = width / (float) WIDTH;
+        this.scaleRenderY = height / (float) HEIGHT;
 
         //store the ratio when touching the screen
-        this.scaleMotionX = (float)OpenGLSurfaceView.WIDTH / width;
-        this.scaleMotionY = (float)OpenGLSurfaceView.HEIGHT / height;
+        this.scaleMotionX = (float) WIDTH / width;
+        this.scaleMotionY = (float) HEIGHT / height;
 
         //sets the current view port to the new size of the screen
         gl.glViewport(0, 0, width, height);

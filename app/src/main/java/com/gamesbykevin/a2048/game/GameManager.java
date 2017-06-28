@@ -7,6 +7,8 @@ package com.gamesbykevin.a2048.game;
 import android.content.Context;
 import android.view.MotionEvent;
 
+import com.gamesbykevin.a2048.BaseActivity;
+import com.gamesbykevin.a2048.GameActivity;
 import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.board.Board;
@@ -27,7 +29,7 @@ public class GameManager {
     private Board board;
 
     //store our activity reference
-    private final Context activity;
+    private final GameActivity activity;
 
     //keep track of the pressed down coordinates
     private float downX, downY;
@@ -57,13 +59,13 @@ public class GameManager {
     /**
      * Default constructor
      */
-    public GameManager(final Context activity) {
+    public GameManager(final GameActivity activity) {
 
         //store our activity reference
         this.activity = activity;
 
         //create a new game board
-        this.board = new Board(5, 5);
+        this.board = new Board(3, 3);
     }
 
     public boolean onTouchEvent(final int action, final float x, final float y) {
@@ -201,15 +203,24 @@ public class GameManager {
                 //spawn a new block
                 getBoard().spawn();
 
-                //if the game is over vibrate the phone
-                if (getBoard().isGameover()) {
-                    //activity.vibrate();
+                //if the game is over
+                if (isGameOver()) {
+
+                    //vibrate the phone
+                    activity.vibrate();
+
+                    //display the game over screen
+                    activity.showGameOverScreen();
                 }
             }
 
             //update the state of the blocks on the board
             getBoard().update();
         }
+    }
+
+    public boolean isGameOver() {
+        return getBoard().isGameover();
     }
 
     /**
