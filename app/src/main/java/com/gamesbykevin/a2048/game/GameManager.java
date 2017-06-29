@@ -57,6 +57,11 @@ public class GameManager {
     public static final int FONT_SIZE = 36;
 
     /**
+     * The pixel length the user needs to swipe a motion event in order to detect up/down/left/right
+     */
+    private static final int SWIPE_DISTANCE = 16;
+
+    /**
      * Default constructor
      */
     public GameManager(final GameActivity activity) {
@@ -65,7 +70,7 @@ public class GameManager {
         this.activity = activity;
 
         //create a new game board
-        this.board = new Board(3, 3);
+        this.board = new Board(4, 4);
     }
 
     public boolean onTouchEvent(final int action, final float x, final float y) {
@@ -119,7 +124,7 @@ public class GameManager {
                     float diffY = (y > this.downY) ? y - this.downY : this.downY - y;
 
                     //if we didn't swipe long enough, don't continue
-                    if (diffX < BLOCK_DIMENSIONS / 2 && diffY < BLOCK_DIMENSIONS / 2)
+                    if (diffX < SWIPE_DISTANCE && diffY < SWIPE_DISTANCE)
                         return true;
 
                     //determine which way we are swiping
