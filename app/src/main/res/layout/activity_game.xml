@@ -20,14 +20,12 @@
         android:layout_height="match_parent"
         style="@style/GameOverPage">
 
+        <!-- Need to show Game Over text etc... -->
         <include layout="@layout/layout_logo" />
 
         <TableLayout style="@style/TableMenu">
             <TableRow style="@style/RowMenu">
-                <Button android:id="@+id/ButtonStart" style="@style/ButtonMenu" android:text="Start" android:onClick="onClickStart" />
-            </TableRow>
-            <TableRow style="@style/RowMenu">
-                <Button android:id="@+id/ButtonOptions" style="@style/ButtonMenu" android:text="Options" android:onClick="onClickOptions" />
+                <Button android:id="@+id/ButtonRestart" style="@style/ButtonMenu" android:text="Restart" android:onClick="onClickRestart" />
             </TableRow>
             <TableRow style="@style/RowMenu">
                 <Button android:id="@+id/ButtonRate" style="@style/ButtonMenu" android:text="Rate" android:onClick="onClickRate" />
@@ -36,7 +34,7 @@
                 <Button android:id="@+id/ButtonMore" style="@style/ButtonMenu" android:text="More" android:onClick="onClickMore" />
             </TableRow>
             <TableRow style="@style/RowMenu">
-                <Button android:id="@+id/ButtonExit" style="@style/ButtonMenu" android:text="Exit" android:onClick="onClickExit" />
+                <Button android:id="@+id/ButtonMenu" style="@style/ButtonMenu" android:text="Menu" android:onClick="onClickMenu" />
             </TableRow>
         </TableLayout>
 

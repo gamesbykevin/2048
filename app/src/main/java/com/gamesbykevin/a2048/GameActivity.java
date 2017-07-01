@@ -168,7 +168,7 @@ public class GameActivity extends BaseActivity {
                 gameOverLayout.bringToFront();
 
                 //need to set visibility of one of the child buttons to get whole view to display
-                ((Button)findViewById(R.id.ButtonStart)).setVisibility(VISIBLE);
+                ((Button)findViewById(R.id.ButtonRestart)).setVisibility(VISIBLE);
             }
         });
     }
@@ -178,5 +178,35 @@ public class GameActivity extends BaseActivity {
 
         //call parent
         super.onBackPressed();
+    }
+
+    /**
+     * Reset the board
+     * @param view
+     */
+    public void onClickRestart(View view) {
+
+        //also hide the game over screen
+        hideGameOverScreen();
+
+        //flag the game to reset
+        MANAGER.RESET = true;
+
+        //play sound effect
+        super.playSoundEffect();
+    }
+
+    /**
+     * Go to the main game menu
+     * @param view
+     */
+    public void onClickMenu(View view) {
+
+        //go back to the main game menu
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+
+        //play sound effect
+        super.playSoundEffect();
     }
 }

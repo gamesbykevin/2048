@@ -56,18 +56,6 @@ public class MainActivity extends BaseActivity {
         super.playSoundEffect();
     }
 
-    public void onClickRate(View view) {
-
-        //open the url
-        openUrl(URL_RATE);
-    }
-
-    public void onClickMore(View view) {
-
-        //open the url
-        openUrl(URL_WEBSITE);
-    }
-
     public void onClickExit(View view) {
 
         //close activity altogether

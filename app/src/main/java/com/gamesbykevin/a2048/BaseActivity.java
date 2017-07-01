@@ -29,10 +29,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static SharedPreferences preferences;
 
     //our vibrate object
-    private Vibrator vibrator;
+    private static Vibrator vibrator;
 
     //the object to play the sound selection
-    private MediaPlayer soundSelection;
+    private static MediaPlayer soundSelection;
 
     //the intent used to open web urls
     private Intent intent;
@@ -40,7 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * The default duration of the vibration
      */
-    public static final long VIBRATE_DURATION = 750L;
+    public static final long VIBRATE_DURATION = 600L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +49,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //get our shared preferences object
-        this.preferences = super.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        if (this.preferences == null)
+            this.preferences = super.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
         //get our vibrator object
-        this.vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+        if (this.vibrator == null)
+            this.vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 
         //get the object to play the sound effect
-        this.soundSelection = MediaPlayer.create(this, R.raw.selection);
+        if (this.soundSelection == null)
+            this.soundSelection = MediaPlayer.create(this, R.raw.selection);
     }
 
     /**
@@ -167,6 +170,18 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public void onClickHelp(View view) {
         openUrl(URL_HELP);
+    }
+
+    public void onClickRate(View view) {
+
+        //open the url
+        openUrl(URL_RATE);
+    }
+
+    public void onClickMore(View view) {
+
+        //open the url
+        openUrl(URL_WEBSITE);
     }
 
     /**

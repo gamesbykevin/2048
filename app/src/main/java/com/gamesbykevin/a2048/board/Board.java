@@ -81,8 +81,23 @@ public class Board {
         this.background.setWidth(BLOCK_DIMENSIONS);
         this.background.setHeight(BLOCK_DIMENSIONS);
 
-        //create some default blocks
+        //reset the board
+        reset();
+    }
+
+    /**
+     * Reset the board and spawn blocks etc...
+     */
+    public void reset() {
+
+        //clear our blocks
+        getBlocks().clear();
+
+        //spawn the default blocks
         spawn();
+
+        //reset the score as well
+        setScore(0);
     }
 
     /**
@@ -198,7 +213,7 @@ public class Board {
             addBlock(available.get(index), getRandomObject().nextBoolean() ? 2 : 4);
         }
 
-        //now that the new block has  spawned, check if the game is over
+        //now that the new block has spawned, check if the game is over
         this.gameover = BoardHelper.isGameOver(this);
 
         //notify if game over

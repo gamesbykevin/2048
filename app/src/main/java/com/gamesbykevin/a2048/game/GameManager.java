@@ -19,6 +19,7 @@ import javax.microedition.khronos.opengles.GL10;
 import static com.gamesbykevin.a2048.board.Block.BLOCK_DIMENSIONS;
 import static com.gamesbykevin.a2048.board.Block.START_X;
 import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.glText;
+import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.FPS;
 
 /**
  * The Game Mananger class will keep all of our game object(s) logic
@@ -61,6 +62,19 @@ public class GameManager {
      */
     private static final int SWIPE_DISTANCE = 16;
 
+    //keep track so we know when to display the game over screen
+    private int frames = 0;
+
+    /**
+     * The duration we wait until we show the game over screen
+     */
+    private static final int GAME_OVER_FRAMES_DELAY = (FPS * 2);
+
+    /**
+     * Do we want to reset the game?
+     */
+    public static boolean RESET = false;
+
     /**
      * Default constructor
      */
@@ -70,7 +84,7 @@ public class GameManager {
         this.activity = activity;
 
         //create a new game board
-        this.board = new Board(4, 4);
+        this.board = new Board(2, 2);
     }
 
     public boolean onTouchEvent(final int action, final float x, final float y) {
@@ -85,6 +99,10 @@ public class GameManager {
 
         //if the game is over we can't continue
         if (getBoard().isGameover())
+            return true;
+
+        //can't continue if we are resetting the game
+        if (RESET)
             return true;
 
         //if blocks are currently expanding/collapsing we can't do anything yet
@@ -184,6 +202,19 @@ public class GameManager {
      */
     public void update() throws Exception {
 
+        //do we want to reset the game?
+        if (RESET) {
+
+            //flag false
+            RESET = false;
+
+            //reset the board to restart
+            getBoard().reset();
+
+            //no need to continue at this point
+            return;
+        }
+
         //do we need to check for a merge
         if (flagMerge) {
 
@@ -214,13 +245,29 @@ public class GameManager {
                     //vibrate the phone
                     activity.vibrate();
 
+                    //reset frames timer
+                    frames = 0;
+                }
+            }
+
+            //update the state of the blocks on the board no matter what
+            getBoard().update();
+
+            //if the game is over, track the time elapsed
+            if (isGameOver()) {
+
+                //keep counting if enough time has not yet passed
+                if (frames < GAME_OVER_FRAMES_DELAY) {
+
+                    //keep track of frames elapsed
+                    frames++;
+
+                } else {
+
                     //display the game over screen
                     activity.showGameOverScreen();
                 }
             }
-
-            //update the state of the blocks on the board
-            getBoard().update();
         }
     }
 
