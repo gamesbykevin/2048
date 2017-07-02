@@ -5,7 +5,9 @@ import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,6 +40,9 @@ public class GameActivity extends BaseActivity {
 
     //our layout for the game over screen
     private LinearLayout gameOverLayout;
+
+    //our layout parameters
+    private LinearLayout.LayoutParams layoutParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,8 +136,14 @@ public class GameActivity extends BaseActivity {
             //resume the game view
             glSurfaceView.onResume();
 
-            //set the content view
+            //remove game over layout from parent view
+            ((ViewGroup)gameOverLayout.getParent()).removeView(gameOverLayout);
+
+            //set the content view for our open gl surface view
             setContentView(glSurfaceView);
+
+            //add the game over layout to the view
+            super.addContentView(gameOverLayout, getLayoutParams());
 
         } else {
 
@@ -141,11 +152,19 @@ public class GameActivity extends BaseActivity {
         }
 
         //determine if the game over screen is displayed
-        if (MANAGER.isGameOver()) {
+        if (MANAGER.canShowGameOverScreen()) {
             showGameOverScreen();
         } else {
             hideGameOverScreen();
         }
+    }
+
+    private LinearLayout.LayoutParams getLayoutParams() {
+
+        if (this.layoutParams == null)
+            this.layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT , LinearLayout.LayoutParams.MATCH_PARENT);
+
+        return this.layoutParams;
     }
 
     public void hideGameOverScreen() {

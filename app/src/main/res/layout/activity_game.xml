@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:id="@+id/layoutGame"
     tools:context="com.gamesbykevin.a2048.GameActivity">
 
@@ -41,4 +42,7 @@
         <include layout="@layout/layout_social_icons" />
 
     </LinearLayout>
+
+    <include layout="@layout/activity_splash" android:id="@+id/loadLayout" />
+
 </FrameLayout>

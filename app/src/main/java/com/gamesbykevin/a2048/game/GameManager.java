@@ -84,7 +84,7 @@ public class GameManager {
         this.activity = activity;
 
         //create a new game board
-        this.board = new Board(2, 2);
+        this.board = new Board(4, 4);
     }
 
     public boolean onTouchEvent(final int action, final float x, final float y) {
@@ -104,10 +104,6 @@ public class GameManager {
         //can't continue if we are resetting the game
         if (RESET)
             return true;
-
-        //if blocks are currently expanding/collapsing we can't do anything yet
-        //if (!getBoard().hasCompletedChange())
-        //    return true;
 
         //determine the appropriate action
         switch (action)
@@ -257,7 +253,7 @@ public class GameManager {
             if (isGameOver()) {
 
                 //keep counting if enough time has not yet passed
-                if (frames < GAME_OVER_FRAMES_DELAY) {
+                if (!canShowGameOverScreen()) {
 
                     //keep track of frames elapsed
                     frames++;
@@ -273,6 +269,14 @@ public class GameManager {
 
     public boolean isGameOver() {
         return getBoard().isGameover();
+    }
+
+    /**
+     * Can we show the game over screen?
+     * @return true if game over and enough time has elapsed, false otherwise
+     */
+    public boolean canShowGameOverScreen() {
+        return (isGameOver() && frames >= GAME_OVER_FRAMES_DELAY);
     }
 
     /**

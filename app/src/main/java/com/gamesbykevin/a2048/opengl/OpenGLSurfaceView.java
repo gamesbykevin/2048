@@ -47,7 +47,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
     /**
      * Frames per second
      */
-    public static final int FPS = 60;
+    public static final int FPS = 90;
 
     /**
      * The duration of each frame (milliseconds)

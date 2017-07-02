@@ -5,6 +5,28 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
-    <color name="transparentMore">#D8000000</color>
-    <color name="transparentLess">#CC000000</color>
+
+    <!-- different levels of transparency -->
+    <color name="transparent100">#FF000000</color>
+    <color name="transparent95">#F2000000</color>
+    <color name="transparent90">#E6000000</color>
+    <color name="transparent85">#D9000000</color>
+    <color name="transparent80">#CC000000</color>
+    <color name="transparent75">#BF000000</color>
+    <color name="transparent70">#B3000000</color>
+    <color name="transparent65">#A6000000</color>
+    <color name="transparent60">#99000000</color>
+    <color name="transparent55">#8C000000</color>
+    <color name="transparent50">#80000000</color>
+    <color name="transparent45">#73000000</color>
+    <color name="transparent40">#66000000</color>
+    <color name="transparent35">#59000000</color>
+    <color name="transparent30">#4D000000</color>
+    <color name="transparent25">#40000000</color>
+    <color name="transparent20">#33000000</color>
+    <color name="transparent15">#26000000</color>
+    <color name="transparent10">#1A000000</color>
+    <color name="transparent05">#0D000000</color>
+    <color name="transparent00">#00000000</color>
+
 </resources>
