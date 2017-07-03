@@ -9,40 +9,19 @@
     android:id="@+id/layoutGame"
     tools:context="com.gamesbykevin.a2048.GameActivity">
 
+    <!-- OpenGL Surface View container -->
     <com.gamesbykevin.a2048.opengl.OpenGLSurfaceView
         android:id="@+id/openglView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <LinearLayout
-        android:id="@+id/gameOverLayout"
-        android:visibility="invisible"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="@style/GameOverPage">
+    <!-- Game over layout -->
+    <include layout="@layout/layout_game_over" android:id="@+id/gameOverLayout" />
 
-        <!-- Need to show Game Over text etc... -->
-        <include layout="@layout/layout_logo" />
+    <!-- Splash page layout -->
+    <include layout="@layout/activity_splash" android:id="@+id/loadingScreenLayout" />
 
-        <TableLayout style="@style/TableMenu">
-            <TableRow style="@style/RowMenu">
-                <Button android:id="@+id/ButtonRestart" style="@style/ButtonMenu" android:text="Restart" android:onClick="onClickRestart" />
-            </TableRow>
-            <TableRow style="@style/RowMenu">
-                <Button android:id="@+id/ButtonRate" style="@style/ButtonMenu" android:text="Rate" android:onClick="onClickRate" />
-            </TableRow>
-            <TableRow style="@style/RowMenu">
-                <Button android:id="@+id/ButtonMore" style="@style/ButtonMenu" android:text="More" android:onClick="onClickMore" />
-            </TableRow>
-            <TableRow style="@style/RowMenu">
-                <Button android:id="@+id/ButtonMenu" style="@style/ButtonMenu" android:text="Menu" android:onClick="onClickMenu" />
-            </TableRow>
-        </TableLayout>
-
-        <include layout="@layout/layout_social_icons" />
-
-    </LinearLayout>
-
-    <include layout="@layout/activity_splash" android:id="@+id/loadLayout" />
+    <!-- Level select layout -->
+    <include layout="@layout/layout_level_select" android:id="@+id/levelSelectLayout" />
 
 </FrameLayout>

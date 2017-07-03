@@ -2,25 +2,39 @@ package com.gamesbykevin.a2048;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gamesbykevin.a2048.game.GameManager;
 import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
+import com.gamesbykevin.a2048.ui.CustomAdapter;
+import com.gamesbykevin.a2048.ui.Item;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
-public class GameActivity extends BaseActivity {
+public class GameActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     //our open GL surface view
     private GLSurfaceView glSurfaceView;
@@ -38,11 +52,33 @@ public class GameActivity extends BaseActivity {
     //has the activity been paused
     private boolean paused = false;
 
+    //our layout parameters
+    private LinearLayout.LayoutParams layoutParams;
+
     //our layout for the game over screen
     private LinearLayout gameOverLayout;
 
-    //our layout parameters
-    private LinearLayout.LayoutParams layoutParams;
+    //access our loading screen
+    private ConstraintLayout loadingScreenLayout;
+
+    //the container for our level select
+    private TableLayout levelSelectLayout;
+
+    //list of data for our grid view
+    private List<Item> data;
+
+    /**
+     * Different steps in the game
+     */
+    public enum Step {
+        Loading,
+        Ready,
+        GameOver,
+        LevelSelect
+    }
+
+    //current step we are on
+    private Step step;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +97,52 @@ public class GameActivity extends BaseActivity {
 
         //obtain the game over layout so we can choose when to display it
         this.gameOverLayout = (LinearLayout)findViewById(R.id.gameOverLayout);
+
+        //store our object reference to toggle visibility
+        this.loadingScreenLayout = (ConstraintLayout)findViewById(R.id.loadingScreenLayout);
+
+        //store the level select layout reference
+        this.levelSelectLayout = (TableLayout)findViewById(R.id.levelSelectLayout);
+
+        //get the grid view reference and assign on click
+        GridView levelSelectGrid = (GridView)findViewById(R.id.levelSelectGrid);
+        levelSelectGrid.setOnItemClickListener(this);
+
+        //create a new list
+        data = new ArrayList<>();
+
+        //add all of our level selections to the list
+        for (int i = 1; i < 101; i++) {
+
+            //create our level selection
+            Item item = new Item();
+            item.setTitle(i + "");
+            item.setCompleted(RANDOM.nextBoolean());
+
+            //add it to the list
+            data.add(item);
+        }
+
+        //create the custom adapter using the level selection layout and data to populate it
+        CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(), R.layout.level_selection, data);
+
+        //set our adapter to the grid view
+        levelSelectGrid.setAdapter(customAdapter);
+
+        //default to loading screen
+        setStep(Step.Loading);
+    }
+
+    @Override
+    public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
+    {
+        String message = "Clicked : " + data.get(position).getTitle();
+        Toast.makeText(getApplicationContext(), message , Toast.LENGTH_SHORT).show();
+
+        //update game manager object
+
+        //we are now ready
+        setStep(Step.Ready);
     }
 
     /**
@@ -136,14 +218,18 @@ public class GameActivity extends BaseActivity {
             //resume the game view
             glSurfaceView.onResume();
 
-            //remove game over layout from parent view
+            //remove layouts from the parent view
             ((ViewGroup)gameOverLayout.getParent()).removeView(gameOverLayout);
+            ((ViewGroup)loadingScreenLayout.getParent()).removeView(loadingScreenLayout);
+            ((ViewGroup)levelSelectLayout.getParent()).removeView(levelSelectLayout);
 
             //set the content view for our open gl surface view
             setContentView(glSurfaceView);
 
-            //add the game over layout to the view
+            //add the layouts to the current content view
             super.addContentView(gameOverLayout, getLayoutParams());
+            super.addContentView(loadingScreenLayout, getLayoutParams());
+            super.addContentView(levelSelectLayout, getLayoutParams());
 
         } else {
 
@@ -151,14 +237,60 @@ public class GameActivity extends BaseActivity {
             glSurfaceView.onResume();
         }
 
-        //determine if the game over screen is displayed
-        if (MANAGER.canShowGameOverScreen()) {
-            showGameOverScreen();
-        } else {
-            hideGameOverScreen();
+        //determine what screens are displayed
+        setStep(step);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Step getStep() {
+        return this.step;
+    }
+
+    /**
+     *
+     * @param step
+     */
+    public void setStep(final Step step) {
+
+        //assign step
+        this.step = step;
+
+        //display the correct screens
+        switch (this.step) {
+
+            case Loading:
+                setLayoutVisibility(loadingScreenLayout, true);
+                setLayoutVisibility(gameOverLayout, false);
+                setLayoutVisibility(levelSelectLayout, false);
+                break;
+
+            case GameOver:
+                setLayoutVisibility(loadingScreenLayout, false);
+                setLayoutVisibility(gameOverLayout, true);
+                setLayoutVisibility(levelSelectLayout, false);
+                break;
+
+            case LevelSelect:
+                setLayoutVisibility(loadingScreenLayout, false);
+                setLayoutVisibility(gameOverLayout, false);
+                setLayoutVisibility(levelSelectLayout, true);
+                break;
+
+            case Ready:
+                setLayoutVisibility(loadingScreenLayout, false);
+                setLayoutVisibility(gameOverLayout, false);
+                setLayoutVisibility(levelSelectLayout, false);
+                break;
         }
     }
 
+    /**
+     *
+     * @return
+     */
     private LinearLayout.LayoutParams getLayoutParams() {
 
         if (this.layoutParams == null)
@@ -167,27 +299,24 @@ public class GameActivity extends BaseActivity {
         return this.layoutParams;
     }
 
-    public void hideGameOverScreen() {
-        this.gameOverLayout.setVisibility(View.INVISIBLE);
-    }
-
-    public void showGameOverScreen() {
-
-        //run task on ui thread to update
-        this.runOnUiThread(new Runnable(){
+    /**
+     *
+     * @param layoutView
+     * @param visible
+     */
+    public void setLayoutVisibility(final ViewGroup layoutView, final boolean visible) {
+        this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //make layout visible
-                gameOverLayout.setVisibility(View.VISIBLE);
 
-                //force layout to redraw
-                gameOverLayout.invalidate();
+                //assign visibility accordingly
+                layoutView.setVisibility(visible ? VISIBLE : INVISIBLE);
 
-                //bring layout to the front
-                gameOverLayout.bringToFront();
-
-                //need to set visibility of one of the child buttons to get whole view to display
-                ((Button)findViewById(R.id.ButtonRestart)).setVisibility(VISIBLE);
+                //if the layout is visible, make sure it is displayed
+                if (visible) {
+                    layoutView.invalidate();
+                    layoutView.bringToFront();
+                }
             }
         });
     }
@@ -205,11 +334,11 @@ public class GameActivity extends BaseActivity {
      */
     public void onClickRestart(View view) {
 
-        //also hide the game over screen
-        hideGameOverScreen();
-
         //flag the game to reset
         MANAGER.RESET = true;
+
+        //go back to the ready step
+        setStep(Step.Ready);
 
         //play sound effect
         super.playSoundEffect();

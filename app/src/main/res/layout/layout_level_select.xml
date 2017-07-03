@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/background"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent">
+
+    <TableRow
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+        <TextView
+            style="@style/LevelSelectHeaderText"
+            android:text="@string/level_select_header_text" />
+    </TableRow>
+    <TableRow
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+        <GridView
+            android:layout_weight="1"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/levelSelectGrid"
+            android:gravity="center"
+            android:columnWidth="75dp"
+            android:numColumns="auto_fit"
+            android:verticalSpacing="10dp"
+            android:horizontalSpacing="10dp"
+            android:padding="10dp"
+            android:stretchMode="columnWidth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </TableRow>
+</TableLayout>

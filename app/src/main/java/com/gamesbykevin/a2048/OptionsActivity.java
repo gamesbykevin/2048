@@ -20,10 +20,12 @@ public class OptionsActivity extends BaseActivity {
         //retrieve our buttons so we can update based on current setting (shared preferences)
         ToggleButton buttonSound = (ToggleButton)findViewById(R.id.ToggleButtonSound);
         ToggleButton buttonVibrate = (ToggleButton)findViewById(R.id.ToggleButtonVibrate);
+        ToggleButton buttonMode = (ToggleButton)findViewById(R.id.ToggleButtonMode);
 
         //update our buttons accordingly
         buttonSound.setChecked(getBooleanValue(getString(R.string.sound_file_key)));
         buttonVibrate.setChecked(getBooleanValue(getString(R.string.vibrate_file_key)));
+        buttonMode.setChecked(getBooleanValue(getString(R.string.mode_file_key)));
     }
 
     /**
@@ -42,8 +44,12 @@ public class OptionsActivity extends BaseActivity {
             //store the vibrate setting based on the toggle button
             editor.putBoolean(getString(R.string.vibrate_file_key), ((ToggleButton)findViewById(R.id.ToggleButtonVibrate)).isChecked());
 
+            //store the mode setting based on the toggle button
+            editor.putBoolean(getString(R.string.mode_file_key), ((ToggleButton)findViewById(R.id.ToggleButtonMode)).isChecked());
+
             //make it final by committing the change
             editor.commit();
+
         } catch (Exception ex) {
             //print stack trace
             ex.printStackTrace();
@@ -78,7 +84,17 @@ public class OptionsActivity extends BaseActivity {
     public void onClickSound(View view) {
 
         //get the button
-        ToggleButton button = (ToggleButton)view.findViewById(R.id.ToggleButtonSound);
+        //ToggleButton button = (ToggleButton)view.findViewById(R.id.ToggleButtonSound);
+
+        //play sound effect
+        playSoundEffect();
+    }
+
+    /**
+     * Handle the button click
+     * @param view Current view
+     */
+    public void onClickMode(View view) {
 
         //play sound effect
         playSoundEffect();

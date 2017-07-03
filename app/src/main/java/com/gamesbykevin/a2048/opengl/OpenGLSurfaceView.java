@@ -14,6 +14,7 @@ import java.util.Calendar;
 
 import static com.gamesbykevin.a2048.GameActivity.MANAGER;
 import static com.gamesbykevin.a2048.MainActivity.DEBUG;
+import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.LOADED;
 
 /**
  * Created by Kevin on 6/1/2017.
@@ -152,6 +153,9 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         //resume the open gl renderer
         getOpenGlRenderer().onResume();
 
+        //resume the game manager as well
+        MANAGER.onResume();
+
         //flag running true
         this.running = true;
 
@@ -251,6 +255,10 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         {
             //we can't continue game input if the game is over
             if (MANAGER.isGameOver())
+                return true;
+
+            //we can't continue if the textures have not yet loaded
+            if (!LOADED)
                 return true;
 
             //adjust the coordinates where touch event occurred

@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/ActivityPage"
-    tools:context="com.gamesbykevin.a2048.MainActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/GameOverPage">
 
+    <!-- Need to show Game Over text etc... -->
     <include layout="@layout/layout_logo" />
 
     <TableLayout style="@style/TableMenu">
         <TableRow style="@style/RowMenu">
-            <Button android:id="@+id/ButtonStart" style="@style/ButtonMenu" android:text="@string/button_text_start" android:onClick="onClickStart" />
-        </TableRow>
-        <TableRow style="@style/RowMenu">
-            <Button android:id="@+id/ButtonOptions" style="@style/ButtonMenu" android:text="@string/button_text_options" android:onClick="onClickOptions" />
+            <Button android:id="@+id/ButtonRestart" style="@style/ButtonMenu" android:text="@string/button_text_restart" android:onClick="onClickRestart" />
         </TableRow>
         <TableRow style="@style/RowMenu">
             <Button android:id="@+id/ButtonRate" style="@style/ButtonMenu" android:text="@string/button_text_rate" android:onClick="onClickRate" />
@@ -21,9 +19,10 @@
             <Button android:id="@+id/ButtonMore" style="@style/ButtonMenu" android:text="@string/button_text_more" android:onClick="onClickMore" />
         </TableRow>
         <TableRow style="@style/RowMenu">
-            <Button android:id="@+id/ButtonExit" style="@style/ButtonMenu" android:text="@string/button_text_exit" android:onClick="onClickExit" />
+            <Button android:id="@+id/ButtonMenu" style="@style/ButtonMenu" android:text="@string/button_text_menu" android:onClick="onClickMenu" />
         </TableRow>
     </TableLayout>
 
     <include layout="@layout/layout_social_icons" />
+
 </LinearLayout>

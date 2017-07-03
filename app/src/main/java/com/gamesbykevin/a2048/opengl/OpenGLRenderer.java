@@ -42,8 +42,18 @@ public class OpenGLRenderer implements Renderer {
     //maintain list of texture id's so we can access when rendering textures
     private int[] textures;
 
+    /**
+     * Have all textures been loaded?
+     */
+    public static boolean LOADED = false;
+
     public OpenGLRenderer(Context activity) {
+
+        //store context reference
         this.activity = activity;
+
+        //flag the textures loaded as false
+        LOADED = false;
     }
 
     //our object to render gl text
@@ -98,6 +108,9 @@ public class OpenGLRenderer implements Renderer {
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
 
+        //flag that we have not yet loaded the textures
+        LOADED = false;
+
         //create new text rendering object
         glText = new GLText(gl, activity.getAssets());
         glText.load(FONT_FILE_NAME, FONT_SIZE, 2, 2);
@@ -146,11 +159,15 @@ public class OpenGLRenderer implements Renderer {
 
         //load our textures
         loadTextures(gl);
+
+        //flag that we have loaded the textures
+        LOADED = true;
     }
 
     public int loadTexture(Bitmap bitmap, GL10 gl, int[] textures, int index) {
 
         try {
+
             //our container to generate the textures
             gl.glGenTextures(1, textures, index);
 

@@ -18,11 +18,12 @@ import javax.microedition.khronos.opengles.GL10;
 
 import static com.gamesbykevin.a2048.board.Block.BLOCK_DIMENSIONS;
 import static com.gamesbykevin.a2048.board.Block.START_X;
+import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.LOADED;
 import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.glText;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.FPS;
 
 /**
- * The Game Mananger class will keep all of our game object(s) logic
+ * The Game Manager class will keep all of our game object(s) logic
  */
 public class GameManager {
 
@@ -76,6 +77,11 @@ public class GameManager {
     public static boolean RESET = false;
 
     /**
+     * Default size of board
+     */
+    public static final int DEFAULT_DIMENSIONS = 4;
+
+    /**
      * Default constructor
      */
     public GameManager(final GameActivity activity) {
@@ -84,25 +90,25 @@ public class GameManager {
         this.activity = activity;
 
         //create a new game board
-        this.board = new Board(4, 4);
+        this.board = new Board(DEFAULT_DIMENSIONS, DEFAULT_DIMENSIONS);
+    }
+
+    public void onResume() {
+        //do anything here?
     }
 
     public boolean onTouchEvent(final int action, final float x, final float y) {
 
         //don't continue if we are in the process of merging
-        if (flagMerge)
-            return true;
-
-        //don't continue if we are already merging
-        if (merge != null)
+        if (flagMerge || merge != null)
             return true;
 
         //if the game is over we can't continue
         if (getBoard().isGameover())
             return true;
 
-        //can't continue if we are resetting the game
-        if (RESET)
+        //can't continue if we are resetting the game or not ready yet
+        if (RESET || activity.getStep() != GameActivity.Step.Ready)
             return true;
 
         //determine the appropriate action
@@ -211,6 +217,24 @@ public class GameManager {
             return;
         }
 
+        //if we aren't ready, check if the textures have loaded
+        if (activity.getStep() == GameActivity.Step.Loading) {
+
+            //check if the textures have loaded
+            if (LOADED) {
+
+                //is this original game mode
+                if (activity.getBooleanValue(activity.getString(R.string.mode_file_key))) {
+                    activity.setStep(GameActivity.Step.Ready);
+                } else {
+                    activity.setStep(GameActivity.Step.LevelSelect);
+                }
+            }
+
+            //no need to continue at this point
+            return;
+        }
+
         //do we need to check for a merge
         if (flagMerge) {
 
@@ -258,15 +282,18 @@ public class GameManager {
                     //keep track of frames elapsed
                     frames++;
 
-                } else {
-
-                    //display the game over screen
-                    activity.showGameOverScreen();
+                    //if we are now ready to display go ahead and do it
+                    if (canShowGameOverScreen())
+                        activity.setStep(GameActivity.Step.GameOver);
                 }
             }
         }
     }
 
+    /**
+     * Is the game over
+     * @return true if the game has been flagged over, false otherwise
+     */
     public boolean isGameOver() {
         return getBoard().isGameover();
     }
@@ -280,8 +307,8 @@ public class GameManager {
     }
 
     /**
-     *
-     * @return
+     * Get the game board
+     * @return The board containing all blocks in play
      */
     public Board getBoard() {
         return this.board;
@@ -316,33 +343,33 @@ public class GameManager {
     public void drawText(GL10 gl) {
 
         // Set to ModelView mode
-        gl.glMatrixMode( GL10.GL_MODELVIEW );           // Activate Model View Matrix
+        gl.glMatrixMode(GL10.GL_MODELVIEW);           // Activate Model View Matrix
         gl.glLoadIdentity();                            // Load Identity Matrix
 
         // enable texture + alpha blending
         // NOTE: this is required for text rendering! we could incorporate it into
         // the GLText class, but then it would be called multiple times (which impacts performance).
-        gl.glEnable( GL10.GL_TEXTURE_2D );              // Enable Texture Mapping
-        gl.glEnable( GL10.GL_BLEND );                   // Enable Alpha Blend
-        gl.glBlendFunc( GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA );  // Set Alpha Blend Function
+        gl.glEnable(GL10.GL_TEXTURE_2D);              // Enable Texture Mapping
+        gl.glEnable(GL10.GL_BLEND);                   // Enable Alpha Blend
+        gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);  // Set Alpha Blend Function
 
         //TEST: render the entire font texture
         //gl.glColor4f(1.0f, 0.0f, 0.0f, 1.0f);     // Set Color to Use
         //glText.drawTexture(100, 100);            // Draw the Entire Texture
 
         // TEST: render some strings with the font
-        glText.begin( 1.0f, 1.0f, 1.0f, 1.0f );         // (r, g, b) alpha
-        glText.draw( "Score:" + getBoard().getScore(), START_X, 25);
+        glText.begin(1.0f, 1.0f, 1.0f, 1.0f);         // (r, g, b) alpha
+        glText.draw("Score:" + getBoard().getScore(), START_X, 25);
         glText.end();                                   // End Text Rendering
 
         if (getBoard().isGameover()) {
-            glText.begin( 1.0f, 1.0f, 1.0f, 1.0f );         // (r, g, b) alpha
+            glText.begin(1.0f, 1.0f, 1.0f, 1.0f);         // (r, g, b) alpha
             glText.draw("Game Over", START_X, 25 + glText.getCharHeight());
             glText.end();
         }
 
         // disable texture + alpha
-        gl.glDisable( GL10.GL_BLEND );                  // Disable Alpha Blend
-        gl.glDisable( GL10.GL_TEXTURE_2D );             // Disable Texture Mapping
+        gl.glDisable(GL10.GL_BLEND);                  // Disable Alpha Blend
+        gl.glDisable(GL10.GL_TEXTURE_2D);             // Disable Texture Mapping
     }
 }
