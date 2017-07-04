@@ -27,16 +27,19 @@
                 android:checked="true" />
         </TableRow>
         <TableRow style="@style/RowMenu">
-            <ToggleButton
+            <com.gamesbykevin.a2048.ui.MultiStateToggleButton
                 style="@style/ButtonMenu"
                 android:id="@+id/ToggleButtonMode"
-                android:textOn="@string/mode_original"
-                android:textOff="@string/mode_puzzle"
                 android:onClick="onClickMode"
-                android:checked="true" />
+                />
         </TableRow>
         <TableRow style="@style/RowMenu">
             <!-- Add multi state toggle button here -->
+            <com.gamesbykevin.a2048.ui.MultiStateToggleButton
+                style="@style/ButtonMenu"
+                android:id="@+id/ToggleButtonDifficulty"
+                android:onClick="onClickDifficulty"
+                />
         </TableRow>
     </TableLayout>
 

@@ -78,12 +78,54 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
+     *
+     * @return
+     */
+    public boolean isDifficultyEasy() {
+        return hasDifficulty(0);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isDifficultyMedium() {
+        return hasDifficulty(1);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isDifficultyHard() {
+        return hasDifficulty(2);
+    }
+
+    /**
+     *
+     * @param index
+     * @return
+     */
+    private boolean hasDifficulty(final int index) {
+        return (getIntegerValue(getString(R.string.difficulty_file_key)) == index);
+    }
+
+    /**
      * Get the boolean value of the shared preferences setting
      * @param key The unique key of the setting we want to retrieve
      * @return The value of the setting for the corresponding key, if not set true will be returned by default
      */
     public boolean getBooleanValue(final String key) {
         return getSharedPreferences().getBoolean(key, true);
+    }
+
+    /**
+     *
+     * @param key
+     * @return
+     */
+    public int getIntegerValue(final String key) {
+        return getSharedPreferences().getInt(key, -1);
     }
 
     /**

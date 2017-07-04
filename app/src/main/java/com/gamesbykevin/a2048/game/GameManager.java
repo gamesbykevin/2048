@@ -18,6 +18,11 @@ import javax.microedition.khronos.opengles.GL10;
 
 import static com.gamesbykevin.a2048.board.Block.BLOCK_DIMENSIONS;
 import static com.gamesbykevin.a2048.board.Block.START_X;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.DIMENSIONS_EASY;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.DIMENSIONS_HARD;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.DIMENSIONS_MEDIUM;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.GAME_OVER_FRAMES_DELAY;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.RESET;
 import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.LOADED;
 import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.glText;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.FPS;
@@ -67,30 +72,28 @@ public class GameManager {
     private int frames = 0;
 
     /**
-     * The duration we wait until we show the game over screen
-     */
-    private static final int GAME_OVER_FRAMES_DELAY = (FPS * 2);
-
-    /**
-     * Do we want to reset the game?
-     */
-    public static boolean RESET = false;
-
-    /**
-     * Default size of board
-     */
-    public static final int DEFAULT_DIMENSIONS = 4;
-
-    /**
      * Default constructor
      */
-    public GameManager(final GameActivity activity) {
+    public GameManager(final GameActivity activity) throws RuntimeException {
 
         //store our activity reference
         this.activity = activity;
 
+        //size of the board
+        final int dimensions;
+
+        if (activity.isDifficultyEasy()) {
+            dimensions = DIMENSIONS_EASY;
+        } else if (activity.isDifficultyMedium()) {
+            dimensions = DIMENSIONS_MEDIUM;
+        } else if (activity.isDifficultyHard()) {
+            dimensions = DIMENSIONS_HARD;
+        } else {
+            throw new RuntimeException("Difficulty not managed");
+        }
+
         //create a new game board
-        this.board = new Board(DEFAULT_DIMENSIONS, DEFAULT_DIMENSIONS);
+        this.board = new Board(dimensions, dimensions);
     }
 
     public void onResume() {
@@ -223,11 +226,29 @@ public class GameManager {
             //check if the textures have loaded
             if (LOADED) {
 
-                //is this original game mode
-                if (activity.getBooleanValue(activity.getString(R.string.mode_file_key))) {
-                    activity.setStep(GameActivity.Step.Ready);
-                } else {
-                    activity.setStep(GameActivity.Step.LevelSelect);
+                //get our desired mode from the options
+                final int mode = activity.getIntegerValue(activity.getString(R.string.mode_file_key));
+
+                //determine which mode
+                switch (mode) {
+
+                    //original
+                    case 0:
+                        activity.setStep(GameActivity.Step.Ready);
+                        break;
+
+                    //puzzle
+                    case 1:
+                        activity.setStep(GameActivity.Step.LevelSelect);
+                        break;
+
+                    //challenge
+                    case 2:
+                        activity.setStep(GameActivity.Step.Ready);
+                        break;
+
+                    default:
+                        throw new RuntimeException("Mode not handled here: " + mode);
                 }
             }
 
@@ -329,47 +350,10 @@ public class GameManager {
             getBoard().draw(gl);
 
             //draw our text on-screen
-            drawText(gl);
+            GameManagerHelper.drawText(gl);
 
         } catch (Exception e) {
             MainActivity.handleException(e);
         }
-    }
-
-    /**
-     * Render any text on screen using custom font
-     * @param gl Object used to render image
-     */
-    public void drawText(GL10 gl) {
-
-        // Set to ModelView mode
-        gl.glMatrixMode(GL10.GL_MODELVIEW);           // Activate Model View Matrix
-        gl.glLoadIdentity();                            // Load Identity Matrix
-
-        // enable texture + alpha blending
-        // NOTE: this is required for text rendering! we could incorporate it into
-        // the GLText class, but then it would be called multiple times (which impacts performance).
-        gl.glEnable(GL10.GL_TEXTURE_2D);              // Enable Texture Mapping
-        gl.glEnable(GL10.GL_BLEND);                   // Enable Alpha Blend
-        gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);  // Set Alpha Blend Function
-
-        //TEST: render the entire font texture
-        //gl.glColor4f(1.0f, 0.0f, 0.0f, 1.0f);     // Set Color to Use
-        //glText.drawTexture(100, 100);            // Draw the Entire Texture
-
-        // TEST: render some strings with the font
-        glText.begin(1.0f, 1.0f, 1.0f, 1.0f);         // (r, g, b) alpha
-        glText.draw("Score:" + getBoard().getScore(), START_X, 25);
-        glText.end();                                   // End Text Rendering
-
-        if (getBoard().isGameover()) {
-            glText.begin(1.0f, 1.0f, 1.0f, 1.0f);         // (r, g, b) alpha
-            glText.draw("Game Over", START_X, 25 + glText.getCharHeight());
-            glText.end();
-        }
-
-        // disable texture + alpha
-        gl.glDisable(GL10.GL_BLEND);                  // Disable Alpha Blend
-        gl.glDisable(GL10.GL_TEXTURE_2D);             // Disable Texture Mapping
     }
 }

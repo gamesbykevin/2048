@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gamesbykevin.a2048.game.GameManager;
+import com.gamesbykevin.a2048.game.GameManagerHelper;
 import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
 import com.gamesbykevin.a2048.ui.CustomAdapter;
 import com.gamesbykevin.a2048.ui.Item;
@@ -335,7 +336,7 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
     public void onClickRestart(View view) {
 
         //flag the game to reset
-        MANAGER.RESET = true;
+        GameManagerHelper.RESET = true;
 
         //go back to the ready step
         setStep(Step.Ready);
