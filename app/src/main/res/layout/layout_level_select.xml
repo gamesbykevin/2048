@@ -2,21 +2,21 @@
 <TableLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/background"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <!-- display header text so the user knows what to do -->
     <TableRow android:layout_height="wrap_content" android:layout_width="match_parent">
-        <TextView
-            style="@style/LevelSelectHeaderText"
-            android:text="@string/level_select_header_text" />
+        <TextView style="@style/LevelSelectHeaderText" android:text="@string/level_select_header_text" />
     </TableRow>
 
     <!-- display our level select options -->
     <TableRow android:layout_height="wrap_content" android:layout_width="match_parent">
         <GridView
-            android:layout_weight="1"
             xmlns:android="http://schemas.android.com/apk/res/android"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false"
+            android:layout_weight="1"
             android:id="@+id/levelSelectGrid"
             android:gravity="center"
             android:columnWidth="75dp"

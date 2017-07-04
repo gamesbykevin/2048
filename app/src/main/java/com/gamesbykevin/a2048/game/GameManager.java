@@ -225,30 +225,14 @@ public class GameManager {
 
             //check if the textures have loaded
             if (LOADED) {
-
-                //get our desired mode from the options
-                final int mode = activity.getIntegerValue(activity.getString(R.string.mode_file_key));
-
-                //determine which mode
-                switch (mode) {
-
-                    //original
-                    case 0:
-                        activity.setStep(GameActivity.Step.Ready);
-                        break;
-
-                    //puzzle
-                    case 1:
-                        activity.setStep(GameActivity.Step.LevelSelect);
-                        break;
-
-                    //challenge
-                    case 2:
-                        activity.setStep(GameActivity.Step.Ready);
-                        break;
-
-                    default:
-                        throw new RuntimeException("Mode not handled here: " + mode);
+                if (activity.isModeOriginal()) {
+                    activity.setStep(GameActivity.Step.Ready);
+                } else if (activity.isModePuzzle()) {
+                    activity.setStep(GameActivity.Step.LevelSelect);
+                } else if (activity.isModeChallenge()) {
+                    activity.setStep(GameActivity.Step.Ready);
+                } else {
+                    throw new RuntimeException("Mode is not handled");
                 }
             }
 

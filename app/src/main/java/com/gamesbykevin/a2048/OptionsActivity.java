@@ -63,8 +63,9 @@ public class OptionsActivity extends BaseActivity {
             editor.commit();
 
         } catch (Exception ex) {
-            //print stack trace
-            ex.printStackTrace();
+
+            //handle exception
+            MainActivity.handleException(ex);
         }
 
         //call parent function

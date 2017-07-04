@@ -40,7 +40,21 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * The default duration of the vibration
      */
-    public static final long VIBRATE_DURATION = 600L;
+    public static final long VIBRATE_DURATION = 500L;
+
+    /**
+     * Difficulty
+     */
+    private static final int DIFFICULTY_EASY = 0;
+    private static final int DIFFICULTY_MEDIUM = 1;
+    private static final int DIFFICULTY_HARD = 2;
+
+    /**
+     * Mode
+     */
+    private static final int MODE_ORIGINAL = 0;
+    private static final int MODE_PUZZLE = 1;
+    private static final int MODE_CHALLENGE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +62,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         //call parent
         super.onCreate(savedInstanceState);
 
-        //get our shared preferences object
-        if (this.preferences == null)
+        //get our shared preferences object and make sure we have key default values entered
+        if (this.preferences == null) {
             this.preferences = super.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+            checkDefaultSharedPreferences();
+        }
 
         //get our vibrator object
         if (this.vibrator == null)
@@ -59,6 +75,25 @@ public abstract class BaseActivity extends AppCompatActivity {
         //get the object to play the sound effect
         if (this.soundSelection == null)
             this.soundSelection = MediaPlayer.create(this, R.raw.selection);
+    }
+
+    private void checkDefaultSharedPreferences() {
+
+        //store basic settings if none are stored
+        if (getSharedPreferences().getAll() == null || getSharedPreferences().getAll().isEmpty()) {
+
+            //get the editor so we can change the shared preferences
+            SharedPreferences.Editor editor = getSharedPreferences().edit();
+
+            //store the mode setting based on the toggle button
+            editor.putInt(getString(R.string.mode_file_key), MODE_ORIGINAL);
+
+            //store the difficulty setting
+            editor.putInt(getString(R.string.difficulty_file_key), DIFFICULTY_MEDIUM);
+
+            //make it final by committing the change
+            editor.commit();
+        }
     }
 
     /**
@@ -77,37 +112,36 @@ public abstract class BaseActivity extends AppCompatActivity {
         return preferences;
     }
 
-    /**
-     *
-     * @return
-     */
     public boolean isDifficultyEasy() {
-        return hasDifficulty(0);
+        return hasDifficulty(DIFFICULTY_EASY);
     }
 
-    /**
-     *
-     * @return
-     */
     public boolean isDifficultyMedium() {
-        return hasDifficulty(1);
+        return (hasDifficulty(DIFFICULTY_MEDIUM));
     }
 
-    /**
-     *
-     * @return
-     */
     public boolean isDifficultyHard() {
-        return hasDifficulty(2);
+        return hasDifficulty(DIFFICULTY_HARD);
     }
 
-    /**
-     *
-     * @param index
-     * @return
-     */
-    private boolean hasDifficulty(final int index) {
-        return (getIntegerValue(getString(R.string.difficulty_file_key)) == index);
+    private boolean hasDifficulty(final int value) {
+        return (getIntegerValue(getString(R.string.difficulty_file_key)) == value);
+    }
+
+    public boolean isModeOriginal() {
+        return hasMode(MODE_ORIGINAL);
+    }
+
+    public boolean isModePuzzle() {
+        return hasMode(MODE_PUZZLE);
+    }
+
+    public boolean isModeChallenge() {
+        return hasMode(MODE_CHALLENGE);
+    }
+
+    private boolean hasMode(final int value) {
+        return (getIntegerValue(getString(R.string.mode_file_key)) == value);
     }
 
     /**
