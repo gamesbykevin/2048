@@ -58,8 +58,19 @@ public class Board {
     //is the game over?
     private boolean gameover = false;
 
+    //values of blocks that are spawned
+    private static final int BLOCK_2 = 2;
+    private static final int BLOCK_4 = 4;
+
     /**
      * Default constructor
+     */
+    public Board() {
+        this(DEFAULT_COLUMNS, DEFAULT_ROWS);
+    }
+
+    /**
+     * Create a board with the specified dimensions
      */
     public Board(final int cols, final int rows) {
 
@@ -102,55 +113,55 @@ public class Board {
 
     /**
      * Assign the columns
-     * @param cols The total number of columns in the puzzle
+     * @param cols The desired number of columns
      */
     public void setCols(int cols) {
         this.cols = cols;
     }
 
     /**
-     *
-     * @param rows
+     * Assign the rows
+     * @param rows The desired number of rows
      */
     public void setRows(int rows) {
         this.rows = rows;
     }
 
     /**
-     *
-     * @return
+     * Get the columns
+     * @return The total number of columns on the board
      */
     public int getCols() {
         return this.cols;
     }
 
     /**
-     *
-     * @return
+     * Get the rows
+     * @return The total number of rows on the board
      */
     public int getRows() {
         return this.rows;
     }
 
     /**
-     *
-     * @return
+     * Get the score
+     * @return Our point score
      */
     public int getScore() {
         return this.score;
     }
 
     /**
-     *
-     * @param score
+     * Assign the score
+     * @param score The desired score
      */
     public void setScore(int score) {
         this.score = score;
     }
 
     /**
-     *
-     * @return
+     * Get the blocks
+     * @return The blocks in play on the board
      */
     public List<Block> getBlocks() {
         return this.blocks;
@@ -181,6 +192,7 @@ public class Board {
 
         //create the list that will contain our available blocks
         List<Cell> available = new ArrayList<>();
+
         //check every location to see what is available
         for (int col = 0; col < getCols(); col++) {
             for (int row = 0; row < getRows(); row++) {
@@ -197,7 +209,7 @@ public class Board {
         if (this.blocks.isEmpty()) {
 
             //spawn one block at this random location
-            addBlock(available.get(index), getRandomObject().nextBoolean() ? 2 : 4);
+            addBlock(available.get(index), getRandomObject().nextBoolean() ? BLOCK_2 : BLOCK_4);
 
             //remove from our list of available spawn points
             available.remove(index);
@@ -206,11 +218,11 @@ public class Board {
             index = getRandomObject().nextInt(available.size());
 
             //spawn one block at a new random location again
-            addBlock(available.get(index), getRandomObject().nextBoolean() ? 2 : 4);
+            addBlock(available.get(index), getRandomObject().nextBoolean() ? BLOCK_2 : BLOCK_4);
         } else {
 
             //spawn one block at this random location
-            addBlock(available.get(index), getRandomObject().nextBoolean() ? 2 : 4);
+            addBlock(available.get(index), getRandomObject().nextBoolean() ? BLOCK_2 : BLOCK_4);
         }
 
         //now that the new block has spawned, check if the game is over
@@ -231,10 +243,10 @@ public class Board {
     }
 
     /**
-     *
-     * @param col
-     * @param row
-     * @param value
+     * Add a block at the specified location with the specified value
+     * @param col Column location
+     * @param row Row location
+     * @param value Desired value of the new block
      */
     public void addBlock(int col, int row, int value) {
        Block block = new Block();
@@ -303,28 +315,6 @@ public class Board {
     }
 
     /**
-     * Have all the blocks completed expanding/collapsing
-     * @return true if finished, false otherwise
-     */
-    public boolean hasCompletedChange() {
-
-        //check every block
-        for (int i = 0; i < getBlocks().size(); i++) {
-
-            //if block is expanding, return false
-            if (getBlocks().get(i).hasExpand())
-                return false;
-
-            //if block is collapsing, return false
-            if (getBlocks().get(i).hasCollapse())
-                return false;
-        }
-
-        //if all completed return true
-        return true;
-    }
-
-    /**
      * Are we at our target
      * @return true if all blocks are at their target, false otherwise
      */
@@ -342,6 +332,10 @@ public class Board {
         return true;
     }
 
+    /**
+     * Assign the appropriate texture for each block etc...
+     * @param textures Our array of texture id's for each texture
+     */
     public void assignTextures(int[] textures) {
 
         //assign to background
@@ -371,7 +365,7 @@ public class Board {
     public void draw(GL10 gl) throws Exception {
 
         //render the border
-
+        //?
 
         //render the background tiles
         for (int col = 0; col < getCols(); col++) {
@@ -396,6 +390,7 @@ public class Board {
         //render all the blocks that aren't expanding/collapsing
         for (int i = 0; i < getBlocks().size(); i++) {
 
+            //get the current block
             final Block tmp = getBlocks().get(i);
 
             //skip blocks that are in transition

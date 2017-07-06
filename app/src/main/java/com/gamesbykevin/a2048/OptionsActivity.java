@@ -30,10 +30,10 @@ public class OptionsActivity extends BaseActivity {
         this.buttonDifficulty.setOptions(getResources().getStringArray(R.array.game_difficulty));
 
         //update our buttons accordingly
-        buttonSound.setChecked(getBooleanValue(getString(R.string.sound_file_key)));
-        buttonVibrate.setChecked(getBooleanValue(getString(R.string.vibrate_file_key)));
-        this.buttonMode.setIndex(getIntegerValue(getString(R.string.mode_file_key)));
-        this.buttonDifficulty.setIndex(getIntegerValue(getString(R.string.difficulty_file_key)));
+        buttonSound.setChecked(getBooleanValue(R.string.sound_file_key));
+        buttonVibrate.setChecked(getBooleanValue(R.string.vibrate_file_key));
+        this.buttonMode.setIndex(getIntegerValue(R.string.mode_file_key));
+        this.buttonDifficulty.setIndex(getIntegerValue(R.string.difficulty_file_key));
     }
 
     /**
@@ -135,6 +135,7 @@ public class OptionsActivity extends BaseActivity {
     @Override
     public void playSoundEffect() {
 
+        //obtain the sound button reference
         ToggleButton button = (ToggleButton)findViewById(R.id.ToggleButtonSound);
 
         //make sure the sound is enabled before we play

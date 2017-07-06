@@ -449,4 +449,16 @@ public class BoardHelper {
         //determine how fast we expand/collapse
         DIMENSION_CHANGE_VELOCITY = (BLOCK_DIMENSIONS / (OpenGLSurfaceView.FPS / 4));
     }
+
+    /**
+     * Generate a puzzle board
+     * @param board Our board reference
+     */
+    protected static void generatePuzzle(Board board) {
+
+        final int cols = board.getCols();
+        final int rows = board.getRows();
+
+
+    }
 }

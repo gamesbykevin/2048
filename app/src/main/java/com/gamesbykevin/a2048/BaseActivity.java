@@ -45,16 +45,16 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * Difficulty
      */
-    private static final int DIFFICULTY_EASY = 0;
-    private static final int DIFFICULTY_MEDIUM = 1;
-    private static final int DIFFICULTY_HARD = 2;
+    public static final int DIFFICULTY_EASY = 0;
+    public static final int DIFFICULTY_MEDIUM = 1;
+    public static final int DIFFICULTY_HARD = 2;
 
     /**
      * Mode
      */
-    private static final int MODE_ORIGINAL = 0;
-    private static final int MODE_PUZZLE = 1;
-    private static final int MODE_CHALLENGE = 2;
+    public static final int MODE_ORIGINAL = 0;
+    public static final int MODE_PUZZLE = 1;
+    public static final int MODE_CHALLENGE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +77,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             this.soundSelection = MediaPlayer.create(this, R.raw.selection);
     }
 
+    /**
+     * Check the default shared preferences, if none are entered we will populate default values
+     */
     private void checkDefaultSharedPreferences() {
 
         //store basic settings if none are stored
@@ -112,36 +115,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         return preferences;
     }
 
-    public boolean isDifficultyEasy() {
-        return hasDifficulty(DIFFICULTY_EASY);
-    }
-
-    public boolean isDifficultyMedium() {
-        return (hasDifficulty(DIFFICULTY_MEDIUM));
-    }
-
-    public boolean isDifficultyHard() {
-        return hasDifficulty(DIFFICULTY_HARD);
-    }
-
-    private boolean hasDifficulty(final int value) {
-        return (getIntegerValue(getString(R.string.difficulty_file_key)) == value);
-    }
-
-    public boolean isModeOriginal() {
-        return hasMode(MODE_ORIGINAL);
-    }
-
-    public boolean isModePuzzle() {
-        return hasMode(MODE_PUZZLE);
-    }
-
-    public boolean isModeChallenge() {
-        return hasMode(MODE_CHALLENGE);
-    }
-
-    private boolean hasMode(final int value) {
-        return (getIntegerValue(getString(R.string.mode_file_key)) == value);
+    /**
+     * Do we have the setting?
+     * @param key The unique key of the shared preference setting we want to check
+     * @param value The value we want to confirm exists
+     * @return true if the specified shared preference setting has the specified value, false otherwise
+     */
+    public boolean hasSetting(final int key, final int value) {
+        return (getIntegerValue(key) == value);
     }
 
     /**
@@ -149,17 +130,17 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param key The unique key of the setting we want to retrieve
      * @return The value of the setting for the corresponding key, if not set true will be returned by default
      */
-    public boolean getBooleanValue(final String key) {
-        return getSharedPreferences().getBoolean(key, true);
+    public boolean getBooleanValue(final int key) {
+        return getSharedPreferences().getBoolean(getString(key), true);
     }
 
     /**
-     *
+     * Get the integer
      * @param key
      * @return
      */
-    public int getIntegerValue(final String key) {
-        return getSharedPreferences().getInt(key, -1);
+    public int getIntegerValue(final int key) {
+        return getSharedPreferences().getInt(getString(key), -1);
     }
 
     /**
@@ -187,13 +168,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (ignoreSetting) {
             //if we ignore the shared preferences setting vibrate anyways
             vibrator.vibrate(milliseconds);
-        } else if (!ignoreSetting && getBooleanValue(getString(R.string.vibrate_file_key))) {
+        } else if (!ignoreSetting && getBooleanValue(R.string.vibrate_file_key)) {
             //if we want to honor the shared preferences setting and it is enabled
             vibrator.vibrate(milliseconds);
         }
 
         //only vibrate if the setting is turned on
-        if (ignoreSetting || getBooleanValue(getString(R.string.vibrate_file_key))) {
+        if (ignoreSetting || getBooleanValue(R.string.vibrate_file_key)) {
             //vibrate the phone for the specified duration
             vibrator.vibrate(milliseconds);
         }
@@ -206,7 +187,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         try {
             //make sure the sound is enabled via shared preferences
-            if (getBooleanValue(getString(R.string.sound_file_key))) {
+            if (getBooleanValue(R.string.sound_file_key)) {
 
                 //start playing sound
                 getSoundSelection().start();

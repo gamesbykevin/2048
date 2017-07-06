@@ -82,11 +82,11 @@ public class GameManager {
         //size of the board
         final int dimensions;
 
-        if (activity.isDifficultyEasy()) {
+        if (activity.hasSetting(R.string.difficulty_file_key, activity.DIFFICULTY_EASY)) {
             dimensions = DIMENSIONS_EASY;
-        } else if (activity.isDifficultyMedium()) {
+        } else if (activity.hasSetting(R.string.difficulty_file_key, activity.DIFFICULTY_MEDIUM)) {
             dimensions = DIMENSIONS_MEDIUM;
-        } else if (activity.isDifficultyHard()) {
+        } else if (activity.hasSetting(R.string.difficulty_file_key, activity.DIFFICULTY_HARD)) {
             dimensions = DIMENSIONS_HARD;
         } else {
             throw new RuntimeException("Difficulty not managed");
@@ -225,11 +225,12 @@ public class GameManager {
 
             //check if the textures have loaded
             if (LOADED) {
-                if (activity.isModeOriginal()) {
+
+                if (activity.hasSetting(R.string.mode_file_key, activity.MODE_ORIGINAL)) {
                     activity.setStep(GameActivity.Step.Ready);
-                } else if (activity.isModePuzzle()) {
+                } else if (activity.hasSetting(R.string.mode_file_key, activity.MODE_PUZZLE)) {
                     activity.setStep(GameActivity.Step.LevelSelect);
-                } else if (activity.isModeChallenge()) {
+                } else if (activity.hasSetting(R.string.mode_file_key, activity.MODE_CHALLENGE)) {
                     activity.setStep(GameActivity.Step.Ready);
                 } else {
                     throw new RuntimeException("Mode is not handled");
@@ -261,8 +262,11 @@ public class GameManager {
                 //we can merge again
                 this.merge = null;
 
-                //spawn a new block
-                getBoard().spawn();
+                //we don't spawn blocks for puzzle mode
+                if (!activity.hasSetting(R.string.mode_file_key, activity.MODE_PUZZLE)) {
+                    //spawn a new block
+                    getBoard().spawn();
+                }
 
                 //if the game is over
                 if (isGameOver()) {
