@@ -1,37 +1,27 @@
 package com.gamesbykevin.a2048;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.ContextCompat;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.gamesbykevin.a2048.board.BoardHelper;
 import com.gamesbykevin.a2048.game.GameManager;
 import com.gamesbykevin.a2048.game.GameManagerHelper;
 import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
 import com.gamesbykevin.a2048.ui.CustomAdapter;
-import com.gamesbykevin.a2048.ui.Item;
+import com.gamesbykevin.a2048.ui.LevelItem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
@@ -65,9 +55,6 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
     //the container for our level select
     private TableLayout levelSelectLayout;
 
-    //list of data for our grid view
-    private List<Item> data;
-
     /**
      * Different steps in the game
      */
@@ -79,7 +66,10 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
     }
 
     //current step we are on
-    private Step step;
+    private Step step = Step.Loading;
+
+    //our array list of levels
+    private ArrayList<LevelItem> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,20 +99,11 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
         GridView levelSelectGrid = (GridView)findViewById(R.id.levelSelectGrid);
         levelSelectGrid.setOnItemClickListener(this);
 
-        //create a new list
-        data = new ArrayList<>();
-
-        //add all of our level selections to the list
-        for (int i = 1; i < 101; i++) {
-
-            //create our level selection
-            Item item = new Item();
-            item.setTitle(i + "");
-            item.setCompleted(RANDOM.nextBoolean());
-
-            //add it to the list
-            data.add(item);
-        }
+        //get the list of levels
+        this.data = MANAGER.getLevelItems().getLevels(
+            (GameManager.Mode)getObjectValue(R.string.mode_file_key, GameManager.Mode.class),
+            (GameManager.Difficulty)getObjectValue(R.string.difficulty_file_key, GameManager.Difficulty.class)
+        );
 
         //create the custom adapter using the level selection layout and data to populate it
         CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(), R.layout.level_selection, data);
@@ -137,10 +118,17 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
     @Override
     public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
     {
-        String message = "Clicked : " + data.get(position).getTitle();
-        Toast.makeText(getApplicationContext(), message , Toast.LENGTH_SHORT).show();
+        MainActivity.displayMessage(getApplicationContext(), "Clicked : " + data.get(position).getTitle());
 
-        //update game manager object
+        //if puzzle mode, generate board with the specified seed
+        if (hasSetting(R.string.mode_file_key, GameManager.Mode.class, GameManager.Mode.Puzzle)) {
+
+            //assign the level selected
+            MANAGER.getLevelItems().setLevelIndex(data.get(position).getLevelIndex());
+
+            //reset game
+            GameManagerHelper.RESET = true;
+        }
 
         //we are now ready
         setStep(Step.Ready);

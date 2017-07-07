@@ -31,6 +31,21 @@ public class GameManagerHelper {
     /**
      * Size of the board while playing easy
      */
+    public static final int PUZZLE_DIMENSIONS_EASY = 4;
+
+    /**
+     * Size of the board while playing medium
+     */
+    public static final int PUZZLE_DIMENSIONS_MEDIUM = 5;
+
+    /**
+     * Size of the board while playing hard
+     */
+    public static final int PUZZLE_DIMENSIONS_HARD = 6;
+
+    /**
+     * Size of the board while playing easy
+     */
     public static final int DIMENSIONS_EASY = 6;
 
     /**
@@ -69,7 +84,7 @@ public class GameManagerHelper {
         glText.draw("Score:" + MANAGER.getBoard().getScore(), START_X, 25);
         glText.end();                                   // End Text Rendering
 
-        if (MANAGER.getBoard().isGameover()) {
+        if (MANAGER.GAME_OVER) {
             glText.begin(1.0f, 1.0f, 1.0f, 1.0f);         // (r, g, b) alpha
             glText.draw("Game Over", START_X, 25 + glText.getCharHeight());
             glText.end();

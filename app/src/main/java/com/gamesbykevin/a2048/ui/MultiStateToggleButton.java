@@ -11,21 +11,40 @@ import android.util.AttributeSet;
 public class MultiStateToggleButton extends AppCompatButton {
 
     //array of options
-    private String[] options;
+    private Object[] options;
 
     //current selection
     private int index = 0;
 
+    //application context
     private final Context context;
 
+    //header text to be displayed in front of our button text
+    private String header = "";
+
+    /**
+     *
+     * @param context
+     * @param attrs
+     */
     public MultiStateToggleButton(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
+    /**
+     *
+     * @param context
+     */
     public MultiStateToggleButton(Context context) {
         this(context, null, 0);
     }
 
+    /**
+     *
+     * @param context
+     * @param attrs
+     * @param defStyle
+     */
     public MultiStateToggleButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs);
 
@@ -33,7 +52,33 @@ public class MultiStateToggleButton extends AppCompatButton {
         this.context = context;
     }
 
-    public void setOptions(String[] options) {
+    /**
+     *
+     * @param header
+     */
+    public void setHeader(final String header) {
+
+        //we don't want to store a null value
+        if (header == null)
+            return;
+
+        //assign value
+        this.header = header;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getHeader() {
+        return this.header;
+    }
+
+    /**
+     *
+     * @param options
+     */
+    public void setOptions(Object[] options) {
 
         //store our array reference
         this.options = options;
@@ -43,6 +88,27 @@ public class MultiStateToggleButton extends AppCompatButton {
 
         //make sure the correct text is displayed
         assignText();
+    }
+
+    /**
+     * Set the current index
+     * @param object Object we want as the current index
+     */
+    public void setIndex(final Object object) {
+
+        //check each option until we find a match
+        for (int i = 0; i < this.options.length; i++) {
+
+            //if the object matches
+            if (this.options[i] == object) {
+
+                //assign the index
+                setIndex(i);
+
+                //we are done
+                break;
+            }
+        }
     }
 
     /**
@@ -66,7 +132,7 @@ public class MultiStateToggleButton extends AppCompatButton {
      * Get the index
      * @return The current index position
      */
-    public int getIndex() {
+    private int getIndex() {
         return this.index;
     }
 
@@ -76,7 +142,7 @@ public class MultiStateToggleButton extends AppCompatButton {
     public void assignText() {
 
         //assign the text to be displayed
-        super.setText(getText(getIndex()));
+        super.setText(getHeader() + getText(getIndex()));
 
         //force re-draw
         super.invalidate();
@@ -88,7 +154,7 @@ public class MultiStateToggleButton extends AppCompatButton {
      * @return The text at the specified position
      */
     public String getText(final int index) {
-        return this.options[index];
+        return getValue(index).toString();
     }
 
     /**
@@ -97,6 +163,23 @@ public class MultiStateToggleButton extends AppCompatButton {
      */
     public String getText() {
         return getText(getIndex());
+    }
+
+    /**
+     * Get the value
+     * @return The object of the current selection
+     */
+    public Object getValue() {
+        return getValue(getIndex());
+    }
+
+    /**
+     * Get the value
+     * @param index The desired index
+     * @return The object at the current selection
+     */
+    public Object getValue(final int index) {
+        return this.options[index];
     }
 
     /**

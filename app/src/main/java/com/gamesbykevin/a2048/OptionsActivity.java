@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ToggleButton;
 
+import com.gamesbykevin.a2048.game.GameManager;
 import com.gamesbykevin.a2048.ui.MultiStateToggleButton;
+import com.google.gson.Gson;
 
 public class OptionsActivity extends BaseActivity {
 
@@ -25,15 +27,17 @@ public class OptionsActivity extends BaseActivity {
         ToggleButton buttonSound = (ToggleButton)findViewById(R.id.ToggleButtonSound);
         ToggleButton buttonVibrate = (ToggleButton)findViewById(R.id.ToggleButtonVibrate);
         this.buttonMode = (MultiStateToggleButton)findViewById(R.id.ToggleButtonMode);
-        this.buttonMode.setOptions(getResources().getStringArray(R.array.game_mode));
+        this.buttonMode.setOptions(GameManager.Mode.values());
+        this.buttonMode.setHeader(getString(R.string.header_game_mode));
         this.buttonDifficulty = (MultiStateToggleButton)findViewById(R.id.ToggleButtonDifficulty);
-        this.buttonDifficulty.setOptions(getResources().getStringArray(R.array.game_difficulty));
+        this.buttonDifficulty.setOptions(GameManager.Difficulty.values());
+        this.buttonDifficulty.setHeader(getString(R.string.header_game_difficulty));
 
         //update our buttons accordingly
         buttonSound.setChecked(getBooleanValue(R.string.sound_file_key));
         buttonVibrate.setChecked(getBooleanValue(R.string.vibrate_file_key));
-        this.buttonMode.setIndex(getIntegerValue(R.string.mode_file_key));
-        this.buttonDifficulty.setIndex(getIntegerValue(R.string.difficulty_file_key));
+        this.buttonMode.setIndex(getObjectValue(R.string.mode_file_key, GameManager.Mode.class));
+        this.buttonDifficulty.setIndex(getObjectValue(R.string.difficulty_file_key, GameManager.Difficulty.class));
     }
 
     /**
@@ -54,10 +58,10 @@ public class OptionsActivity extends BaseActivity {
             editor.putBoolean(getString(R.string.vibrate_file_key), ((ToggleButton)findViewById(R.id.ToggleButtonVibrate)).isChecked());
 
             //store the mode setting based on the toggle button
-            editor.putInt(getString(R.string.mode_file_key), buttonMode.getIndex());
+            editor.putString(getString(R.string.mode_file_key), GSON.toJson(buttonMode.getValue()));
 
             //store the difficulty setting
-            editor.putInt(getString(R.string.difficulty_file_key), buttonDifficulty.getIndex());
+            editor.putString(getString(R.string.difficulty_file_key), GSON.toJson(buttonDifficulty.getValue()));
 
             //make it final by committing the change
             editor.commit();

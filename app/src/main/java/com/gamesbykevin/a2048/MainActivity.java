@@ -1,10 +1,12 @@
 package com.gamesbykevin.a2048;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends BaseActivity {
 
@@ -84,5 +86,15 @@ public class MainActivity extends BaseActivity {
 
         //log string as information
         Log.i("2048", message);
+    }
+
+    public static void displayMessage(final Context context, final String message) {
+
+        //if not debugging, don't continue
+        if (!DEBUG)
+            return;
+
+        //show text
+        Toast.makeText(context, message , Toast.LENGTH_SHORT).show();
     }
 }

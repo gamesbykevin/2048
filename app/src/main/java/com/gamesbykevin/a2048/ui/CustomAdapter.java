@@ -27,7 +27,7 @@ public class CustomAdapter extends ArrayAdapter {
     private int resourceId;
 
     //list of our levels
-    private List<Item> data;
+    private List<LevelItem> data;
 
     //images for completed and not-completed levels
     private Drawable imageGreen, imageRed;
@@ -38,7 +38,7 @@ public class CustomAdapter extends ArrayAdapter {
      * @param layoutResourceId
      * @param data
      */
-    public CustomAdapter(Context context, int layoutResourceId, List<Item> data) {
+    public CustomAdapter(Context context, int layoutResourceId, List<LevelItem> data) {
 
         super(context, layoutResourceId, data);
 
@@ -83,7 +83,7 @@ public class CustomAdapter extends ArrayAdapter {
             imageGreen = ContextCompat.getDrawable(context, R.drawable.green);
 
         //setup text description and image
-        Item item = (Item)getItem(position);
+        LevelItem item = (LevelItem)getItem(position);
         holder.imgItem.setImageDrawable(item.isCompleted() ? imageGreen : imageRed);
         holder.txtItem.setText(item.getTitle());
 

@@ -3,14 +3,18 @@ package com.gamesbykevin.a2048.board;
 import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.game.GameManager;
 import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
+import com.gamesbykevin.androidframework.base.Cell;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static com.gamesbykevin.a2048.board.Block.BLOCK_DIMENSIONS;
 import static com.gamesbykevin.a2048.board.Block.DIMENSIONS_MAX;
 import static com.gamesbykevin.a2048.board.Block.DIMENSION_CHANGE_VELOCITY;
 import static com.gamesbykevin.a2048.board.Block.START_X;
 import static com.gamesbykevin.a2048.board.Block.START_Y;
+import static com.gamesbykevin.a2048.board.Block.VALUES;
 import static com.gamesbykevin.a2048.board.Board.BORDER_THICKNESS;
 import static com.gamesbykevin.a2048.board.Board.PADDING;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.HEIGHT;
@@ -23,41 +27,48 @@ import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.WIDTH;
 public class BoardHelper {
 
     /**
+     * Our random object used to generate a random board
+     */
+    private static Random RANDOM_OBJECT;
+
+    /**
      * Merge the blocks on the board
      * @param board The board we are merging
      * @param merge The direction of the merge
+     * @param combine Do we combine similar blocks?
      */
-    public static void merge(Board board, GameManager.Merge merge) throws Exception {
+    public static void merge(Board board, GameManager.Merge merge, boolean combine) {
 
         //merge the board accordingly
         switch (merge) {
 
             case North:
-                mergeNorth(board);
+                mergeNorth(board, combine);
                 break;
 
             case South:
-                mergeSouth(board);
+                mergeSouth(board, combine);
                 break;
 
             case West:
-                mergeWest(board);
+                mergeWest(board, combine);
                 break;
 
             case East:
-                mergeEast(board);
+                mergeEast(board, combine);
                 break;
 
             default:
-                throw new Exception("Merge not handled here: " + merge.toString());
+                throw new RuntimeException("Merge not handled here: " + merge.toString());
         }
     }
 
     /**
      * Merge the blocks towards the west
      * @param board Board containing our blocks to merge
+     * @param combine Do we combine similar blocks?
      */
-    private static void mergeWest(Board board) {
+    private static void mergeWest(Board board, boolean combine) {
 
         //check every row
         for (int row = 0; row < board.getRows(); row++) {
@@ -82,7 +93,7 @@ public class BoardHelper {
                     continue;
 
                 //if the block value matches the previous we can merge
-                if (block.getValue() == previousValue) {
+                if (block.getValue() == previousValue && combine) {
 
                     //update the target of the current block
                     block.setColTarget(columnMerge);
@@ -117,8 +128,9 @@ public class BoardHelper {
     /**
      * Merge the blocks towards the east
      * @param board Board containing our blocks to merge
+     * @param combine Do we combine similar blocks?
      */
-    private static void mergeEast(Board board) {
+    private static void mergeEast(Board board, boolean combine) {
 
         //check every row
         for (int row = 0; row < board.getRows(); row++) {
@@ -143,7 +155,7 @@ public class BoardHelper {
                     continue;
 
                 //if the block value matches the previous we can merge
-                if (block.getValue() == previousValue) {
+                if (block.getValue() == previousValue && combine) {
 
                     //update the target of the current block
                     block.setColTarget(columnMerge);
@@ -178,8 +190,9 @@ public class BoardHelper {
     /**
      * Merge the blocks towards the north
      * @param board Board containing our blocks to merge
+     * @param combine Do we combine similar blocks?
      */
-    private static void mergeNorth(Board board) {
+    private static void mergeNorth(Board board, boolean combine) {
 
         //check each column
         for (int col = 0; col < board.getCols(); col++) {
@@ -204,7 +217,7 @@ public class BoardHelper {
                     continue;
 
                 //if the block value matches the previous we can merge
-                if (block.getValue() == previousValue) {
+                if (block.getValue() == previousValue && combine) {
 
                     //update the target of the current block
                     block.setRowTarget(rowMerge);
@@ -239,8 +252,9 @@ public class BoardHelper {
     /**
      * Merge the blocks towards the south
      * @param board Board containing our blocks to merge
+     * @param combine Do we combine similar blocks?
      */
-    private static void mergeSouth(Board board) {
+    private static void mergeSouth(Board board, boolean combine) {
 
         //check each column
         for (int col = 0; col < board.getCols(); col++) {
@@ -265,7 +279,7 @@ public class BoardHelper {
                     continue;
 
                 //if the block value matches the previous we can merge
-                if (block.getValue() == previousValue) {
+                if (block.getValue() == previousValue && combine) {
 
                     //update the target of the current block
                     block.setRowTarget(rowMerge);
@@ -366,39 +380,48 @@ public class BoardHelper {
      * @param board
      * @return
      */
-    protected static boolean isGameOver(Board board) {
+    public static boolean isGameOver(Board board, GameManager.Mode mode) {
 
-        //check every available place on the board
-        for (int col = 0; col < board.getCols(); col++) {
-            for (int row = 0; row < board.getRows(); row++) {
+        switch (mode) {
 
-                //get the current block
-                Block block = board.getBlock(col, row);
+            case Puzzle:
 
-                //if the block doesn't exist we can still move the blocks and the game is not over
-                if (block == null)
-                    return false;
+                //if there is one block left, the game is over
+                return (board.getBlocks().size() == 1);
 
-                //check for blocks in all 4 directions
-                Block east = board.getBlock(col + 1, row);
-                Block west = board.getBlock(col - 1, row);
-                Block north = board.getBlock(col, row - 1);
-                Block south = board.getBlock(col, row + 1);
+            default:
+                //check every available place on the board
+                for (int col = 0; col < board.getCols(); col++) {
+                    for (int row = 0; row < board.getRows(); row++) {
 
-                //if the neighbor block exists and has the same value, the game is not yet over
-                if (east != null && block.getValue() == east.getValue())
-                    return false;
-                if (west != null && block.getValue() == west.getValue())
-                    return false;
-                if (north != null && block.getValue() == north.getValue())
-                    return false;
-                if (south != null && block.getValue() == south.getValue())
-                    return false;
-            }
+                        //get the current block
+                        Block block = board.getBlock(col, row);
+
+                        //if the block doesn't exist we can still move the blocks and the game is not over
+                        if (block == null)
+                            return false;
+
+                        //check for blocks in all 4 directions
+                        Block east = board.getBlock(col + 1, row);
+                        Block west = board.getBlock(col - 1, row);
+                        Block north = board.getBlock(col, row - 1);
+                        Block south = board.getBlock(col, row + 1);
+
+                        //if the neighbor block exists and has the same value, the game is not yet over
+                        if (east != null && block.getValue() == east.getValue())
+                            return false;
+                        if (west != null && block.getValue() == west.getValue())
+                            return false;
+                        if (north != null && block.getValue() == north.getValue())
+                            return false;
+                        if (south != null && block.getValue() == south.getValue())
+                            return false;
+                    }
+                }
+
+                //we couldn't find any moves, so the game is over
+                return true;
         }
-
-        //we couldn't find any moves, so the game is over
-        return true;
     }
 
     /**
@@ -454,11 +477,182 @@ public class BoardHelper {
      * Generate a puzzle board
      * @param board Our board reference
      */
-    protected static void generatePuzzle(Board board) {
+    public static void generatePuzzle(Board board, final int seed) {
+
+        //update the seed so the same random board is generated
+        getRandomObject().setSeed(seed);
+
+        //remove any existing blocks
+        board.getBlocks().clear();
 
         final int cols = board.getCols();
         final int rows = board.getRows();
 
+        //start at the max value
+        int value = VALUES[VALUES.length - 1];
 
+        //where do we start
+        int startCol, startRow;
+
+        //pick end of board to start
+        if (getRandomObject().nextBoolean()) {
+
+            //either first or last row
+            startRow = (getRandomObject().nextBoolean()) ? 0 : rows - 1;
+            startCol = (getRandomObject().nextInt(cols - 1)) + 1;
+
+        } else {
+
+            //either first or last column
+            startCol = (getRandomObject().nextBoolean()) ? 0 : cols - 1;
+            startRow = (getRandomObject().nextInt(rows - 1)) + 1;
+        }
+
+        //add the block to start
+        board.addBlock(startCol, startRow, value);
+
+        //full board size so we know when to stop
+        final int max = cols * rows;
+
+        //continue until there are no more open block spaces available
+        while (board.getBlocks().size() < max && value > VALUES[1]) {
+
+            //did we split anything
+            boolean split = false;
+
+            //get the block for our current value
+            for (int i = 0; i < board.getBlocks().size(); i++) {
+
+                //get the current block
+                Block block = board.getBlocks().get(i);
+
+                //if the block equals the current value and is > 2 we need to split it into 2 smaller value blocks
+                if (block.getValue() == value && block.getValue() > VALUES[1]) {
+
+                    //list of available places
+                    List<Cell> available = new ArrayList<>();
+
+                    //current location
+                    int currentCol = (int)block.getCol();
+                    int currentRow = (int)block.getRow();
+
+                    for (int col = -1; col <= 1; col++) {
+                        for (int row = -1; row <= 1; row++) {
+
+                            if (col != 0 && row != 0)
+                                continue;
+
+                            //skip if the location is out of bounds
+                            if (currentCol + col < 0 || currentCol + col >= cols)
+                                continue;
+                            if (currentRow + row < 0 || currentRow + row >= rows)
+                                continue;
+
+                            //make sure the block space is empty
+                            if (board.getBlock(currentCol + col, currentRow + row) == null)
+                                available.add(new Cell(currentCol + col, currentRow + row));
+                        }
+                    }
+
+                    //if there is no way we can split continue to check the next block
+                    if (available.isEmpty())
+                        continue;
+
+                    //new value
+                    int newValue = (block.getValue() / 2);
+
+                    //remove existing from list
+                    board.getBlocks().remove(i);
+
+                    //adjust index so we don't miss checking any blocks
+                    i--;
+
+                    //add new block in the same place
+                    board.addBlock((int)block.getCol(), (int)block.getRow(), newValue);
+
+                    //where to put the next block
+                    Cell cell = available.get(getRandomObject().nextInt(available.size()));
+
+                    //add the other block
+                    board.addBlock((int)cell.getCol(), (int)cell.getRow(), newValue);
+
+                    //flag that we split the block
+                    split = true;
+
+                    //move the blocks in random direction
+                    moveBoard(board);
+
+                } else {
+
+                    //if we can't split up the values anymore, exit loop
+                    if (block.getValue() <= VALUES[1] && value <= VALUES[1])
+                        break;
+                }
+            }
+
+            //if we weren't able to split any blocks, lower the split value
+            if (!split)
+                value = (value / 2);
+        }
+
+        //print out the finished result
+        for (int col = 0; col < board.getCols(); col++) {
+            for (int row = 0; row < board.getRows(); row++) {
+
+                Block block = board.getBlock(col, row);
+
+                if (block != null) {
+                    MainActivity.logEvent("(" + col + "," + row + ") " + block.getValue());
+                } else {
+                    MainActivity.logEvent("(" + col + "," + row + ") 0");
+                }
+            }
+        }
+    }
+
+    private static void moveBoard(Board board) {
+
+        //since we split move the blocks in a random direction
+        GameManager.Merge move = GameManager.Merge.values()[getRandomObject().nextInt(GameManager.Merge.values().length)];
+
+        switch (move) {
+            case North:
+                MainActivity.logEvent("South");
+                break;
+
+            case South:
+                MainActivity.logEvent("North");
+                break;
+
+            case West:
+                MainActivity.logEvent("East");
+                break;
+
+            case East:
+                MainActivity.logEvent("West");
+                break;
+        }
+
+        //MainActivity.logEvent("Generate direction " + move.toString());
+
+        //move the pieces without merging
+        merge(board, move, false);
+
+        //move until we are at the target
+        while (!board.hasTarget()) {
+            for (Block tmp : board.getBlocks()) {
+                if (!tmp.hasTarget())
+                    tmp.update();
+            }
+        }
+    }
+
+    private static Random getRandomObject() {
+
+        //create new instance if null
+        if (RANDOM_OBJECT == null)
+            RANDOM_OBJECT = new Random();
+
+        return RANDOM_OBJECT;
     }
 }

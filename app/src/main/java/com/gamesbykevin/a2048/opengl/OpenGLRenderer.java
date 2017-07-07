@@ -115,15 +115,11 @@ public class OpenGLRenderer implements Renderer {
         glText = new GLText(gl, activity.getAssets());
         glText.load(FONT_FILE_NAME, FONT_SIZE, 2, 2);
 
-        //enable 2d textures and the ability to render alpha pixels
-        gl.glEnable(GL10.GL_TEXTURE_2D);
-        gl.glEnable(GL10.GL_ALPHA_TEST);
+        //enable the ability to render alpha pixels
+        //gl.glEnable(GL10.GL_ALPHA_TEST);
 
         //show alpha if greater than 0.01f
-        gl.glAlphaFunc(GL10.GL_GREATER, 0.01f);
-
-        gl.glEnable(GL10.GL_BLEND);
-        gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+        //gl.glAlphaFunc(GL10.GL_GREATER, 0.001f);
 
         //store the ratio for the render
         this.scaleRenderX = width / (float) WIDTH;
@@ -151,11 +147,8 @@ public class OpenGLRenderer implements Renderer {
         //enable 2d textures
         gl.glEnable(GL10.GL_TEXTURE_2D);
 
-        //enable alpha blending with textures
-        gl.glEnable(GL10.GL_BLEND);
-
-        //add blend function for alpha
-        gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+        //enable smooth shading
+        gl.glEnableClientState(GL10.GL_SMOOTH);
 
         //load our textures
         loadTextures(gl);
@@ -174,7 +167,7 @@ public class OpenGLRenderer implements Renderer {
             //bind the texture id
             gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[index]);
 
-            if (true) {
+            if (false) {
                 //we want smoother images
                 gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
                 gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);
@@ -192,6 +185,7 @@ public class OpenGLRenderer implements Renderer {
 
             //add bitmap to texture
             GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+            //GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA, bitmap, GL10.GL_UNSIGNED_BYTE, 0);
 
             //we no longer need the resource
             bitmap.recycle();
@@ -202,6 +196,7 @@ public class OpenGLRenderer implements Renderer {
                 //display texture id
                 MainActivity.logEvent("Texture loaded id: " + textures[index]);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -219,7 +214,7 @@ public class OpenGLRenderer implements Renderer {
         Bitmap spriteSheet = BitmapFactory.decodeResource(activity.getResources(), R.drawable.blocks);
 
         //load every texture that we need
-        for (int i = 0; i < textures.length - 1; i++) {
+        for (int i = 0; i < textures.length; i++) {
 
             //retrieve the current bitmap
             Bitmap tmp = Bitmap.createBitmap(spriteSheet, i * ANIMATION_DIMENSIONS, 0, ANIMATION_DIMENSIONS, ANIMATION_DIMENSIONS);

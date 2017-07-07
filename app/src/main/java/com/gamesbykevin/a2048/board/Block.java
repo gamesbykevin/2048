@@ -63,6 +63,9 @@ public class Block extends EntityItem {
     //did we already expand and collapse the block
     private boolean expand, collapse;
 
+    //the different values for the blocks
+    public static final int[] VALUES = {0, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192};
+
     /**
      * Default constructor
      */
@@ -317,65 +320,23 @@ public class Block extends EntityItem {
      */
     public void assignTextures(final int[] textures) {
 
-        //assign texture id for the block
-        switch (getValue()) {
 
-            default:
-                setTextureId(textures[0]);
-                break;
+        //check each value until we find our texture
+        for (int i = 0; i < VALUES.length; i++) {
 
-            case 2:
-                setTextureId(textures[1]);
-                break;
+            //if we have a match
+            if (VALUES[i] == getValue()) {
 
-            case 4:
-                setTextureId(textures[2]);
-                break;
+                //assign the texture
+                setTextureId(textures[i]);
 
-            case 8:
-                setTextureId(textures[3]);
-                break;
-
-            case 16:
-                setTextureId(textures[4]);
-                break;
-
-            case 32:
-                setTextureId(textures[5]);
-                break;
-
-            case 64:
-                setTextureId(textures[6]);
-                break;
-
-            case 128:
-                setTextureId(textures[7]);
-                break;
-
-            case 256:
-                setTextureId(textures[8]);
-                break;
-
-            case 512:
-                setTextureId(textures[9]);
-                break;
-
-            case 1024:
-                setTextureId(textures[10]);
-                break;
-
-            case 2048:
-                setTextureId(textures[11]);
-                break;
-
-            case 4096:
-                setTextureId(textures[12]);
-                break;
-
-            case 8192:
-                setTextureId(textures[13]);
-                break;
+                //we are done
+                return;
+            }
         }
+
+        //we did not find our value and are not able to assign a texture
+        throw new RuntimeException("Value not handled here :" + getValue());
     }
 
     @Override

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:background="@drawable/background"
+    android:visibility="visible"
     tools:context="com.gamesbykevin.a2048.SplashActivity">
 
     <TableLayout style="@style/TableLayoutSplash">

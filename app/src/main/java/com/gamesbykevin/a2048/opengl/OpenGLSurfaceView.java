@@ -254,7 +254,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         try
         {
             //we can't continue game input if the game is over
-            if (MANAGER.isGameOver())
+            if (MANAGER.GAME_OVER)
                 return true;
 
             //we can't continue if the textures have not yet loaded

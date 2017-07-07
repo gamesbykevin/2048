@@ -13,6 +13,10 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import static javax.microedition.khronos.opengles.GL10.GL_BLEND;
+import static javax.microedition.khronos.opengles.GL10.GL_ONE;
+import static javax.microedition.khronos.opengles.GL10.GL_ONE_MINUS_SRC_ALPHA;
+
 /**
  * Created by Kevin on 6/19/2017.
  */
@@ -107,5 +111,6 @@ public class EntityItem extends com.gamesbykevin.androidframework.base.Entity {
         //now that we are done, undo client state to prevent any render issues
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+        gl.glDisableClientState(GL10.GL_TEXTURE_2D);
     }
 }

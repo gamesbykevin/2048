@@ -16,6 +16,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import static com.gamesbykevin.a2048.GameActivity.getRandomObject;
 import static com.gamesbykevin.a2048.board.Block.BLOCK_DIMENSIONS;
+import static com.gamesbykevin.a2048.board.Block.VALUES;
 
 /**
  * The game board where the action takes place
@@ -54,13 +55,6 @@ public class Board {
 
     //the size of the board
     private int cols, rows;
-
-    //is the game over?
-    private boolean gameover = false;
-
-    //values of blocks that are spawned
-    private static final int BLOCK_2 = 2;
-    private static final int BLOCK_4 = 4;
 
     /**
      * Default constructor
@@ -209,7 +203,7 @@ public class Board {
         if (this.blocks.isEmpty()) {
 
             //spawn one block at this random location
-            addBlock(available.get(index), getRandomObject().nextBoolean() ? BLOCK_2 : BLOCK_4);
+            addBlock(available.get(index), getRandomObject().nextBoolean() ? VALUES[1] : VALUES[2]);
 
             //remove from our list of available spawn points
             available.remove(index);
@@ -218,19 +212,13 @@ public class Board {
             index = getRandomObject().nextInt(available.size());
 
             //spawn one block at a new random location again
-            addBlock(available.get(index), getRandomObject().nextBoolean() ? BLOCK_2 : BLOCK_4);
+            addBlock(available.get(index), getRandomObject().nextBoolean() ? VALUES[1] : VALUES[2]);
+
         } else {
 
             //spawn one block at this random location
-            addBlock(available.get(index), getRandomObject().nextBoolean() ? BLOCK_2 : BLOCK_4);
+            addBlock(available.get(index), getRandomObject().nextBoolean() ? VALUES[1] : VALUES[2]);
         }
-
-        //now that the new block has spawned, check if the game is over
-        this.gameover = BoardHelper.isGameOver(this);
-
-        //notify if game over
-        if (isGameover())
-            MainActivity.logEvent("GAME OVER!!!!!!!!!!!");
     }
 
     /**
@@ -304,14 +292,6 @@ public class Board {
         if (!hasTarget && hasTarget()) {
             BoardHelper.updateMerged(this);
         }
-    }
-
-    /**
-     * Is the game over?
-     * @return true = yes, otherwise false
-     */
-    public boolean isGameover() {
-        return this.gameover;
     }
 
     /**

@@ -10,6 +10,9 @@ import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.gamesbykevin.a2048.game.GameManager;
+import com.google.gson.Gson;
+
 import static com.gamesbykevin.a2048.MainActivity.DEBUG;
 
 /**
@@ -42,19 +45,8 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public static final long VIBRATE_DURATION = 500L;
 
-    /**
-     * Difficulty
-     */
-    public static final int DIFFICULTY_EASY = 0;
-    public static final int DIFFICULTY_MEDIUM = 1;
-    public static final int DIFFICULTY_HARD = 2;
-
-    /**
-     * Mode
-     */
-    public static final int MODE_ORIGINAL = 0;
-    public static final int MODE_PUZZLE = 1;
-    public static final int MODE_CHALLENGE = 2;
+    //gson object to retrieve and convert json string to object
+    public static Gson GSON;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +54,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         //call parent
         super.onCreate(savedInstanceState);
 
+        //create new instance if null
+        if (GSON == null)
+            GSON = new Gson();
+
         //get our shared preferences object and make sure we have key default values entered
         if (this.preferences == null) {
             this.preferences = super.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-            checkDefaultSharedPreferences();
+
+            //if there are no settings stored, store default values
+            if (this.preferences.getAll().isEmpty())
+                storeDefaultPreferences();
         }
 
         //get our vibrator object
@@ -77,26 +76,19 @@ public abstract class BaseActivity extends AppCompatActivity {
             this.soundSelection = MediaPlayer.create(this, R.raw.selection);
     }
 
-    /**
-     * Check the default shared preferences, if none are entered we will populate default values
-     */
-    private void checkDefaultSharedPreferences() {
+    private void storeDefaultPreferences() {
 
-        //store basic settings if none are stored
-        if (getSharedPreferences().getAll() == null || getSharedPreferences().getAll().isEmpty()) {
+        //get the editor so we can change the shared preferences
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
 
-            //get the editor so we can change the shared preferences
-            SharedPreferences.Editor editor = getSharedPreferences().edit();
+        //store the mode setting based on the toggle button
+        editor.putString(getString(R.string.mode_file_key), GSON.toJson(GameManager.Mode.Original));
 
-            //store the mode setting based on the toggle button
-            editor.putInt(getString(R.string.mode_file_key), MODE_ORIGINAL);
+        //store the difficulty setting
+        editor.putString(getString(R.string.difficulty_file_key), GSON.toJson(GameManager.Difficulty.Easy));
 
-            //store the difficulty setting
-            editor.putInt(getString(R.string.difficulty_file_key), DIFFICULTY_MEDIUM);
-
-            //make it final by committing the change
-            editor.commit();
-        }
+        //make it final by committing the change
+        editor.commit();
     }
 
     /**
@@ -118,11 +110,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * Do we have the setting?
      * @param key The unique key of the shared preference setting we want to check
-     * @param value The value we want to confirm exists
+     * @param classObj The class instance of the object we want to check
+     * @param value The value we want to confirm matches
      * @return true if the specified shared preference setting has the specified value, false otherwise
      */
-    public boolean hasSetting(final int key, final int value) {
-        return (getIntegerValue(key) == value);
+    public boolean hasSetting(final int key, final Class classObj, final Object value) {
+        return (getObjectValue(key, classObj) == value);
     }
 
     /**
@@ -135,12 +128,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * Get the integer
-     * @param key
-     * @return
+     * Get our object
+     * @param key The unique key of the setting we want to retrieve
+     * @param classObj The class instance of the object we want to retrieve
+     * @return object reference based on the shared preference setting
      */
-    public int getIntegerValue(final int key) {
-        return getSharedPreferences().getInt(getString(key), -1);
+    public Object getObjectValue(final int key, final Class classObj) {
+
+        //convert from json to object
+        return GSON.fromJson(getSharedPreferences().getString(getString(key), ""), classObj);
     }
 
     /**

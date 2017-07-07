@@ -25,21 +25,11 @@
     <string name="mode_file_key">com.gamesbykevin.2048.MODE_FILE_KEY</string>
     <string name="difficulty_file_key">com.gamesbykevin.2048.DIFFICULTY_FILE_KEY</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <!-- Options to select for the game difficulty -->
-    <string-array name="game_difficulty">
-        <item>Skill: Easy</item>
-        <item>Skill: Medium</item>
-        <item>Skill: Hard</item>
-    </string-array>
+    <string name="game_stats_file_key">com.gamesbykevin.2048.GAME_STATS_FILE_KEY</string>
 
-    <!-- Different game modes we are offering -->
-    <string-array name="game_mode">
-        <item>Mode: Original</item>
-        <item>Mode: Puzzle</item>
-        <item>Mode: Challenge</item>
-    </string-array>
+    <!--header text for our game options, &#160; is to create an empty space-->
+    <string name="header_game_difficulty">Skill:&#160;</string>
+    <string name="header_game_mode">Mode:&#160;</string>
 
 </resources>
