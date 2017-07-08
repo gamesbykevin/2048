@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.ToggleButton;
 
 import com.gamesbykevin.a2048.game.GameManager;
+import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
+import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
 import com.gamesbykevin.a2048.ui.MultiStateToggleButton;
 import com.google.gson.Gson;
 
@@ -27,17 +29,17 @@ public class OptionsActivity extends BaseActivity {
         ToggleButton buttonSound = (ToggleButton)findViewById(R.id.ToggleButtonSound);
         ToggleButton buttonVibrate = (ToggleButton)findViewById(R.id.ToggleButtonVibrate);
         this.buttonMode = (MultiStateToggleButton)findViewById(R.id.ToggleButtonMode);
-        this.buttonMode.setOptions(GameManager.Mode.values());
+        this.buttonMode.setOptions(Mode.values());
         this.buttonMode.setHeader(getString(R.string.header_game_mode));
         this.buttonDifficulty = (MultiStateToggleButton)findViewById(R.id.ToggleButtonDifficulty);
-        this.buttonDifficulty.setOptions(GameManager.Difficulty.values());
+        this.buttonDifficulty.setOptions(Difficulty.values());
         this.buttonDifficulty.setHeader(getString(R.string.header_game_difficulty));
 
         //update our buttons accordingly
         buttonSound.setChecked(getBooleanValue(R.string.sound_file_key));
         buttonVibrate.setChecked(getBooleanValue(R.string.vibrate_file_key));
-        this.buttonMode.setIndex(getObjectValue(R.string.mode_file_key, GameManager.Mode.class));
-        this.buttonDifficulty.setIndex(getObjectValue(R.string.difficulty_file_key, GameManager.Difficulty.class));
+        this.buttonMode.setIndex(getObjectValue(R.string.mode_file_key, Mode.class));
+        this.buttonDifficulty.setIndex(getObjectValue(R.string.difficulty_file_key, Difficulty.class));
     }
 
     /**

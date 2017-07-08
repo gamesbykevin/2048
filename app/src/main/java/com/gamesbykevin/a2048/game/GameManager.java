@@ -11,10 +11,13 @@ import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.board.Board;
 import com.gamesbykevin.a2048.board.BoardHelper;
-import com.gamesbykevin.a2048.ui.LevelItems;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
+import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
+
+import static com.gamesbykevin.a2048.GameActivity.STATS;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.DIMENSIONS_EASY;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.DIMENSIONS_HARD;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.DIMENSIONS_MEDIUM;
@@ -69,17 +72,6 @@ public class GameManager {
     //keep track so we know when to display the game over screen
     private int frames = 0;
 
-    public enum Difficulty {
-        Easy, Medium, Hard
-    }
-
-    public enum Mode {
-        Original, Puzzle, Challenge
-    }
-
-    //the stats for our level items
-    private final LevelItems levelItems;
-
     //is the game over
     public static boolean GAME_OVER = false;
 
@@ -90,9 +82,6 @@ public class GameManager {
 
         //store our activity reference
         this.activity = activity;
-
-        //create a new instance of our level items
-        this.levelItems = new LevelItems(activity);
 
         //size of the board
         final int dimensions;
@@ -123,10 +112,6 @@ public class GameManager {
 
         //default false
         GAME_OVER = false;
-    }
-
-    public LevelItems getLevelItems() {
-        return this.levelItems;
     }
 
     public void onResume() {
@@ -258,14 +243,13 @@ public class GameManager {
                 //generate random board
                 BoardHelper.generatePuzzle(
                     getBoard(),
-                    getLevelItems().getLevelItem(Mode.Puzzle,
-                    (Difficulty)activity.getObjectValue(R.string.difficulty_file_key, Difficulty.class)).getSeed()
+                    STATS.getLevel(Mode.Puzzle,(Difficulty)activity.getObjectValue(R.string.difficulty_file_key, Difficulty.class)).getSeed()
                 );
 
             } else {
 
                 //every other mode will have 1 level
-                getLevelItems().setLevelIndex(0);
+                STATS.setLevelIndex(0);
             }
 
             //no need to continue at this point
@@ -337,7 +321,7 @@ public class GameManager {
                     MainActivity.logEvent("GAME OVER!!!!!!!!!!!");
 
                     //mark level completed
-                    getLevelItems().update(
+                    STATS.markComplete(
                         (Mode)activity.getObjectValue(R.string.mode_file_key, Mode.class),
                         (Difficulty)activity.getObjectValue(R.string.difficulty_file_key, Difficulty.class)
                     );
@@ -387,6 +371,10 @@ public class GameManager {
     public void draw(GL10 gl, final int[] textures) {
 
         try {
+            //don't display if we are resetting
+            if (RESET)
+                return;
+
             //only render when ready, or game over to prevent screen flicker
             if (activity.getStep() != GameActivity.Step.Ready && activity.getStep() != GameActivity.Step.GameOver)
                 return;

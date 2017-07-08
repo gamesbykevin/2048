@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.gamesbykevin.a2048.game.GameManagerHelper;
+
 public class MainActivity extends BaseActivity {
 
     /**
@@ -84,8 +86,31 @@ public class MainActivity extends BaseActivity {
         if (!DEBUG)
             return;
 
-        //log string as information
-        Log.i("2048", message);
+        //don't do anything if null
+        if (message == null)
+            return;
+
+        //length limit of each line we print
+        int maxLogSize = 4000;
+
+        //if the string is too long
+        if (message.length() > maxLogSize) {
+
+            //we will display a portion at a time
+            for(int i = 0; i <= message.length() / maxLogSize; i++) {
+                int start = i * maxLogSize;
+                int end = (i+1) * maxLogSize;
+                end = end > message.length() ? message.length() : end;
+                Log.i("2048", message.substring(start, end));
+            }
+
+        } else {
+            //log string as information
+            Log.i("2048", message);
+        }
+
+
+
     }
 
     public static void displayMessage(final Context context, final String message) {

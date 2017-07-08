@@ -11,15 +11,16 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 
-import com.gamesbykevin.a2048.board.BoardHelper;
 import com.gamesbykevin.a2048.game.GameManager;
 import com.gamesbykevin.a2048.game.GameManagerHelper;
+import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
+import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
+import com.gamesbykevin.a2048.level.Level;
+import com.gamesbykevin.a2048.level.Stats;
 import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
 import com.gamesbykevin.a2048.ui.CustomAdapter;
-import com.gamesbykevin.a2048.ui.LevelItem;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import static android.view.View.INVISIBLE;
@@ -39,6 +40,11 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
      * Our game manager class
      */
     public static GameManager MANAGER;
+
+    /**
+     * The class that tracks our level progess for each game mode/difficulty
+     */
+    public static Stats STATS;
 
     //has the activity been paused
     private boolean paused = false;
@@ -69,7 +75,7 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
     private Step step = Step.Loading;
 
     //our array list of levels
-    private ArrayList<LevelItem> data;
+    private ArrayList<Level> levels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +85,7 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
 
         //create our game manager
         MANAGER = new GameManager(this);
+        GameManagerHelper.RESET = true;
 
         //set the content view
         setContentView(R.layout.activity_game);
@@ -100,34 +107,34 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
         levelSelectGrid.setOnItemClickListener(this);
 
         //get the list of levels
-        this.data = MANAGER.getLevelItems().getLevels(
-            (GameManager.Mode)getObjectValue(R.string.mode_file_key, GameManager.Mode.class),
-            (GameManager.Difficulty)getObjectValue(R.string.difficulty_file_key, GameManager.Difficulty.class)
+        this.levels = STATS.getLevels(
+                (Mode)getObjectValue(R.string.mode_file_key, Mode.class),
+                (Difficulty)getObjectValue(R.string.difficulty_file_key, Difficulty.class)
         );
 
         //create the custom adapter using the level selection layout and data to populate it
-        CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(), R.layout.level_selection, data);
+        CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(), R.layout.level_selection, levels);
 
         //set our adapter to the grid view
         levelSelectGrid.setAdapter(customAdapter);
-
-        //default to loading screen
-        setStep(Step.Loading);
     }
 
     @Override
     public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
     {
-        MainActivity.displayMessage(getApplicationContext(), "Clicked : " + data.get(position).getTitle());
+        MainActivity.displayMessage(getApplicationContext(), "Clicked : " + levels.get(position).getTitle());
 
         //if puzzle mode, generate board with the specified seed
-        if (hasSetting(R.string.mode_file_key, GameManager.Mode.class, GameManager.Mode.Puzzle)) {
+        if (hasSetting(R.string.mode_file_key, Mode.class, Mode.Puzzle)) {
 
             //assign the level selected
-            MANAGER.getLevelItems().setLevelIndex(data.get(position).getLevelIndex());
+            STATS.setLevelIndex(levels.get(position).getLevelIndex());
 
             //reset game
             GameManagerHelper.RESET = true;
+        } else {
+            //assign the level selected
+            STATS.setLevelIndex(0);
         }
 
         //we are now ready
@@ -162,6 +169,10 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
 
         //call parent
         super.onStart();
+
+        //default to loading screen
+        GameManagerHelper.RESET = true;
+        setStep(Step.Loading);
     }
 
     @Override

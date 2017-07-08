@@ -1,5 +1,7 @@
 package com.gamesbykevin.a2048.game;
 
+import com.google.gson.annotations.SerializedName;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import static com.gamesbykevin.a2048.GameActivity.MANAGER;
@@ -57,6 +59,18 @@ public class GameManagerHelper {
      * Size of the board while playing hard
      */
     public static final int DIMENSIONS_HARD = 4;
+
+    public enum Difficulty {
+        Easy,
+        Medium,
+        Hard;
+    }
+
+    public enum Mode {
+        Original,
+        Puzzle,
+        Challenge;
+    }
 
     /**
      * Render any text on screen using custom font

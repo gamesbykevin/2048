@@ -2,6 +2,7 @@ package com.gamesbykevin.a2048.board;
 
 import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.game.GameManager;
+import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
 import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
 import com.gamesbykevin.androidframework.base.Cell;
 
@@ -380,7 +381,7 @@ public class BoardHelper {
      * @param board
      * @return
      */
-    public static boolean isGameOver(Board board, GameManager.Mode mode) {
+    public static boolean isGameOver(Board board, Mode mode) {
 
         switch (mode) {
 

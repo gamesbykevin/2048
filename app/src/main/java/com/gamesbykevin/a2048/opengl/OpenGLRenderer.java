@@ -115,12 +115,6 @@ public class OpenGLRenderer implements Renderer {
         glText = new GLText(gl, activity.getAssets());
         glText.load(FONT_FILE_NAME, FONT_SIZE, 2, 2);
 
-        //enable the ability to render alpha pixels
-        //gl.glEnable(GL10.GL_ALPHA_TEST);
-
-        //show alpha if greater than 0.01f
-        //gl.glAlphaFunc(GL10.GL_GREATER, 0.001f);
-
         //store the ratio for the render
         this.scaleRenderX = width / (float) WIDTH;
         this.scaleRenderY = height / (float) HEIGHT;

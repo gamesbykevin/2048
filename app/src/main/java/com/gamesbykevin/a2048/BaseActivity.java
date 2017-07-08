@@ -10,8 +10,12 @@ import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.gamesbykevin.a2048.game.GameManager;
+import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
+import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.lang.reflect.Type;
 
 import static com.gamesbykevin.a2048.MainActivity.DEBUG;
 
@@ -55,8 +59,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //create new instance if null
-        if (GSON == null)
-            GSON = new Gson();
+        if (GSON == null) {
+
+            //use to create custom GSON object
+            GsonBuilder gsonBuilder = new GsonBuilder();
+
+            //need to turn on to support our complex hash map
+            gsonBuilder.enableComplexMapKeySerialization();
+
+            //get our object
+            GSON = gsonBuilder.create();
+
+            //GSON = new Gson();
+        }
 
         //get our shared preferences object and make sure we have key default values entered
         if (this.preferences == null) {
@@ -82,10 +97,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
 
         //store the mode setting based on the toggle button
-        editor.putString(getString(R.string.mode_file_key), GSON.toJson(GameManager.Mode.Original));
+        editor.putString(getString(R.string.mode_file_key), GSON.toJson(Mode.Original));
 
         //store the difficulty setting
-        editor.putString(getString(R.string.difficulty_file_key), GSON.toJson(GameManager.Difficulty.Easy));
+        editor.putString(getString(R.string.difficulty_file_key), GSON.toJson(Difficulty.Easy));
 
         //make it final by committing the change
         editor.commit();
@@ -137,6 +152,18 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         //convert from json to object
         return GSON.fromJson(getSharedPreferences().getString(getString(key), ""), classObj);
+    }
+
+    /**
+     * Get our object
+     * @param key The unique key of the setting we want to retrieve
+     * @param type The class instance type, needed to de-serialize a json string back to hash map
+     * @return object reference based on the shared preference setting
+     */
+    public Object getObjectValue(final int key, final Type type) {
+
+        //convert from json to object
+        return GSON.fromJson(getSharedPreferences().getString(getString(key), ""), type);
     }
 
     /**

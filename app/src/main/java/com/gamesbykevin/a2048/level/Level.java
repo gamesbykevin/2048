@@ -1,4 +1,4 @@
-package com.gamesbykevin.a2048.ui;
+package com.gamesbykevin.a2048.level;
 
 import android.graphics.drawable.Drawable;
 
@@ -11,7 +11,7 @@ import com.gamesbykevin.a2048.game.GameManager;
 /**
  * Each level selection will have a text description and is it completed
  */
-public class LevelItem
+public class Level
 {
     //default value for our description
     private String title = "0";
@@ -31,7 +31,7 @@ public class LevelItem
     /**
      * Default constructor
      */
-    public LevelItem(int seed, int index)
+    public Level(int seed, int index)
     {
         super();
 

@@ -1,5 +1,7 @@
 package com.gamesbykevin.a2048.board;
 
+import com.gamesbykevin.a2048.game.GameManagerHelper;
+
 import org.junit.Test;
 
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.FPS;
@@ -277,7 +279,7 @@ public class BoardTest extends Board {
         Board board = new Board();
 
         //assume the game isn't over
-        assertFalse(board.isGameover());
+        assertFalse(BoardHelper.isGameOver(board, GameManagerHelper.Mode.Original));
 
         //remove all blocks
         board.getBlocks().clear();
@@ -304,7 +306,7 @@ public class BoardTest extends Board {
         board.spawn();
 
         //assume the game is now over
-        assertTrue(board.isGameover());
+        assertTrue(BoardHelper.isGameOver(board, GameManagerHelper.Mode.Original));
     }
 
     @Test

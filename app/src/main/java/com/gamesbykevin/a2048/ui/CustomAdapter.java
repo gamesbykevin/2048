@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gamesbykevin.a2048.R;
+import com.gamesbykevin.a2048.level.Level;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class CustomAdapter extends ArrayAdapter {
     private int resourceId;
 
     //list of our levels
-    private List<LevelItem> data;
+    private List<Level> data;
 
     //images for completed and not-completed levels
     private Drawable imageGreen, imageRed;
@@ -38,7 +39,7 @@ public class CustomAdapter extends ArrayAdapter {
      * @param layoutResourceId
      * @param data
      */
-    public CustomAdapter(Context context, int layoutResourceId, List<LevelItem> data) {
+    public CustomAdapter(Context context, int layoutResourceId, List<Level> data) {
 
         super(context, layoutResourceId, data);
 
@@ -83,7 +84,7 @@ public class CustomAdapter extends ArrayAdapter {
             imageGreen = ContextCompat.getDrawable(context, R.drawable.green);
 
         //setup text description and image
-        LevelItem item = (LevelItem)getItem(position);
+        Level item = (Level)getItem(position);
         holder.imgItem.setImageDrawable(item.isCompleted() ? imageGreen : imageRed);
         holder.txtItem.setText(item.getTitle());
 
