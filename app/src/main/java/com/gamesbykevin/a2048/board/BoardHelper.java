@@ -595,46 +595,12 @@ public class BoardHelper {
             if (!split)
                 value = (value / 2);
         }
-
-        //print out the finished result
-        for (int col = 0; col < board.getCols(); col++) {
-            for (int row = 0; row < board.getRows(); row++) {
-
-                Block block = board.getBlock(col, row);
-
-                if (block != null) {
-                    MainActivity.logEvent("(" + col + "," + row + ") " + block.getValue());
-                } else {
-                    MainActivity.logEvent("(" + col + "," + row + ") 0");
-                }
-            }
-        }
     }
 
     private static void moveBoard(Board board) {
 
         //since we split move the blocks in a random direction
         GameManager.Merge move = GameManager.Merge.values()[getRandomObject().nextInt(GameManager.Merge.values().length)];
-
-        switch (move) {
-            case North:
-                MainActivity.logEvent("South");
-                break;
-
-            case South:
-                MainActivity.logEvent("North");
-                break;
-
-            case West:
-                MainActivity.logEvent("East");
-                break;
-
-            case East:
-                MainActivity.logEvent("West");
-                break;
-        }
-
-        //MainActivity.logEvent("Generate direction " + move.toString());
 
         //move the pieces without merging
         merge(board, move, false);

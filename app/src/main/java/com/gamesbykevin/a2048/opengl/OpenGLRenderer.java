@@ -179,7 +179,6 @@ public class OpenGLRenderer implements Renderer {
 
             //add bitmap to texture
             GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
-            //GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA, bitmap, GL10.GL_UNSIGNED_BYTE, 0);
 
             //we no longer need the resource
             bitmap.recycle();

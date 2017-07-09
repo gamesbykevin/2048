@@ -15,16 +15,21 @@ import com.gamesbykevin.a2048.game.GameManager;
 import com.gamesbykevin.a2048.game.GameManagerHelper;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
-import com.gamesbykevin.a2048.level.Level;
 import com.gamesbykevin.a2048.level.Stats;
 import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
 import com.gamesbykevin.a2048.ui.CustomAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.updateDisplayStats;
+import static com.gamesbykevin.a2048.level.Stats.DIFFICULTY;
+import static com.gamesbykevin.a2048.level.Stats.MODE;
+import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.DIRTY_FLAG;
 
 public class GameActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
@@ -42,7 +47,7 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
     public static GameManager MANAGER;
 
     /**
-     * The class that tracks our level progess for each game mode/difficulty
+     * The class that tracks our level progress for each game mode/difficulty
      */
     public static Stats STATS;
 
@@ -52,14 +57,8 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
     //our layout parameters
     private LinearLayout.LayoutParams layoutParams;
 
-    //our layout for the game over screen
-    private LinearLayout gameOverLayout;
-
-    //access our loading screen
-    private ConstraintLayout loadingScreenLayout;
-
-    //the container for our level select
-    private TableLayout levelSelectLayout;
+    //a list of layouts on the game screen, separate from opengl layout
+    private List<ViewGroup> layouts;
 
     /**
      * Different steps in the game
@@ -74,8 +73,8 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
     //current step we are on
     private Step step = Step.Loading;
 
-    //our array list of levels
-    private ArrayList<Level> levels;
+    //our custom adapter that we bind to GridView
+    private CustomAdapter customAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +82,24 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
         //call parent
         super.onCreate(savedInstanceState);
 
+        //store the current game settings while we play
+        MODE = (Mode)getObjectValue(R.string.mode_file_key, Mode.class);
+        DIFFICULTY = (Difficulty)getObjectValue(R.string.difficulty_file_key, Difficulty.class);
+
         //create our game manager
         MANAGER = new GameManager(this);
+
+        //first assign default level is 0
+        STATS.setLevelIndex(0);
+
+        //update display stats
+        updateDisplayStats();
+
+        //flag reset
         GameManagerHelper.RESET = true;
+
+        //turn dirty flag off
+        DIRTY_FLAG = false;
 
         //set the content view
         setContentView(R.layout.activity_game);
@@ -93,49 +107,56 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
         //obtain our open gl surface view object for reference
         this.glSurfaceView = (OpenGLSurfaceView)findViewById(R.id.openglView);
 
-        //obtain the game over layout so we can choose when to display it
-        this.gameOverLayout = (LinearLayout)findViewById(R.id.gameOverLayout);
+        //add the layouts to our list
+        this.layouts = new ArrayList<>();
+        this.layouts.add((LinearLayout)findViewById(R.id.gameOverLayoutDefault));
+        this.layouts.add((LinearLayout)findViewById(R.id.gameOverLayoutPuzzle));
+        this.layouts.add((ConstraintLayout)findViewById(R.id.loadingScreenLayout));
+        this.layouts.add((TableLayout)findViewById(R.id.levelSelectLayout));
 
-        //store our object reference to toggle visibility
-        this.loadingScreenLayout = (ConstraintLayout)findViewById(R.id.loadingScreenLayout);
+        //update level select screen
+        refreshLevelSelect();
+    }
 
-        //store the level select layout reference
-        this.levelSelectLayout = (TableLayout)findViewById(R.id.levelSelectLayout);
+    /**
+     * Update the level select screen with the current data
+     */
+    public void refreshLevelSelect() {
 
         //get the grid view reference and assign on click
         GridView levelSelectGrid = (GridView)findViewById(R.id.levelSelectGrid);
         levelSelectGrid.setOnItemClickListener(this);
 
-        //get the list of levels
-        this.levels = STATS.getLevels(
-                (Mode)getObjectValue(R.string.mode_file_key, Mode.class),
-                (Difficulty)getObjectValue(R.string.difficulty_file_key, Difficulty.class)
-        );
-
         //create the custom adapter using the level selection layout and data to populate it
-        CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(), R.layout.level_selection, levels);
+        this.customAdapter = new CustomAdapter(getApplicationContext(), R.layout.level_selection, STATS.getLevels());
 
         //set our adapter to the grid view
-        levelSelectGrid.setAdapter(customAdapter);
+        levelSelectGrid.setAdapter(this.customAdapter);
     }
 
     @Override
     public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
     {
-        MainActivity.displayMessage(getApplicationContext(), "Clicked : " + levels.get(position).getTitle());
-
         //if puzzle mode, generate board with the specified seed
-        if (hasSetting(R.string.mode_file_key, Mode.class, Mode.Puzzle)) {
+        if (MODE == Mode.Puzzle) {
 
             //assign the level selected
-            STATS.setLevelIndex(levels.get(position).getLevelIndex());
+            STATS.setLevelIndex(STATS.getLevels().get(position).getLevelIndex());
 
-            //reset game
-            GameManagerHelper.RESET = true;
         } else {
-            //assign the level selected
+
+            //assign the level selected (technically won't be called since puzzle mode only has level select)
             STATS.setLevelIndex(0);
         }
+
+        //update display stats
+        updateDisplayStats();
+
+        //reset game
+        GameManagerHelper.RESET = true;
+
+        //flag false
+        DIRTY_FLAG = false;
 
         //we are now ready
         setStep(Step.Ready);
@@ -169,10 +190,6 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
 
         //call parent
         super.onStart();
-
-        //default to loading screen
-        GameManagerHelper.RESET = true;
-        setStep(Step.Loading);
     }
 
     @Override
@@ -219,17 +236,17 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
             glSurfaceView.onResume();
 
             //remove layouts from the parent view
-            ((ViewGroup)gameOverLayout.getParent()).removeView(gameOverLayout);
-            ((ViewGroup)loadingScreenLayout.getParent()).removeView(loadingScreenLayout);
-            ((ViewGroup)levelSelectLayout.getParent()).removeView(levelSelectLayout);
+            for (int i = 0; i < layouts.size(); i++) {
+                ((ViewGroup)layouts.get(i).getParent()).removeView(layouts.get(i));
+            }
 
             //set the content view for our open gl surface view
             setContentView(glSurfaceView);
 
             //add the layouts to the current content view
-            super.addContentView(gameOverLayout, getLayoutParams());
-            super.addContentView(loadingScreenLayout, getLayoutParams());
-            super.addContentView(levelSelectLayout, getLayoutParams());
+            for (int i = 0; i < layouts.size(); i++) {
+                super.addContentView(layouts.get(i), getLayoutParams());
+            }
 
         } else {
 
@@ -241,56 +258,44 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
         setStep(step);
     }
 
-    /**
-     *
-     * @return
-     */
     public Step getStep() {
         return this.step;
     }
 
-    /**
-     *
-     * @param step
-     */
     public void setStep(final Step step) {
 
         //assign step
         this.step = step;
 
-        //display the correct screens
-        switch (this.step) {
+        //default all layouts to hidden
+        for (int i = 0; i < layouts.size(); i++) {
+            setLayoutVisibility(layouts.get(i), false);
+        }
 
+        //only display the correct screens
+        switch (getStep()) {
+
+            //show loading screen
             case Loading:
-                setLayoutVisibility(loadingScreenLayout, true);
-                setLayoutVisibility(gameOverLayout, false);
-                setLayoutVisibility(levelSelectLayout, false);
+                setLayoutVisibility((ViewGroup)findViewById(R.id.loadingScreenLayout), true);
                 break;
 
+            //decide which game over screen is displayed
             case GameOver:
-                setLayoutVisibility(loadingScreenLayout, false);
-                setLayoutVisibility(gameOverLayout, true);
-                setLayoutVisibility(levelSelectLayout, false);
+                setLayoutVisibility((ViewGroup)findViewById((MODE == Mode.Puzzle) ? R.id.gameOverLayoutPuzzle : R.id.gameOverLayoutDefault), true);
                 break;
 
+            //show level select screen
             case LevelSelect:
-                setLayoutVisibility(loadingScreenLayout, false);
-                setLayoutVisibility(gameOverLayout, false);
-                setLayoutVisibility(levelSelectLayout, true);
+                setLayoutVisibility((ViewGroup)findViewById(R.id.levelSelectLayout), true);
                 break;
 
+            //don't re-enable any
             case Ready:
-                setLayoutVisibility(loadingScreenLayout, false);
-                setLayoutVisibility(gameOverLayout, false);
-                setLayoutVisibility(levelSelectLayout, false);
                 break;
         }
     }
 
-    /**
-     *
-     * @return
-     */
     private LinearLayout.LayoutParams getLayoutParams() {
 
         if (this.layoutParams == null)
@@ -308,7 +313,6 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
                 //assign visibility accordingly
                 layoutView.setVisibility(visible ? VISIBLE : INVISIBLE);
 
@@ -324,8 +328,40 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
     @Override
     public void onBackPressed() {
 
+        //if we are playing puzzle mode, go back to the level select screen
+        if (hasSetting(R.string.mode_file_key, Mode.class, Mode.Puzzle)) {
+
+            //if not on level select screen, go to it
+            if (getStep() != Step.LevelSelect) {
+
+                //go to level select screen
+                setStep(Step.LevelSelect);
+
+                //no need to continue here
+                return;
+            }
+        }
+
         //call parent
         super.onBackPressed();
+    }
+
+    public void onClickNext(View view) {
+
+        //move to the next index
+        STATS.nextLevelIndex();
+
+        //update display stats
+        updateDisplayStats();
+
+        //flag the game to reset
+        GameManagerHelper.RESET = true;
+
+        //go back to the ready step
+        setStep(Step.Ready);
+
+        //play sound effect
+        super.playSoundEffect();
     }
 
     /**
@@ -334,11 +370,29 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
      */
     public void onClickRestart(View view) {
 
+        //always stay at level 0 since it isn't puzzle mode
+        STATS.setLevelIndex(0);
+
+        //update display stats
+        updateDisplayStats();
+
         //flag the game to reset
         GameManagerHelper.RESET = true;
 
         //go back to the ready step
         setStep(Step.Ready);
+
+        //play sound effect
+        super.playSoundEffect();
+    }
+
+    public void onClickLevelSelect(View view) {
+
+        //go back to level select screen
+        setStep(Step.LevelSelect);
+
+        //update level select
+        refreshLevelSelect();
 
         //play sound effect
         super.playSoundEffect();

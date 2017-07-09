@@ -69,8 +69,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             //get our object
             GSON = gsonBuilder.create();
-
-            //GSON = new Gson();
         }
 
         //get our shared preferences object and make sure we have key default values entered
@@ -145,7 +143,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * Get our object
      * @param key The unique key of the setting we want to retrieve
-     * @param classObj The class instance of the object we want to retrieve
+     * @param classObj The class instance of the object we want to retrieve (could be enum)
      * @return object reference based on the shared preference setting
      */
     public Object getObjectValue(final int key, final Class classObj) {

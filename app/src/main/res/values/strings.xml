@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">2048</string>
 
+    <string name="button_text_next">Next</string>
     <string name="button_text_restart">Restart</string>
     <string name="button_text_rate">Rate</string>
     <string name="button_text_more">More</string>
@@ -16,7 +17,7 @@
     <string name="sound_on">Sound: On</string>
     <string name="sound_off">Sound: Off</string>
 
-    <string name="level_select_header_text">Select Level</string>
+    <string name="text_header_level_select">Select Level</string>
 
     <!-- Make sure name and value are unique -->
     <string name="preference_file_key">com.gamesbykevin.2048.PREFERENCE_FILE_KEY</string>

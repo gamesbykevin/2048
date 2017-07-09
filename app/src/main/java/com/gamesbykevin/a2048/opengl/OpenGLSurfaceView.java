@@ -1,14 +1,11 @@
 package com.gamesbykevin.a2048.opengl;
 
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 import com.gamesbykevin.a2048.MainActivity;
-import com.gamesbykevin.a2048.game.GameManager;
 
 import java.util.Calendar;
 
@@ -80,6 +77,11 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
 
     //store context to access resources
     private final Context activity;
+
+    /**
+     * Do we render again?
+     */
+    public static boolean DIRTY_FLAG = true;
 
     public OpenGLSurfaceView(Context activity) {
 
@@ -309,8 +311,15 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
 
         try {
 
-            //render game objects
-            requestRender();
+            //if a change was made
+            if (DIRTY_FLAG) {
+
+                //render game objects
+                requestRender();
+
+                //turn flag off
+                DIRTY_FLAG = false;
+            }
 
         } catch (Exception e) {
             MainActivity.handleException(e);

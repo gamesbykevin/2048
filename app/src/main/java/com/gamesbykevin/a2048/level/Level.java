@@ -28,6 +28,9 @@ public class Level
     //the length it took to complete the item
     private long duration = 0;
 
+    //score for this level
+    private int score = 0;
+
     /**
      * Default constructor
      */
@@ -42,12 +45,20 @@ public class Level
         this.index = index;
     }
 
+    public int getScore() {
+        return this.score;
+    }
+
     public int getLevelIndex() {
         return this.index;
     }
 
     public long getDuration() {
         return this.duration;
+    }
+
+    public void setScore(final int score) {
+        this.score = score;
     }
 
     public void setDuration(final long duration) {

@@ -4,9 +4,10 @@ package com.gamesbykevin.a2048.board;
  * Created by Kevin on 5/26/2017.
  */
 
-import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.base.EntityItem;
-import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
+
+import static com.gamesbykevin.a2048.game.GameManager.GAME_OVER;
+import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.DIRTY_FLAG;
 import com.gamesbykevin.androidframework.base.Cell;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import javax.microedition.khronos.opengles.GL10;
 import static com.gamesbykevin.a2048.GameActivity.getRandomObject;
 import static com.gamesbykevin.a2048.board.Block.BLOCK_DIMENSIONS;
 import static com.gamesbykevin.a2048.board.Block.VALUES;
+import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.FRAME_DURATION;
 
 /**
  * The game board where the action takes place
@@ -52,6 +54,9 @@ public class Board {
 
     //what is our score
     private int score = 0;
+
+    //how long have we been playing
+    private long duration = 0;
 
     //the size of the board
     private int cols, rows;
@@ -95,6 +100,9 @@ public class Board {
      */
     public void reset() {
 
+        //flag render
+        DIRTY_FLAG = true;
+
         //clear our blocks
         getBlocks().clear();
 
@@ -103,6 +111,9 @@ public class Board {
 
         //reset the score as well
         setScore(0);
+
+        //reset the duration
+        setDuration(0);
     }
 
     /**
@@ -137,6 +148,14 @@ public class Board {
         return this.rows;
     }
 
+    public long getDuration() {
+        return this.duration;
+    }
+
+    public void setDuration(final long duration) {
+        this.duration = duration;
+    }
+
     /**
      * Get the score
      * @return Our point score
@@ -150,6 +169,12 @@ public class Board {
      * @param score The desired score
      */
     public void setScore(int score) {
+
+        //flag since score is changed
+        if (this.score != score)
+            DIRTY_FLAG = true;
+
+        //assign score
         this.score = score;
     }
 
@@ -280,6 +305,11 @@ public class Board {
      */
     public void update() {
 
+        //if the game is not over keep track of duration
+        if (!GAME_OVER) {
+            setDuration(getDuration() + FRAME_DURATION);
+        }
+
         //are all of the blocks at their target
         final boolean hasTarget = hasTarget();
 
@@ -291,6 +321,9 @@ public class Board {
         //if we weren't at the target but am now, we can update the merged blocks
         if (!hasTarget && hasTarget()) {
             BoardHelper.updateMerged(this);
+
+            //flag render
+            DIRTY_FLAG = true;
         }
     }
 

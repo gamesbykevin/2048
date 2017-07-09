@@ -11,16 +11,16 @@
 
     <TableLayout style="@style/TableMenu">
         <TableRow style="@style/RowMenu">
-            <Button android:id="@+id/ButtonRestart" style="@style/ButtonMenu" android:text="@string/button_text_restart" android:onClick="onClickRestart" />
+            <Button style="@style/ButtonMenu" android:text="@string/button_text_restart" android:onClick="onClickRestart" />
         </TableRow>
         <TableRow style="@style/RowMenu">
-            <Button android:id="@+id/ButtonRate" style="@style/ButtonMenu" android:text="@string/button_text_rate" android:onClick="onClickRate" />
+            <Button style="@style/ButtonMenu" android:text="@string/button_text_rate" android:onClick="onClickRate" />
         </TableRow>
         <TableRow style="@style/RowMenu">
-            <Button android:id="@+id/ButtonMore" style="@style/ButtonMenu" android:text="@string/button_text_more" android:onClick="onClickMore" />
+            <Button style="@style/ButtonMenu" android:text="@string/button_text_more" android:onClick="onClickMore" />
         </TableRow>
         <TableRow style="@style/RowMenu">
-            <Button android:id="@+id/ButtonMenu" style="@style/ButtonMenu" android:text="@string/button_text_menu" android:onClick="onClickMenu" />
+            <Button style="@style/ButtonMenu" android:text="@string/button_text_menu" android:onClick="onClickMenu" />
         </TableRow>
     </TableLayout>
 

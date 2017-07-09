@@ -8,7 +8,7 @@
 
     <!-- display header text so the user knows what to do -->
     <TableRow android:layout_height="wrap_content" android:layout_width="match_parent">
-        <TextView style="@style/LevelSelectHeaderText" android:text="@string/level_select_header_text" />
+        <TextView style="@style/LevelSelectHeaderText" android:text="@string/text_header_level_select" />
     </TableRow>
 
     <!-- display our level select options -->

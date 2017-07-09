@@ -26,6 +26,8 @@ import static com.gamesbykevin.a2048.game.GameManagerHelper.PUZZLE_DIMENSIONS_EA
 import static com.gamesbykevin.a2048.game.GameManagerHelper.PUZZLE_DIMENSIONS_HARD;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.PUZZLE_DIMENSIONS_MEDIUM;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.RESET;
+import static com.gamesbykevin.a2048.level.Stats.DIFFICULTY;
+import static com.gamesbykevin.a2048.level.Stats.MODE;
 import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.LOADED;
 
 /**
@@ -87,10 +89,10 @@ public class GameManager {
         final int dimensions;
 
         //puzzle mode will have a different size board
-        boolean puzzle = activity.hasSetting(R.string.mode_file_key, Mode.class, Mode.Puzzle);
+        boolean puzzle = (MODE == Mode.Puzzle);
 
         //figure out the size of the board based on difficulty and game mode
-        switch ((Difficulty)activity.getObjectValue(R.string.difficulty_file_key, Difficulty.class)) {
+        switch (DIFFICULTY) {
             case Easy:
                 dimensions = puzzle ? PUZZLE_DIMENSIONS_EASY : DIMENSIONS_EASY;
                 break;
@@ -243,13 +245,8 @@ public class GameManager {
                 //generate random board
                 BoardHelper.generatePuzzle(
                     getBoard(),
-                    STATS.getLevel(Mode.Puzzle,(Difficulty)activity.getObjectValue(R.string.difficulty_file_key, Difficulty.class)).getSeed()
+                    STATS.getLevel().getSeed()
                 );
-
-            } else {
-
-                //every other mode will have 1 level
-                STATS.setLevelIndex(0);
             }
 
             //no need to continue at this point
@@ -299,14 +296,14 @@ public class GameManager {
                 this.merge = null;
 
                 //we don't spawn blocks for puzzle mode
-                if (!activity.hasSetting(R.string.mode_file_key, Mode.class, Mode.Puzzle)) {
+                if (MODE != Mode.Puzzle) {
 
                     //spawn a new block
                     getBoard().spawn();
                 }
 
                 //check if the game is over
-                GAME_OVER = BoardHelper.isGameOver(getBoard(), (Mode)activity.getObjectValue(R.string.mode_file_key, Mode.class));
+                GAME_OVER = BoardHelper.isGameOver(getBoard(), MODE);
 
                 //if the game is over
                 if (GAME_OVER) {
@@ -321,10 +318,7 @@ public class GameManager {
                     MainActivity.logEvent("GAME OVER!!!!!!!!!!!");
 
                     //mark level completed
-                    STATS.markComplete(
-                        (Mode)activity.getObjectValue(R.string.mode_file_key, Mode.class),
-                        (Difficulty)activity.getObjectValue(R.string.difficulty_file_key, Difficulty.class)
-                    );
+                    STATS.markComplete(getBoard().getDuration(), getBoard().getScore());
                 }
             }
 
@@ -372,7 +366,7 @@ public class GameManager {
 
         try {
             //don't display if we are resetting
-            if (RESET)
+            if (RESET || !LOADED)
                 return;
 
             //only render when ready, or game over to prevent screen flicker

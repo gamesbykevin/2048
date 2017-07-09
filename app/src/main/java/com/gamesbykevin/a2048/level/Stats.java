@@ -33,6 +33,10 @@ public class Stats {
     //track the current level
     private int index = 0;
 
+    //the mode and difficulty in play
+    public static Mode MODE;
+    public static Difficulty DIFFICULTY;
+
     public Stats(BaseActivity activity) {
 
         //we need to create this type in order to de-serialize the json back to hash map object
@@ -108,6 +112,10 @@ public class Stats {
         list.add(level);
     }
 
+    public void nextLevelIndex() {
+        setLevelIndex(getLevelIndex() + 1);
+    }
+
     public void setLevelIndex(final int index) {
         this.index = index;
     }
@@ -116,7 +124,11 @@ public class Stats {
         return this.index;
     }
 
-    public ArrayList<Level> getLevels(Mode mode, Difficulty difficulty) {
+    public ArrayList<Level> getLevels() {
+        return getLevels(MODE, DIFFICULTY);
+    }
+
+    private ArrayList<Level> getLevels(Mode mode, Difficulty difficulty) {
 
         //check every key in the hash map
         for (Entry entry : data.keySet()) {
@@ -130,10 +142,14 @@ public class Stats {
         return null;
     }
 
-    public Level getLevel(Mode mode, Difficulty difficulty) {
+    public Level getLevel() {
 
         //get our list of levels
-        ArrayList<Level> tmp = getLevels(mode, difficulty);
+        ArrayList<Level> tmp = getLevels(MODE, DIFFICULTY);
+
+        //make sure the level index stays in bounds
+        if (getLevelIndex() >= tmp.size())
+            setLevelIndex(0);
 
         for (int i = 0; i < tmp.size(); i++) {
 
@@ -146,10 +162,30 @@ public class Stats {
         return null;
     }
 
-    public void markComplete(Mode mode, Difficulty difficulty) {
+    public void markComplete(long duration, int score) {
+
+        //get the current level
+        Level level = getLevel();
 
         //set complete true
-        getLevel(mode, difficulty).setCompleted(true);
+        level.setCompleted(true);
+
+        MainActivity.logEvent("Time New: " + duration);
+        MainActivity.logEvent("Time Old: " + level.getDuration());
+        MainActivity.logEvent("Score New: " + score);
+        MainActivity.logEvent("Score Old: " + level.getScore());
+
+        //if the time is faster, assign the new record
+        if (duration < level.getDuration() || level.getDuration() <= 0) {
+            level.setDuration(duration);
+            MainActivity.logEvent("New Record (time)");
+        }
+
+        //if we set a new high score, assign the new record
+        if (score > level.getScore() || level.getScore() <= 0) {
+            level.setScore(score);
+            MainActivity.logEvent("New Record (score)");
+        }
 
         //save changes
         save();

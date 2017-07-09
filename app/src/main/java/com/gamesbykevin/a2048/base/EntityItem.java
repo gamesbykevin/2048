@@ -1,21 +1,10 @@
 package com.gamesbykevin.a2048.base;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.opengl.GLUtils;
-
-import com.gamesbykevin.a2048.MainActivity;
-import com.gamesbykevin.androidframework.base.Entity;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
-
-import static javax.microedition.khronos.opengles.GL10.GL_BLEND;
-import static javax.microedition.khronos.opengles.GL10.GL_ONE;
-import static javax.microedition.khronos.opengles.GL10.GL_ONE_MINUS_SRC_ALPHA;
 
 /**
  * Created by Kevin on 6/19/2017.
