@@ -102,7 +102,7 @@ public class BoardHelper {
                     //make sure previous value can't match since we just merged
                     previousValue = -1;
 
-                    //since we can't merge this block, the next column to place is to the right
+                    //since we can't merge this block, the next column where we can
                     columnMerge = columnMerge + 1;
 
                     //also mark the non-merge column as the same
@@ -373,55 +373,6 @@ public class BoardHelper {
                     break;
                 }
             }
-        }
-    }
-
-    /**
-     *
-     * @param board
-     * @return
-     */
-    public static boolean isGameOver(Board board, Mode mode) {
-
-        switch (mode) {
-
-            case Puzzle:
-
-                //if there is one block left, the game is over
-                return (board.getBlocks().size() == 1);
-
-            default:
-                //check every available place on the board
-                for (int col = 0; col < board.getCols(); col++) {
-                    for (int row = 0; row < board.getRows(); row++) {
-
-                        //get the current block
-                        Block block = board.getBlock(col, row);
-
-                        //if the block doesn't exist we can still move the blocks and the game is not over
-                        if (block == null)
-                            return false;
-
-                        //check for blocks in all 4 directions
-                        Block east = board.getBlock(col + 1, row);
-                        Block west = board.getBlock(col - 1, row);
-                        Block north = board.getBlock(col, row - 1);
-                        Block south = board.getBlock(col, row + 1);
-
-                        //if the neighbor block exists and has the same value, the game is not yet over
-                        if (east != null && block.getValue() == east.getValue())
-                            return false;
-                        if (west != null && block.getValue() == west.getValue())
-                            return false;
-                        if (north != null && block.getValue() == north.getValue())
-                            return false;
-                        if (south != null && block.getValue() == south.getValue())
-                            return false;
-                    }
-                }
-
-                //we couldn't find any moves, so the game is over
-                return true;
         }
     }
 

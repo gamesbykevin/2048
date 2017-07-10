@@ -245,7 +245,7 @@ public class Block extends EntityItem {
      * Retrieve the block value
      * @return The assigned block value 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, etc...
      */
-    protected int getValue() {
+    public int getValue() {
         return this.value;
     }
 

@@ -192,7 +192,7 @@ public class Board {
      * @param row Row
      * @return The block at the specified location, if none found null is returned
      */
-    protected Block getBlock(int col, int row) {
+    public Block getBlock(int col, int row) {
 
         //check each block in the list
         for (int i = 0; i < getBlocks().size(); i++) {
@@ -307,7 +307,12 @@ public class Board {
 
         //if the game is not over keep track of duration
         if (!GAME_OVER) {
+
+            //each update the time added will be for each frame duration
             setDuration(getDuration() + FRAME_DURATION);
+
+            //flag render
+            DIRTY_FLAG = true;
         }
 
         //are all of the blocks at their target

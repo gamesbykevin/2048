@@ -273,43 +273,6 @@ public class BoardTest extends Board {
     }
 
     @Test
-    public void isGameOverTest() {
-
-        //create new instance
-        Board board = new Board();
-
-        //assume the game isn't over
-        assertFalse(BoardHelper.isGameOver(board, GameManagerHelper.Mode.Original));
-
-        //remove all blocks
-        board.getBlocks().clear();
-
-        //default start value
-        int value = 100000;
-
-        //add a block to every position with a different value
-        for (int col = 0; col < board.getCols(); col++) {
-            for (int row = 0; row < board.getRows(); row++) {
-
-                //change the value so no blocks are the same
-                value++;
-
-                //add block
-                board.addBlock(col, row, value);
-            }
-        }
-
-        //remove 1 block
-        board.getBlocks().remove(0);
-
-        //spawn a new block
-        board.spawn();
-
-        //assume the game is now over
-        assertTrue(BoardHelper.isGameOver(board, GameManagerHelper.Mode.Original));
-    }
-
-    @Test
     public void hasTargetTest() {
 
         //create new instance

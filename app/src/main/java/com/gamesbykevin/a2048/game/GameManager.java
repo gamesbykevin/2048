@@ -253,6 +253,9 @@ public class GameManager {
             return;
         }
 
+        //store the game over status
+        boolean gameOver = GAME_OVER;
+
         //if we aren't ready, check if the textures have loaded
         if (activity.getStep() == GameActivity.Step.Loading) {
 
@@ -301,25 +304,24 @@ public class GameManager {
                     //spawn a new block
                     getBoard().spawn();
                 }
+            }
 
-                //check if the game is over
-                GAME_OVER = BoardHelper.isGameOver(getBoard(), MODE);
+            //check if the game is over
+            GAME_OVER = GameManagerHelper.isGameOver(getBoard(), MODE);
 
-                //if the game is over
-                if (GAME_OVER) {
+            //if the game wasn't over previously, but now is
+            if (!gameOver && GAME_OVER) {
 
-                    //vibrate the phone
-                    activity.vibrate();
+                //vibrate the phone
+                activity.vibrate();
 
-                    //reset frames timer
-                    frames = 0;
+                //reset frames timer
+                frames = 0;
 
-                    //notify if game over
-                    MainActivity.logEvent("GAME OVER!!!!!!!!!!!");
+                MainActivity.logEvent("GAME OVER!!!");
 
-                    //mark level completed
-                    STATS.markComplete(getBoard().getDuration(), getBoard().getScore());
-                }
+                //mark level completed
+                STATS.markComplete(getBoard().getDuration(), getBoard().getScore());
             }
 
             //update the state of the blocks on the board no matter what
@@ -380,7 +382,7 @@ public class GameManager {
             getBoard().draw(gl);
 
             //draw our text on-screen
-            GameManagerHelper.drawText(gl);
+            GameManagerHelper.drawText(gl, getBoard().getDuration());
 
         } catch (Exception e) {
             MainActivity.handleException(e);

@@ -334,6 +334,9 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
             //if not on level select screen, go to it
             if (getStep() != Step.LevelSelect) {
 
+                //update list so it displays correct information
+                refreshLevelSelect();
+
                 //go to level select screen
                 setStep(Step.LevelSelect);
 
