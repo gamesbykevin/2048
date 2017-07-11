@@ -9,8 +9,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.gamesbykevin.a2048.game.GameManagerHelper;
+import com.gamesbykevin.a2048.services.BaseGameActivity;
+import com.gamesbykevin.a2048.services.GameHelper;
+import com.google.android.gms.common.api.GoogleApiClient;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseGameActivity {
 
     /**
      * Do we debug the application?
@@ -24,8 +27,21 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        //log out of google play services
+        super.signOut();
     }
 
     @Override
@@ -65,6 +81,9 @@ public class MainActivity extends BaseActivity {
 
         //close all activities
         ActivityCompat.finishAffinity(this);
+
+        //log out of google play services
+        super.signOut();
     }
 
     public static void handleException(final Exception exception) {
@@ -108,9 +127,6 @@ public class MainActivity extends BaseActivity {
             //log string as information
             Log.i("2048", message);
         }
-
-
-
     }
 
     public static void displayMessage(final Context context, final String message) {
@@ -121,5 +137,15 @@ public class MainActivity extends BaseActivity {
 
         //show text
         Toast.makeText(context, message , Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSignInSucceeded() {
+        displayMessage(this, "Sign in succeeded!!!");
+    }
+
+    @Override
+    public void onSignInFailed() {
+        displayMessage(this, "Sign in failed!!!");
     }
 }

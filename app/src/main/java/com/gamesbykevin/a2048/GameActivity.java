@@ -3,7 +3,6 @@ package com.gamesbykevin.a2048;
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.updateDisplayStats;
@@ -111,7 +109,7 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
         this.layouts = new ArrayList<>();
         this.layouts.add((LinearLayout)findViewById(R.id.gameOverLayoutDefault));
         this.layouts.add((LinearLayout)findViewById(R.id.gameOverLayoutPuzzle));
-        this.layouts.add((ConstraintLayout)findViewById(R.id.loadingScreenLayout));
+        this.layouts.add((LinearLayout)findViewById(R.id.loadingScreenLayout));
         this.layouts.add((TableLayout)findViewById(R.id.levelSelectLayout));
 
         //update level select screen

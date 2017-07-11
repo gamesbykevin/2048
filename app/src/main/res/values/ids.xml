@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- app id as defined in google play -->
+    <string name="app_id">850125635001</string>
+
+    <!-- leader board id for original mode -->
+    <string name="leaderboard_mode_original_key">CgkIufu--94YEAIQAA</string>
+
+</resources>

@@ -44,19 +44,19 @@ public class BoardHelper {
         switch (merge) {
 
             case North:
-                mergeNorth(board, combine);
+                mergeVertical(board, combine, false);
                 break;
 
             case South:
-                mergeSouth(board, combine);
+                mergeVertical(board, combine, true);
                 break;
 
             case West:
-                mergeWest(board, combine);
+                mergeHorizontal(board, combine, false);
                 break;
 
             case East:
-                mergeEast(board, combine);
+                mergeHorizontal(board, combine, true);
                 break;
 
             default:
@@ -65,73 +65,12 @@ public class BoardHelper {
     }
 
     /**
-     * Merge the blocks towards the west
-     * @param board Board containing our blocks to merge
-     * @param combine Do we combine similar blocks?
+     * Merge the blocks horizontally
+     * @param board The board containing the blocks we want to merge
+     * @param combine If the blocks match do we combine them together?
+     * @param east true if you want to merge east, false we will merge west
      */
-    private static void mergeWest(Board board, boolean combine) {
-
-        //check every row
-        for (int row = 0; row < board.getRows(); row++) {
-
-            //the previous value block
-            int previousValue = -1;
-
-            //the west column of the last block that we can merge with
-            int columnMerge = 0;
-
-            //if we can't merge what is the next block
-            int columnNoMerge = 0;
-
-            //check each column in the row one by one starting in the west
-            for (int col = 0; col < board.getCols(); col++) {
-
-                //get the block at the current position
-                Block block = board.getBlock(col, row);
-
-                //if the block doesn't exist there is no need to continue
-                if (block == null)
-                    continue;
-
-                //if the block value matches the previous we can merge
-                if (block.getValue() == previousValue && combine) {
-
-                    //update the target of the current block
-                    block.setColTarget(columnMerge);
-
-                    //make sure previous value can't match since we just merged
-                    previousValue = -1;
-
-                    //since we can't merge this block, the next column where we can
-                    columnMerge = columnMerge + 1;
-
-                    //also mark the non-merge column as the same
-                    columnNoMerge = columnMerge;
-
-                } else {
-
-                    //update the target of the current block
-                    block.setColTarget(columnNoMerge);
-
-                    //store the previous value in case of match
-                    previousValue = block.getValue();
-
-                    //track this column in case we can merge the next block
-                    columnMerge = columnNoMerge;
-
-                    //in case we can't merge the next block track the non-merge column
-                    columnNoMerge = columnMerge + 1;
-                }
-            }
-        }
-    }
-
-    /**
-     * Merge the blocks towards the east
-     * @param board Board containing our blocks to merge
-     * @param combine Do we combine similar blocks?
-     */
-    private static void mergeEast(Board board, boolean combine) {
+    private static void mergeHorizontal(Board board, boolean combine, boolean east) {
 
         //check every row
         for (int row = 0; row < board.getRows(); row++) {
@@ -140,16 +79,22 @@ public class BoardHelper {
             int previousValue = -1;
 
             //the east column of the last block that we can merge with
-            int columnMerge = board.getCols() - 1;
+            int columnMerge = (east) ? board.getCols() - 1 : 0;
 
             //if we can't merge what is the next block
-            int columnNoMerge = board.getCols() - 1;
+            int columnNoMerge = columnMerge;
 
-            //check each column in the row one by one starting in the east
-            for (int col = board.getCols() - 1; col >= 0; col--) {
+            int col = columnMerge;
+            int end = (east) ? -1 : board.getCols();
+            int increment = (east) ? -1 : 1;
+
+            while (col != end) {
 
                 //get the block at the current position
                 Block block = board.getBlock(col, row);
+
+                //change the column
+                col += increment;
 
                 //if the block doesn't exist there is no need to continue
                 if (block == null)
@@ -165,7 +110,7 @@ public class BoardHelper {
                     previousValue = -1;
 
                     //since we can't merge this block, the next column where we can
-                    columnMerge = columnMerge - 1;
+                    columnMerge = columnMerge + increment;
 
                     //also mark the non-merge column as the same
                     columnNoMerge = columnMerge;
@@ -182,80 +127,19 @@ public class BoardHelper {
                     columnMerge = columnNoMerge;
 
                     //in case we can't merge the next block track the non-merge column
-                    columnNoMerge = columnMerge - 1;
+                    columnNoMerge = columnMerge + increment;
                 }
             }
         }
     }
 
     /**
-     * Merge the blocks towards the north
-     * @param board Board containing our blocks to merge
-     * @param combine Do we combine similar blocks?
+     * Merge the blocks vertically
+     * @param board The board containing the blocks we want to merge
+     * @param combine If the blocks match do we combine them together?
+     * @param south true if you want to merge south, false we will merge north
      */
-    private static void mergeNorth(Board board, boolean combine) {
-
-        //check each column
-        for (int col = 0; col < board.getCols(); col++) {
-
-            //the previous value block
-            int previousValue = -1;
-
-            //the north row of the last block that we can merge with
-            int rowMerge = 0;
-
-            //if we can't merge what is the next block
-            int rowNoMerge = 0;
-
-            //check each row one by one starting in the north
-            for (int row = 0; row < board.getRows(); row++) {
-
-                //get the block at the current position
-                Block block = board.getBlock(col, row);
-
-                //if the block doesn't exist there is no need to continue
-                if (block == null)
-                    continue;
-
-                //if the block value matches the previous we can merge
-                if (block.getValue() == previousValue && combine) {
-
-                    //update the target of the current block
-                    block.setRowTarget(rowMerge);
-
-                    //make sure previous value can't match since we just merged
-                    previousValue = -1;
-
-                    //since we can't merge this block, the next row where we can
-                    rowMerge = rowMerge + 1;
-
-                    //also mark the non-merge row as the same
-                    rowNoMerge = rowMerge;
-
-                } else {
-
-                    //update the target of the current block
-                    block.setRowTarget(rowNoMerge);
-
-                    //store the previous value in case of match
-                    previousValue = block.getValue();
-
-                    //track this row in case we can merge the next block
-                    rowMerge = rowNoMerge;
-
-                    //in case we can't merge the next block track the non-merge row
-                    rowNoMerge = rowMerge + 1;
-                }
-            }
-        }
-    }
-
-    /**
-     * Merge the blocks towards the south
-     * @param board Board containing our blocks to merge
-     * @param combine Do we combine similar blocks?
-     */
-    private static void mergeSouth(Board board, boolean combine) {
+    private static void mergeVertical(Board board, boolean combine, boolean south) {
 
         //check each column
         for (int col = 0; col < board.getCols(); col++) {
@@ -264,16 +148,22 @@ public class BoardHelper {
             int previousValue = -1;
 
             //the south row of the last block that we can merge with
-            int rowMerge = board.getRows() - 1;
+            int rowMerge = (south) ? board.getRows() - 1 : 0;
 
             //if we can't merge what is the next block
-            int rowNoMerge = board.getRows() - 1;
+            int rowNoMerge = rowMerge;
 
-            //check each row one by one starting in the south
-            for (int row = board.getRows() - 1; row >= 0; row--) {
+            int row = rowMerge;
+            int end = (south) ? -1 : board.getRows();
+            int increment = (south) ? -1 : 1;
+
+            while (row != end) {
 
                 //get the block at the current position
                 Block block = board.getBlock(col, row);
+
+                //change the row
+                row += increment;
 
                 //if the block doesn't exist there is no need to continue
                 if (block == null)
@@ -289,7 +179,7 @@ public class BoardHelper {
                     previousValue = -1;
 
                     //since we can't merge this block, the next row where we can
-                    rowMerge = rowMerge - 1;
+                    rowMerge = rowMerge + increment;
 
                     //also mark the non-merge row as the same
                     rowNoMerge = rowMerge;
@@ -306,7 +196,7 @@ public class BoardHelper {
                     rowMerge = rowNoMerge;
 
                     //in case we can't merge the next block track the non-merge row
-                    rowNoMerge = rowMerge - 1;
+                    rowNoMerge = rowMerge + increment;
                 }
             }
         }
