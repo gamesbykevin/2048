@@ -327,7 +327,7 @@ public class GameActivity extends BaseActivity implements AdapterView.OnItemClic
     public void onBackPressed() {
 
         //if we are playing puzzle mode, go back to the level select screen
-        if (hasSetting(R.string.mode_file_key, Mode.class, Mode.Puzzle)) {
+        if (MODE == Mode.Puzzle) {
 
             //if not on level select screen, go to it
             if (getStep() != Step.LevelSelect) {

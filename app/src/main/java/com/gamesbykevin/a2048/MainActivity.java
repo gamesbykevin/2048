@@ -12,6 +12,7 @@ import com.gamesbykevin.a2048.game.GameManagerHelper;
 import com.gamesbykevin.a2048.services.BaseGameActivity;
 import com.gamesbykevin.a2048.services.GameHelper;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
 
 public class MainActivity extends BaseGameActivity {
 
@@ -72,6 +73,15 @@ public class MainActivity extends BaseGameActivity {
         //start options activity
         Intent intent = new Intent(this, OptionsActivity.class);
         startActivity(intent);
+
+        //play sound effect
+        super.playSoundEffect();
+    }
+
+    public void onClickAchievements(View view) {
+
+        //show default achievements ui
+        startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), 1);
 
         //play sound effect
         super.playSoundEffect();
@@ -141,11 +151,12 @@ public class MainActivity extends BaseGameActivity {
 
     @Override
     public void onSignInSucceeded() {
-        displayMessage(this, "Sign in succeeded!!!");
+        MainActivity.logEvent("Google Play login worked!");
+        unlockAchievement(R.string.achievement_play_your_first_game);
     }
 
     @Override
     public void onSignInFailed() {
-        displayMessage(this, "Sign in failed!!!");
+        MainActivity.logEvent("Google play login failed!");
     }
 }

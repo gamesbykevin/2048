@@ -98,7 +98,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         editor.putString(getString(R.string.mode_file_key), GSON.toJson(Mode.Original));
 
         //store the difficulty setting
-        editor.putString(getString(R.string.difficulty_file_key), GSON.toJson(Difficulty.Easy));
+        editor.putString(getString(R.string.difficulty_file_key), GSON.toJson(Difficulty.Medium));
 
         //make it final by committing the change
         editor.commit();
@@ -118,17 +118,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public static SharedPreferences getSharedPreferences() {
         return preferences;
-    }
-
-    /**
-     * Do we have the setting?
-     * @param key The unique key of the shared preference setting we want to check
-     * @param classObj The class instance of the object we want to check
-     * @param value The value we want to confirm matches
-     * @return true if the specified shared preference setting has the specified value, false otherwise
-     */
-    public boolean hasSetting(final int key, final Class classObj, final Object value) {
-        return (getObjectValue(key, classObj) == value);
     }
 
     /**

@@ -6,6 +6,8 @@ package com.gamesbykevin.a2048.board;
 
 import com.gamesbykevin.a2048.base.EntityItem;
 
+import static com.gamesbykevin.a2048.board.BoardHelper.SPAWN_VALUE_1;
+import static com.gamesbykevin.a2048.board.BoardHelper.SPAWN_VALUE_2;
 import static com.gamesbykevin.a2048.game.GameManager.GAME_OVER;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.DIRTY_FLAG;
 import com.gamesbykevin.androidframework.base.Cell;
@@ -228,7 +230,7 @@ public class Board {
         if (this.blocks.isEmpty()) {
 
             //spawn one block at this random location
-            addBlock(available.get(index), getRandomObject().nextBoolean() ? VALUES[1] : VALUES[2]);
+            addBlock(available.get(index), getRandomObject().nextBoolean() ? SPAWN_VALUE_1 : SPAWN_VALUE_2);
 
             //remove from our list of available spawn points
             available.remove(index);
@@ -237,12 +239,12 @@ public class Board {
             index = getRandomObject().nextInt(available.size());
 
             //spawn one block at a new random location again
-            addBlock(available.get(index), getRandomObject().nextBoolean() ? VALUES[1] : VALUES[2]);
+            addBlock(available.get(index), getRandomObject().nextBoolean() ? SPAWN_VALUE_1 : SPAWN_VALUE_2);
 
         } else {
 
             //spawn one block at this random location
-            addBlock(available.get(index), getRandomObject().nextBoolean() ? VALUES[1] : VALUES[2]);
+            addBlock(available.get(index), getRandomObject().nextBoolean() ? SPAWN_VALUE_1 : SPAWN_VALUE_2);
         }
     }
 
@@ -349,6 +351,56 @@ public class Board {
         //all blocks are at their target we return true
         return true;
     }
+
+    public boolean hasValue(final int value) {
+
+        //check every block
+        for (int i = 0; i < getBlocks().size(); i++) {
+
+            //if the values are the same, we have a match
+            if (getBlocks().get(i).getValue() == value)
+                return true;
+        }
+
+        //we did not find a block with the specified value
+        return false;
+    }
+
+    public boolean hasMove() {
+
+        //check every available place on the board
+        for (int col = 0; col < getCols(); col++) {
+            for (int row = 0; row < getRows(); row++) {
+
+                //get the current block
+                Block block = getBlock(col, row);
+
+                //if the block doesn't exist we can still move the blocks
+                if (block == null)
+                    return true;
+
+                //check for blocks in all 4 directions
+                Block east = getBlock(col + 1, row);
+                Block west = getBlock(col - 1, row);
+                Block north = getBlock(col, row - 1);
+                Block south = getBlock(col, row + 1);
+
+                //if the neighbor block exists and has the same value, we still have a move
+                if (east != null && block.getValue() == east.getValue())
+                    return true;
+                if (west != null && block.getValue() == west.getValue())
+                    return true;
+                if (north != null && block.getValue() == north.getValue())
+                    return true;
+                if (south != null && block.getValue() == south.getValue())
+                    return true;
+            }
+        }
+
+        //we couldn't find any moves
+        return false;
+    }
+
 
     /**
      * Assign the appropriate texture for each block etc...

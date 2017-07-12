@@ -14,7 +14,6 @@ import com.gamesbykevin.a2048.board.BoardHelper;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
 
 import static com.gamesbykevin.a2048.GameActivity.STATS;
@@ -94,15 +93,15 @@ public class GameManager {
         //figure out the size of the board based on difficulty and game mode
         switch (DIFFICULTY) {
             case Easy:
-                dimensions = puzzle ? PUZZLE_DIMENSIONS_EASY : DIMENSIONS_EASY;
+                dimensions = (puzzle) ? PUZZLE_DIMENSIONS_EASY : DIMENSIONS_EASY;
                 break;
 
             case Medium:
-                dimensions = puzzle ? PUZZLE_DIMENSIONS_MEDIUM : DIMENSIONS_MEDIUM;
+                dimensions = (puzzle) ? PUZZLE_DIMENSIONS_MEDIUM : DIMENSIONS_MEDIUM;
                 break;
 
             case Hard:
-                dimensions = puzzle ? PUZZLE_DIMENSIONS_HARD : DIMENSIONS_HARD;
+                dimensions = (puzzle) ? PUZZLE_DIMENSIONS_HARD : DIMENSIONS_HARD;
                 break;
 
             default:
@@ -240,7 +239,7 @@ public class GameManager {
             GAME_OVER = false;
 
             //if puzzle mode, generate board with the specified seed
-            if (activity.hasSetting(R.string.mode_file_key, Mode.class, Mode.Puzzle)) {
+            if (MODE == Mode.Puzzle) {
 
                 //generate random board
                 BoardHelper.generatePuzzle(
@@ -262,14 +261,20 @@ public class GameManager {
             //check if the textures have loaded
             if (LOADED) {
 
-                if (activity.hasSetting(R.string.mode_file_key, Mode.class, Mode.Original)) {
-                    activity.setStep(GameActivity.Step.Ready);
-                } else if (activity.hasSetting(R.string.mode_file_key, Mode.class, Mode.Puzzle)) {
-                    activity.setStep(GameActivity.Step.LevelSelect);
-                } else if (activity.hasSetting(R.string.mode_file_key, Mode.class, Mode.Challenge)) {
-                    activity.setStep(GameActivity.Step.Ready);
-                } else {
-                    throw new RuntimeException("Mode is not handled");
+                switch (MODE) {
+
+                    case Puzzle:
+                        activity.setStep(GameActivity.Step.LevelSelect);
+                        break;
+
+                    case Original:
+                    case Challenge:
+                    case Infinite:
+                        activity.setStep(GameActivity.Step.Ready);
+                        break;
+
+                    default:
+                        throw new RuntimeException("Mode: " + MODE.toString() + " is not handled");
                 }
             }
 
@@ -314,6 +319,9 @@ public class GameManager {
 
                 //vibrate the phone
                 activity.vibrate();
+
+                //unlock first game played achievement
+                //MainActivity.unlockAchievement(activity.getString(R.string.achievement_play_your_first_game));
 
                 //reset frames timer
                 frames = 0;

@@ -1,11 +1,14 @@
 package com.gamesbykevin.a2048.services;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.gamesbykevin.a2048.BaseActivity;
+import com.gamesbykevin.a2048.MainActivity;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
 
 import static com.gamesbykevin.a2048.MainActivity.DEBUG;
 
@@ -95,6 +98,19 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
 
     protected GoogleApiClient getApiClient() {
         return mHelper.getApiClient();
+    }
+
+    public void unlockAchievement(int id) {
+        unlockAchievement(getString(id));
+    }
+
+    public void unlockAchievement(String achievementId) {
+
+        try {
+            Games.Achievements.unlock(getApiClient(), achievementId);
+        } catch (Exception e) {
+            MainActivity.handleException(e);
+        }
     }
 
     protected boolean isSignedIn() {

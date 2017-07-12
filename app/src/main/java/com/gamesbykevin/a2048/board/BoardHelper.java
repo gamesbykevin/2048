@@ -32,6 +32,9 @@ public class BoardHelper {
      */
     private static Random RANDOM_OBJECT;
 
+    public static final int SPAWN_VALUE_1 = VALUES[1];
+    public static final int SPAWN_VALUE_2 = VALUES[2];
+
     /**
      * Merge the blocks on the board
      * @param board The board we are merging
