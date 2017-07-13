@@ -15,12 +15,14 @@ import com.gamesbykevin.a2048.board.BoardHelper;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
+import com.gamesbykevin.a2048.services.AchievementHelper;
 
 import static com.gamesbykevin.a2048.GameActivity.STATS;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.DIMENSIONS_EASY;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.DIMENSIONS_HARD;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.DIMENSIONS_MEDIUM;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.GAME_OVER_FRAMES_DELAY;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.ORIGINAL_MODE_GOAL_VALUE;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.PUZZLE_DIMENSIONS_EASY;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.PUZZLE_DIMENSIONS_HARD;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.PUZZLE_DIMENSIONS_MEDIUM;
@@ -320,20 +322,42 @@ public class GameManager {
                 //vibrate the phone
                 activity.vibrate();
 
-                //unlock first game played achievement
-                //MainActivity.unlockAchievement(activity.getString(R.string.achievement_play_your_first_game));
-
                 //reset frames timer
                 frames = 0;
 
                 MainActivity.logEvent("GAME OVER!!!");
 
-                //mark level completed
-                STATS.markComplete(getBoard().getDuration(), getBoard().getScore());
+                //update our achievements
+                AchievementHelper.checkAchievementsCompletedGame(activity);
+
+                //did we beat a personal best
+                boolean record = false;
+
+                //if original mode, make sure they have 2048 value
+                if (MODE == Mode.Original) {
+
+                    //make sure they solved the board to check if we beat a record
+                    if (getBoard().hasValue(ORIGINAL_MODE_GOAL_VALUE))
+                        record = STATS.markComplete(getBoard().getDuration(), getBoard().getScore());
+                } else {
+                    //did we set a record
+                    record = STATS.markComplete(getBoard().getDuration(), getBoard().getScore());
+                }
+
+                //if puzzle mode, check if we completed a level quickly
+                if (MODE == Mode.Puzzle)
+                    AchievementHelper.checkAchievementsPuzzleTime(activity, getBoard());
+
+                //if we beat a previous best, check achievements
+                if (record)
+                    AchievementHelper.checkAchievementsNewRecord(activity);
             }
 
             //update the state of the blocks on the board no matter what
             getBoard().update();
+
+            //check if any new blocks are created for achievements
+            AchievementHelper.checkAchievementsNewBlocks(activity);
 
             //if the game is over, track the time elapsed
             if (GAME_OVER) {

@@ -32,6 +32,11 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
 
     private final static String TAG = "BaseGameActivity";
 
+    /**
+     * Have we called onStart already?
+     */
+    private static boolean STARTED = false;
+
     /** Constructs a BaseGameActivity with default client (GamesClient). */
     protected BaseGameActivity() {
         super();
@@ -81,6 +86,8 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
     @Override
     protected void onStart() {
         super.onStart();
+
+        //only call game helper once
         mHelper.onStart(this);
     }
 
@@ -96,18 +103,27 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
         mHelper.onActivityResult(request, response, data);
     }
 
-    protected GoogleApiClient getApiClient() {
-        return mHelper.getApiClient();
+    public GoogleApiClient getApiClient() {
+        return getGameHelper().getApiClient();
     }
 
-    public void unlockAchievement(int id) {
-        unlockAchievement(getString(id));
-    }
-
-    public void unlockAchievement(String achievementId) {
-
+    public void unlockAchievement(final int resId) {
         try {
+            String achievementId = getString(resId);
+            MainActivity.logEvent("Unlocking achievement " + achievementId);
             Games.Achievements.unlock(getApiClient(), achievementId);
+            MainActivity.logEvent("Achievement unlocked " + achievementId);
+        } catch (Exception e) {
+            MainActivity.handleException(e);
+        }
+    }
+
+    public void incrementAchievement(final int resId, final int incrementValue) {
+        try {
+            String achievementId = getString(resId);
+            MainActivity.logEvent("Incrementing achievement " + achievementId);
+            Games.Achievements.increment(getApiClient(), achievementId, incrementValue);
+            MainActivity.logEvent("Achievement incremented " + achievementId);
         } catch (Exception e) {
             MainActivity.handleException(e);
         }

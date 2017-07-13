@@ -162,7 +162,7 @@ public class Stats {
         return null;
     }
 
-    public void markComplete(long duration, int score) {
+    public boolean markComplete(long duration, int score) {
 
         //get the current level
         Level level = getLevel();
@@ -175,20 +175,52 @@ public class Stats {
         MainActivity.logEvent("Score New: " + score);
         MainActivity.logEvent("Score Old: " + level.getScore());
 
-        //if the time is faster, assign the new record
-        if (duration < level.getDuration() || level.getDuration() <= 0) {
-            level.setDuration(duration);
-            MainActivity.logEvent("New Record (time)");
-        }
+        //did we set a new record?
+        boolean newRecordTime = false;
+        boolean newRecordScore = false;
 
-        //if we set a new high score, assign the new record
-        if (score > level.getScore() || level.getScore() <= 0) {
-            level.setScore(score);
-            MainActivity.logEvent("New Record (score)");
+        //determine if a record was set depending on the game mode we are playing
+        switch (MODE) {
+
+            case Original:
+            case Puzzle:
+
+                //if no previous was set, we didn't beat our personal best
+                if (level.getDuration() <= 0) {
+                    level.setDuration(duration);
+                } else if (duration < level.getDuration()) {
+                    level.setDuration(duration);
+
+                    //we beat our personal best
+                    MainActivity.logEvent("New Record (time)");
+                    newRecordTime = true;
+                }
+                break;
+
+            case Infinite:
+            case Challenge:
+
+                //if no previous score, we didn't beat our personal best
+                if (level.getScore() <= 0) {
+                    level.setScore(score);
+                } else if (score > level.getScore()) {
+                    level.setScore(score);
+
+                    //we beat our personal best
+                    MainActivity.logEvent("New Record (score)");
+                    newRecordScore = true;
+                }
+                break;
+
+            default:
+                throw new RuntimeException("Mode: " + MODE.toString() + " not handled here");
+
         }
 
         //save changes
         save();
+
+        return (newRecordScore || newRecordTime);
     }
 
     /**

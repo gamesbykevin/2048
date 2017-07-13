@@ -21,6 +21,9 @@ public class MainActivity extends BaseGameActivity {
      */
     public static final boolean DEBUG = true;
 
+    //did we access the achievements
+    private boolean ACCESS_ACHIEVEMENT = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,11 +83,23 @@ public class MainActivity extends BaseGameActivity {
 
     public void onClickAchievements(View view) {
 
-        //show default achievements ui
-        startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), 1);
+        //if we are connected, display default achievements ui
+        if (getApiClient().isConnected()) {
+            displayAchievementUI();
+        } else {
+            //if not connected, re-attempt google play login
+            beginUserInitiatedSignIn();
+
+            //flag that we want to open the achievements
+            ACCESS_ACHIEVEMENT = true;
+        }
 
         //play sound effect
         super.playSoundEffect();
+    }
+
+    private void displayAchievementUI() {
+        startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), 1);
     }
 
     public void onClickExit(View view) {
@@ -151,12 +166,20 @@ public class MainActivity extends BaseGameActivity {
 
     @Override
     public void onSignInSucceeded() {
-        MainActivity.logEvent("Google Play login worked!");
-        unlockAchievement(R.string.achievement_play_your_first_game);
+        MainActivity.displayMessage(this, "Google Play login worked!");
+
+        if (ACCESS_ACHIEVEMENT) {
+
+            //if we just came from achievements button and are now signed in, show achievements ui
+            displayAchievementUI();
+
+            //flag back false
+            ACCESS_ACHIEVEMENT = false;
+        }
     }
 
     @Override
     public void onSignInFailed() {
-        MainActivity.logEvent("Google play login failed!");
+        MainActivity.displayMessage(this, "Google play login failed!");
     }
 }

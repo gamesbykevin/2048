@@ -9,7 +9,10 @@ import com.gamesbykevin.a2048.base.EntityItem;
 import static com.gamesbykevin.a2048.board.BoardHelper.SPAWN_VALUE_1;
 import static com.gamesbykevin.a2048.board.BoardHelper.SPAWN_VALUE_2;
 import static com.gamesbykevin.a2048.game.GameManager.GAME_OVER;
+import static com.gamesbykevin.a2048.level.Stats.MODE;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.DIRTY_FLAG;
+
+import com.gamesbykevin.a2048.game.GameManagerHelper;
 import com.gamesbykevin.androidframework.base.Cell;
 
 import java.util.ArrayList;

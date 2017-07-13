@@ -1,7 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_id">850125635001</string>
     <string name="package_name">com.gamesbykevin.a2048</string>
-    <string name="achievement_play_your_first_game">CgkIufu--94YEAIQAg</string>
+
+    <!-- ACHIEVEMENTS -->
+    <string name="achievement_complete_your_first_game_mode_original">CgkIufu--94YEAIQAw</string>
+    <string name="achievement_complete_your_first_game_mode_puzzle">CgkIufu--94YEAIQBA</string>
+    <string name="achievement_complete_your_first_game_mode_challenge">CgkIufu--94YEAIQBQ</string>
+    <string name="achievement_complete_your_first_game_mode_infinite">CgkIufu--94YEAIQBg</string>
+    <string name="achievement_complete_100_games_mode_original">CgkIufu--94YEAIQBw</string>
+    <string name="achievement_complete_100_games_mode_puzzle">CgkIufu--94YEAIQCA</string>
+    <string name="achievement_complete_100_games_mode_challenge">CgkIufu--94YEAIQCQ</string>
+    <string name="achievement_complete_100_games_mode_infinite">CgkIufu--94YEAIQCg</string>
+    <string name="achievement_beat_your_personal_best_mode_original">CgkIufu--94YEAIQCw</string>
+    <string name="achievement_beat_your_personal_best_mode_puzzle">CgkIufu--94YEAIQDA</string>
+    <string name="achievement_beat_your_personal_best_mode_challenge">CgkIufu--94YEAIQDQ</string>
+    <string name="achievement_beat_your_personal_best_mode_infinite">CgkIufu--94YEAIQDg</string>
+    <string name="achievement_complete_a_game_in_less_than_5_seconds_mode_puzzle">CgkIufu--94YEAIQDw</string>
+    <string name="achievement_complete_a_game_in_less_than_15_seconds_mode_puzzle">CgkIufu--94YEAIQEA</string>
+    <string name="achievement_complete_a_game_in_less_than_30_seconds_mode_puzzle">CgkIufu--94YEAIQEQ</string>
+    <string name="achievement_get_a_4096_block_mode_infinite">CgkIufu--94YEAIQEg</string>
+    <string name="achievement_get_a_8192_block_mode_infinite">CgkIufu--94YEAIQEw</string>
+    <string name="achievement_get_a_256_block_mode_challenge">CgkIufu--94YEAIQFA</string>
+    <string name="achievement_get_a_512_block_mode_challenge">CgkIufu--94YEAIQFQ</string>
+    <string name="achievement_get_a_1024_block_mode_challenge">CgkIufu--94YEAIQFg</string>
+    <string name="achievement_create_a_4096_block_100_times_mode_challenge_infinite">CgkIufu--94YEAIQFw</string>
+    <string name="achievement_create_a_8192_block_100_times_mode_challenge_infinite">CgkIufu--94YEAIQGA</string>
+
+    <!-- LEADER BOARDS -->
     <string name="leaderboard_original_mode_leaderboard">CgkIufu--94YEAIQAA</string>
 </resources>
+

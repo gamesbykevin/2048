@@ -35,6 +35,13 @@ public class BoardHelper {
     public static final int SPAWN_VALUE_1 = VALUES[1];
     public static final int SPAWN_VALUE_2 = VALUES[2];
 
+    //keep track of how many new blocks are created
+    public static int BLOCK_256 = 0;
+    public static int BLOCK_512 = 0;
+    public static int BLOCK_1024 = 0;
+    public static int BLOCK_4096 = 0;
+    public static int BLOCK_8192 = 0;
+
     /**
      * Merge the blocks on the board
      * @param board The board we are merging
@@ -212,6 +219,13 @@ public class BoardHelper {
      */
     protected static void updateMerged(Board board) {
 
+        //reset our block counts to 0
+        BLOCK_256 = 0;
+        BLOCK_512 = 0;
+        BLOCK_1024 = 0;
+        BLOCK_4096 = 0;
+        BLOCK_8192 = 0;
+
         //get the list of blocks from our board
         List<Block> blocks = board.getBlocks();
 
@@ -249,6 +263,18 @@ public class BoardHelper {
 
                     //update block value
                     block.setValue(block.getValue() + tmp.getValue());
+
+                    //keep track of blocks created for achievements
+                    if (block.getValue() == VALUES[8])
+                        BLOCK_256++;
+                    if (block.getValue() == VALUES[9])
+                        BLOCK_512++;
+                    if (block.getValue() == VALUES[10])
+                        BLOCK_1024++;
+                    if (block.getValue() == VALUES[12])
+                        BLOCK_4096++;
+                    if (block.getValue() == VALUES[13])
+                        BLOCK_8192++;
 
                     //flag the block to expand
                     block.setExpand(true);

@@ -112,6 +112,9 @@ public class GameManagerHelper {
      */
     public static final long CHALLENGE_DURATION = 60000;
 
+    /**
+     * Value of a single block that indicates game over for original mode
+     */
     public static final int ORIGINAL_MODE_GOAL_VALUE = VALUES[11];
 
     public static void updateDisplayStats() {
