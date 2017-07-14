@@ -7,15 +7,14 @@ package com.gamesbykevin.a2048.game;
 import android.view.MotionEvent;
 
 import com.gamesbykevin.a2048.GameActivity;
-import com.gamesbykevin.a2048.MainActivity;
-import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.board.Board;
 import com.gamesbykevin.a2048.board.BoardHelper;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
-import com.gamesbykevin.a2048.services.AchievementHelper;
+import com.gamesbykevin.a2048.services.GooglePlayServicesHelper;
+import com.gamesbykevin.a2048.util.UtilityHelper;
 
 import static com.gamesbykevin.a2048.GameActivity.STATS;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.DIMENSIONS_EASY;
@@ -178,7 +177,7 @@ public class GameManager {
                         if (x > this.downX) {
 
                             //we are swiping right
-                            MainActivity.logEvent("Swiping Right");
+                            UtilityHelper.logEvent("Swiping Right");
 
                             //merging east
                             this.merge = Merge.East;
@@ -186,7 +185,7 @@ public class GameManager {
                         } else {
 
                             //we are swiping left
-                            MainActivity.logEvent("Swiping Left");
+                            UtilityHelper.logEvent("Swiping Left");
 
                             //merging west
                             this.merge = Merge.West;
@@ -198,7 +197,7 @@ public class GameManager {
                         if (y > this.downY) {
 
                             //we are swiping down
-                            MainActivity.logEvent("Swiping Down");
+                            UtilityHelper.logEvent("Swiping Down");
 
                             //merging south
                             this.merge = Merge.South;
@@ -206,7 +205,7 @@ public class GameManager {
                         } else {
 
                             //we are swiping up
-                            MainActivity.logEvent("Swiping Up");
+                            UtilityHelper.logEvent("Swiping Up");
 
                             //merging north
                             this.merge = Merge.North;
@@ -325,10 +324,10 @@ public class GameManager {
                 //reset frames timer
                 frames = 0;
 
-                MainActivity.logEvent("GAME OVER!!!");
+                UtilityHelper.logEvent("GAME OVER!!!");
 
                 //update our achievements
-                AchievementHelper.checkAchievementsCompletedGame(activity);
+                GooglePlayServicesHelper.checkCompletedGame(activity, getBoard());
 
                 //did we beat a personal best
                 boolean record = false;
@@ -346,18 +345,18 @@ public class GameManager {
 
                 //if puzzle mode, check if we completed a level quickly
                 if (MODE == Mode.Puzzle)
-                    AchievementHelper.checkAchievementsPuzzleTime(activity, getBoard());
+                    GooglePlayServicesHelper.checkAchievementsPuzzleTime(activity, getBoard());
 
                 //if we beat a previous best, check achievements
                 if (record)
-                    AchievementHelper.checkAchievementsNewRecord(activity);
+                    GooglePlayServicesHelper.checkAchievementsNewRecord(activity);
             }
 
             //update the state of the blocks on the board no matter what
             getBoard().update();
 
             //check if any new blocks are created for achievements
-            AchievementHelper.checkAchievementsNewBlocks(activity);
+            GooglePlayServicesHelper.checkAchievementsNewBlocks(activity);
 
             //if the game is over, track the time elapsed
             if (GAME_OVER) {
@@ -417,7 +416,7 @@ public class GameManager {
             GameManagerHelper.drawText(gl, getBoard().getDuration());
 
         } catch (Exception e) {
-            MainActivity.handleException(e);
+            UtilityHelper.handleException(e);
         }
     }
 }

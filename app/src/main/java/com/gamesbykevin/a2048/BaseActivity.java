@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
+import com.gamesbykevin.a2048.util.UtilityHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -203,7 +204,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 getSoundSelection().start();
             }
         } catch (Exception e) {
-            MainActivity.handleException(e);
+            UtilityHelper.handleException(e);
         }
     }
 

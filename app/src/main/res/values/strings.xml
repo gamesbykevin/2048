@@ -12,19 +12,17 @@
     <string name="gamehelper_license_failed">License check failed.</string>
     <string name="gamehelper_unknown_error">Unknown error.</string>
 
-
+    <!-- button text -->
     <string name="button_text_next">Next</string>
     <string name="button_text_restart">Restart</string>
     <string name="button_text_achievements">Achievements</string>
+    <string name="button_text_leaderboard">Leaderboard</string>
     <string name="button_text_rate">Rate</string>
     <string name="button_text_more">More</string>
     <string name="button_text_menu">Menu</string>
     <string name="button_text_start">Start</string>
     <string name="button_text_options">Options</string>
     <string name="button_text_exit">Exit</string>
-
-
-    <string name="title_activity_options">OptionsActivity</string>
     <string name="vibrate_on">Vibrate: On</string>
     <string name="vibrate_off">Vibrate: Off</string>
     <string name="sound_on">Sound: On</string>
@@ -38,8 +36,6 @@
     <string name="vibrate_file_key">com.gamesbykevin.2048.VIBRATE_FILE_KEY</string>
     <string name="mode_file_key">com.gamesbykevin.2048.MODE_FILE_KEY</string>
     <string name="difficulty_file_key">com.gamesbykevin.2048.DIFFICULTY_FILE_KEY</string>
-
-
     <string name="game_stats_file_key">com.gamesbykevin.2048.GAME_STATS_FILE_KEY</string>
 
     <!--header text for our game options, &#160; is to create an empty space-->

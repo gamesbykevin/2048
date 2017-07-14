@@ -3,10 +3,10 @@ package com.gamesbykevin.a2048.level;
 import android.content.SharedPreferences;
 
 import com.gamesbykevin.a2048.BaseActivity;
-import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
+import com.gamesbykevin.a2048.util.UtilityHelper;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -170,10 +170,10 @@ public class Stats {
         //set complete true
         level.setCompleted(true);
 
-        MainActivity.logEvent("Time New: " + duration);
-        MainActivity.logEvent("Time Old: " + level.getDuration());
-        MainActivity.logEvent("Score New: " + score);
-        MainActivity.logEvent("Score Old: " + level.getScore());
+        UtilityHelper.logEvent("Time New: " + duration);
+        UtilityHelper.logEvent("Time Old: " + level.getDuration());
+        UtilityHelper.logEvent("Score New: " + score);
+        UtilityHelper.logEvent("Score Old: " + level.getScore());
 
         //did we set a new record?
         boolean newRecordTime = false;
@@ -192,7 +192,7 @@ public class Stats {
                     level.setDuration(duration);
 
                     //we beat our personal best
-                    MainActivity.logEvent("New Record (time)");
+                    UtilityHelper.logEvent("New Record (time)");
                     newRecordTime = true;
                 }
                 break;
@@ -207,7 +207,7 @@ public class Stats {
                     level.setScore(score);
 
                     //we beat our personal best
-                    MainActivity.logEvent("New Record (score)");
+                    UtilityHelper.logEvent("New Record (score)");
                     newRecordScore = true;
                 }
                 break;
@@ -235,7 +235,7 @@ public class Stats {
         final String json = activity.GSON.toJson(data);
 
         //print data
-        MainActivity.logEvent(json);
+        UtilityHelper.logEvent(json);
 
         //convert to json string and store in preferences
         editor.putString(activity.getString(R.string.game_stats_file_key), json);

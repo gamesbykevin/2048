@@ -3,8 +3,6 @@ package com.gamesbykevin.a2048;
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,9 +16,9 @@ import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
 import com.gamesbykevin.a2048.level.Stats;
 import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
-import com.gamesbykevin.a2048.services.AchievementHelper;
 import com.gamesbykevin.a2048.services.BaseGameActivity;
 import com.gamesbykevin.a2048.ui.CustomAdapter;
+import com.gamesbykevin.a2048.util.UtilityHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,7 +30,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -88,9 +85,6 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        //don't check achievements, yet
-        AchievementHelper.CHECK_ACHIEVEMENTS = false;
 
         //call parent
         super.onCreate(savedInstanceState);
@@ -192,7 +186,7 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
             RANDOM = new Random(time);
 
             //print the random seed
-            MainActivity.logEvent("Random seed: " + time);
+            UtilityHelper.logEvent("Random seed: " + time);
         }
 
         return RANDOM;
@@ -430,17 +424,20 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
 
     @Override
     public void onSignInSucceeded() {
-        MainActivity.displayMessage(this, "Google Play login worked!");
+        UtilityHelper.displayMessage(this, "Google Play login worked!");
 
-        //flag that we can check achievements
-        AchievementHelper.CHECK_ACHIEVEMENTS = true;
+        if (ACCESS_LEADERBOARD) {
+
+            //if we came from hitting the leaderboard button display ui
+            displayLeaderboardUI();
+
+            //flag back false
+            ACCESS_LEADERBOARD = false;
+        }
     }
 
     @Override
     public void onSignInFailed() {
-        MainActivity.displayMessage(this, "Google play login failed!");
-
-        //don't check achievements, yet
-        AchievementHelper.CHECK_ACHIEVEMENTS = false;
+        UtilityHelper.displayMessage(this, "Google play login failed!");
     }
 }

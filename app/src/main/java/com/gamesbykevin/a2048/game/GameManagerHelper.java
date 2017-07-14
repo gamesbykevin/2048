@@ -163,7 +163,7 @@ public class GameManagerHelper {
             case Infinite:
 
                 //continue until no more moves are left
-                return (board.hasMove());
+                return (!board.hasMove());
 
             /**
              * Original the game continues until there are no more moves available
@@ -218,6 +218,7 @@ public class GameManagerHelper {
             glText.draw(TEXT_GAME_OVER, START_X, y);
 
         switch (MODE) {
+
             case Puzzle:
                 y += glText.getCharHeight();
                 glText.draw("Time: " + DATE_FORMAT.format(duration), START_X, y);
@@ -236,7 +237,12 @@ public class GameManagerHelper {
 
             case Challenge:
                 y += glText.getCharHeight();
-                glText.draw("Time: " + DATE_FORMAT.format(CHALLENGE_DURATION - duration), START_X, y);
+
+                if (duration > CHALLENGE_DURATION) {
+                    glText.draw("Time: " + DATE_FORMAT.format(CHALLENGE_DURATION - CHALLENGE_DURATION), START_X, y);
+                } else {
+                    glText.draw("Time: " + DATE_FORMAT.format(CHALLENGE_DURATION - duration), START_X, y);
+                }
                 y += glText.getCharHeight();
                 glText.draw(TEXT_SCORE + MANAGER.getBoard().getScore(), START_X, y);
                 y += glText.getCharHeight();

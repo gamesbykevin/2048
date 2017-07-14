@@ -11,6 +11,7 @@ import com.gamesbykevin.a2048.GameActivity;
 import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.opengl.text.GLText;
+import com.gamesbykevin.a2048.util.UtilityHelper;
 
 import java.nio.IntBuffer;
 
@@ -95,7 +96,7 @@ public class OpenGLRenderer implements Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         //display the version of open gl
-        MainActivity.logEvent("OpenGL Version: " + gl.glGetString(GL10.GL_VERSION));
+        UtilityHelper.logEvent("OpenGL Version: " + gl.glGetString(GL10.GL_VERSION));
     }
 
     /**
@@ -187,7 +188,7 @@ public class OpenGLRenderer implements Renderer {
                 throw new Exception("Error loading texture: " + index);
             } else {
                 //display texture id
-                MainActivity.logEvent("Texture loaded id: " + textures[index]);
+                UtilityHelper.logEvent("Texture loaded id: " + textures[index]);
             }
 
         } catch (Exception e) {

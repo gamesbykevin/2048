@@ -4,6 +4,7 @@ import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.game.GameManager;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
 import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
+import com.gamesbykevin.a2048.util.UtilityHelper;
 import com.gamesbykevin.androidframework.base.Cell;
 
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ public class BoardHelper {
 
     public static final int SPAWN_VALUE_1 = VALUES[1];
     public static final int SPAWN_VALUE_2 = VALUES[2];
+    //public static final int SPAWN_VALUE_1 = VALUES[9];
+    //public static final int SPAWN_VALUE_2 = VALUES[10];
 
     //keep track of how many new blocks are created
     public static int BLOCK_256 = 0;
@@ -251,15 +254,15 @@ public class BoardHelper {
                     if (block.getValue() != tmp.getValue()) {
 
                         //for some reason we tried to merge these blocks
-                        MainActivity.logEvent("Block 1: (" + block.getCol() + ", " + block.getRow() + ") " + block.getValue());
-                        MainActivity.logEvent("Block 2: (" + tmp.getCol() + ", " + tmp.getRow() + ") " + tmp.getValue());
+                        UtilityHelper.logEvent("Block 1: (" + block.getCol() + ", " + block.getRow() + ") " + block.getValue());
+                        UtilityHelper.logEvent("Block 2: (" + tmp.getCol() + ", " + tmp.getRow() + ") " + tmp.getValue());
 
                         //skip to the next block
                         continue;
                     }
 
-                    MainActivity.logEvent("Merged 1: (" + block.getCol() + ", " + block.getRow() + ") " + block.getValue());
-                    MainActivity.logEvent("Merged 2: (" + tmp.getCol() + ", " + tmp.getRow() + ") " + tmp.getValue());
+                    UtilityHelper.logEvent("Merged 1: (" + block.getCol() + ", " + block.getRow() + ") " + block.getValue());
+                    UtilityHelper.logEvent("Merged 2: (" + tmp.getCol() + ", " + tmp.getRow() + ") " + tmp.getValue());
 
                     //update block value
                     block.setValue(block.getValue() + tmp.getValue());

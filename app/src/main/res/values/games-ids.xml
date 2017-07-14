@@ -29,6 +29,14 @@
     <string name="achievement_create_a_8192_block_100_times_mode_challenge_infinite">CgkIufu--94YEAIQGA</string>
 
     <!-- LEADER BOARDS -->
-    <string name="leaderboard_original_mode_leaderboard">CgkIufu--94YEAIQAA</string>
+    <string name="leaderboard_challenge_easy">CgkIufu--94YEAIQAA</string>
+    <string name="leaderboard_challenge_medium">CgkIufu--94YEAIQHQ</string>
+    <string name="leaderboard_challenge_hard">CgkIufu--94YEAIQHg</string>
+    <string name="leaderboard_infinite_easy">CgkIufu--94YEAIQGQ</string>
+    <string name="leaderboard_infinite_medium">CgkIufu--94YEAIQHw</string>
+    <string name="leaderboard_infinite_hard">CgkIufu--94YEAIQIA</string>
+    <string name="leaderboard_original_easy">CgkIufu--94YEAIQGg</string>
+    <string name="leaderboard_original_medium">CgkIufu--94YEAIQGw</string>
+    <string name="leaderboard_original_hard">CgkIufu--94YEAIQHA</string>
 </resources>
 

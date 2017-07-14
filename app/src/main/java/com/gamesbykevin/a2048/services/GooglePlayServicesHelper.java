@@ -4,12 +4,14 @@ import com.gamesbykevin.a2048.GameActivity;
 import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.board.Board;
+import com.gamesbykevin.a2048.util.UtilityHelper;
 
 import static com.gamesbykevin.a2048.board.BoardHelper.BLOCK_1024;
 import static com.gamesbykevin.a2048.board.BoardHelper.BLOCK_256;
 import static com.gamesbykevin.a2048.board.BoardHelper.BLOCK_4096;
 import static com.gamesbykevin.a2048.board.BoardHelper.BLOCK_512;
 import static com.gamesbykevin.a2048.board.BoardHelper.BLOCK_8192;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.ORIGINAL_MODE_GOAL_VALUE;
 import static com.gamesbykevin.a2048.level.Stats.DIFFICULTY;
 import static com.gamesbykevin.a2048.level.Stats.MODE;
 
@@ -17,62 +19,112 @@ import static com.gamesbykevin.a2048.level.Stats.MODE;
  * Created by Kevin on 7/12/2017.
  */
 
-public class AchievementHelper {
+public class GooglePlayServicesHelper {
 
     //duration of each difficulty indicating a fast time to resolve
     private static final long PUZZLE_FAST_DURATION_EASY = 5000;
     private static final long PUZZLE_FAST_DURATION_MEDIUM = 15000;
     private static final long PUZZLE_FAST_DURATION_HARD = 30000;
 
-    //can we check achievements
-    public static boolean CHECK_ACHIEVEMENTS = false;
-
-    public static void checkAchievementsCompletedGame(GameActivity activity) {
-
-        //wait until we can check achievements
-        if (!CHECK_ACHIEVEMENTS)
-            return;
+    public static void checkCompletedGame(GameActivity activity, Board board) {
 
         //if we aren't connected to google play services, exit method
         if (!activity.getApiClient().isConnected())
             return;
 
-        MainActivity.logEvent("checkAchievementsCompletedGame");
+        UtilityHelper.logEvent("checkAchievementsCompletedGame");
 
         switch (MODE) {
+
             case Original:
-                activity.unlockAchievement(R.string.achievement_complete_your_first_game_mode_original);
-                activity.incrementAchievement(R.string.achievement_complete_100_games_mode_original, 1);
+
+                //make sure the board was actually solved before updating the leaderboard and achievements
+                if (board.hasValue(ORIGINAL_MODE_GOAL_VALUE)) {
+
+                    //unlock achievements
+                    activity.unlockAchievement(R.string.achievement_complete_your_first_game_mode_original);
+                    activity.incrementAchievement(R.string.achievement_complete_100_games_mode_original, 1);
+
+                    //update the appropriate leaderboard
+                    switch (DIFFICULTY) {
+
+                        case Easy:
+                            activity.updateLeaderboard(R.string.leaderboard_original_easy, board.getDuration());
+                            break;
+
+                        case Medium:
+                            activity.updateLeaderboard(R.string.leaderboard_original_medium, board.getDuration());
+                            break;
+
+                        case Hard:
+                            activity.updateLeaderboard(R.string.leaderboard_original_hard, board.getDuration());
+                            break;
+                    }
+                }
                 break;
 
             case Challenge:
+
+                //unlock achievements
                 activity.unlockAchievement(R.string.achievement_complete_your_first_game_mode_challenge);
                 activity.incrementAchievement(R.string.achievement_complete_100_games_mode_challenge, 1);
+
+                //update the appropriate leaderboard
+                switch (DIFFICULTY) {
+
+                    case Easy:
+                        activity.updateLeaderboard(R.string.leaderboard_challenge_easy, board.getScore());
+                        break;
+
+                    case Medium:
+                        activity.updateLeaderboard(R.string.leaderboard_challenge_medium, board.getScore());
+                        break;
+
+                    case Hard:
+                        activity.updateLeaderboard(R.string.leaderboard_challenge_hard, board.getScore());
+                        break;
+                }
                 break;
 
             case Puzzle:
+
+                //unlock achievements
                 activity.unlockAchievement(R.string.achievement_complete_your_first_game_mode_puzzle);
                 activity.incrementAchievement(R.string.achievement_complete_100_games_mode_puzzle, 1);
                 break;
 
             case Infinite:
+
+                //unlock achievements
                 activity.unlockAchievement(R.string.achievement_complete_your_first_game_mode_infinite);
                 activity.incrementAchievement(R.string.achievement_complete_100_games_mode_infinite, 1);
+
+                //update the appropriate leaderboard
+                switch (DIFFICULTY) {
+
+                    case Easy:
+                        activity.updateLeaderboard(R.string.leaderboard_infinite_easy, board.getScore());
+                        break;
+
+                    case Medium:
+                        activity.updateLeaderboard(R.string.leaderboard_infinite_medium, board.getScore());
+                        break;
+
+                    case Hard:
+                        activity.updateLeaderboard(R.string.leaderboard_infinite_hard, board.getScore());
+                        break;
+                }
                 break;
         }
     }
 
     public static void checkAchievementsNewRecord(GameActivity activity) {
 
-        //wait until we can check achievements
-        if (!CHECK_ACHIEVEMENTS)
-            return;
-
         //if we aren't connected to google play services, exit method
         if (!activity.getApiClient().isConnected())
             return;
 
-        MainActivity.logEvent("checkAchievementsNewRecord");
+        UtilityHelper.logEvent("checkAchievementsNewRecord");
 
         switch (MODE) {
             case Original:
@@ -95,15 +147,11 @@ public class AchievementHelper {
 
     public static void checkAchievementsPuzzleTime(GameActivity activity, Board board) {
 
-        //wait until we can check achievements
-        if (!CHECK_ACHIEVEMENTS)
-            return;
-
         //if we aren't connected to google play services, exit method
         if (!activity.getApiClient().isConnected())
             return;
 
-        MainActivity.logEvent("checkAchievementsPuzzleTime");
+        UtilityHelper.logEvent("checkAchievementsPuzzleTime");
 
         switch (DIFFICULTY) {
             case Easy:
@@ -125,10 +173,6 @@ public class AchievementHelper {
 
     public static void checkAchievementsNewBlocks(GameActivity activity) {
 
-        //wait until we can check achievements
-        if (!CHECK_ACHIEVEMENTS)
-            return;
-
         //if we aren't connected to google play services, exit method
         if (!activity.getApiClient().isConnected())
             return;
@@ -137,7 +181,7 @@ public class AchievementHelper {
         if (BLOCK_256 <= 0 && BLOCK_512 <= 0 && BLOCK_1024 <= 0 && BLOCK_4096 <= 0 && BLOCK_8192 <= 0)
             return;
 
-        MainActivity.logEvent("checkAchievementsNewBlocks");
+        //UtilityHelper.logEvent("checkAchievementsNewBlocks");
 
         switch (MODE) {
 
@@ -174,5 +218,11 @@ public class AchievementHelper {
             default:
                 throw new RuntimeException("Mode: " + MODE.toString() + " not handled here");
         }
+
+        BLOCK_256 = 0;
+        BLOCK_512 = 0;
+        BLOCK_1024 = 0;
+        BLOCK_4096 = 0;
+        BLOCK_8192 = 0;
     }
 }

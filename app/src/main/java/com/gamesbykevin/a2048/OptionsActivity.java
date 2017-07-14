@@ -13,6 +13,7 @@ import com.gamesbykevin.a2048.game.GameManager;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
 import com.gamesbykevin.a2048.ui.MultiStateToggleButton;
+import com.gamesbykevin.a2048.util.UtilityHelper;
 import com.google.gson.Gson;
 
 public class OptionsActivity extends BaseActivity {
@@ -71,7 +72,7 @@ public class OptionsActivity extends BaseActivity {
         } catch (Exception ex) {
 
             //handle exception
-            MainActivity.handleException(ex);
+            UtilityHelper.handleException(ex);
         }
 
         //call parent function

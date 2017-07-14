@@ -4,13 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.gamesbykevin.a2048.BaseActivity;
-import com.gamesbykevin.a2048.MainActivity;
+import com.gamesbykevin.a2048.R;
+import com.gamesbykevin.a2048.util.UtilityHelper;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 
 import static com.gamesbykevin.a2048.MainActivity.DEBUG;
+import static com.gamesbykevin.a2048.level.Stats.DIFFICULTY;
+import static com.gamesbykevin.a2048.level.Stats.MODE;
 
 /**
  * Created by Kevin on 7/10/2017.
@@ -32,10 +36,14 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
 
     private final static String TAG = "BaseGameActivity";
 
-    /**
-     * Have we called onStart already?
-     */
-    private static boolean STARTED = false;
+    //did we want to access the achievements
+    protected boolean ACCESS_ACHIEVEMENT = false;
+
+    //did we want to access the leaderboards
+    protected boolean ACCESS_LEADERBOARD = false;
+
+    //do we pass future login? (this is in case the player does not want to sign in)
+    public static boolean BYPASS_LOGIN = false;
 
     /** Constructs a BaseGameActivity with default client (GamesClient). */
     protected BaseGameActivity() {
@@ -110,22 +118,33 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
     public void unlockAchievement(final int resId) {
         try {
             String achievementId = getString(resId);
-            MainActivity.logEvent("Unlocking achievement " + achievementId);
+            UtilityHelper.logEvent("Unlocking achievement " + achievementId);
             Games.Achievements.unlock(getApiClient(), achievementId);
-            MainActivity.logEvent("Achievement unlocked " + achievementId);
+            UtilityHelper.logEvent("Achievement unlocked " + achievementId);
         } catch (Exception e) {
-            MainActivity.handleException(e);
+            UtilityHelper.handleException(e);
         }
     }
 
     public void incrementAchievement(final int resId, final int incrementValue) {
         try {
             String achievementId = getString(resId);
-            MainActivity.logEvent("Incrementing achievement " + achievementId);
+            UtilityHelper.logEvent("Incrementing achievement " + achievementId);
             Games.Achievements.increment(getApiClient(), achievementId, incrementValue);
-            MainActivity.logEvent("Achievement incremented " + achievementId);
+            UtilityHelper.logEvent("Achievement incremented " + achievementId);
         } catch (Exception e) {
-            MainActivity.handleException(e);
+            UtilityHelper.handleException(e);
+        }
+    }
+
+    public void updateLeaderboard(final int resId, final long score) {
+        try {
+            String leaderboardId = getString(resId);
+            UtilityHelper.logEvent("Submitting score:  " + leaderboardId);
+            Games.Leaderboards.submitScore(getApiClient(), leaderboardId, score);
+            UtilityHelper.logEvent("Score submitted:  " + leaderboardId);
+        } catch (Exception e) {
+            UtilityHelper.handleException(e);
         }
     }
 
@@ -175,5 +194,124 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
 
     protected GameHelper.SignInFailureReason getSignInError() {
         return mHelper.getSignInError();
+    }
+
+    public void onClickAchievements(View view) {
+
+        //if we are connected, display default achievements ui
+        if (getApiClient().isConnected()) {
+            displayAchievementUI();
+        } else {
+            UtilityHelper.logEvent("beginUserInitiatedSignIn() before");
+            //if not connected, re-attempt google play login
+            beginUserInitiatedSignIn();
+            UtilityHelper.logEvent("beginUserInitiatedSignIn() after");
+
+            //flag that we want to open the achievements
+            ACCESS_ACHIEVEMENT = true;
+        }
+
+        //play sound effect
+        super.playSoundEffect();
+    }
+
+    public void onClickLeaderboard(View view) {
+
+        //if we are connected, display default achievements ui
+        if (getApiClient().isConnected()) {
+            displayLeaderboardUI();
+        } else {
+            UtilityHelper.logEvent("beginUserInitiatedSignIn() before");
+            //if not connected, re-attempt google play login
+            beginUserInitiatedSignIn();
+            UtilityHelper.logEvent("beginUserInitiatedSignIn() after");
+
+            //flag that we want to open the achievements
+            ACCESS_LEADERBOARD = true;
+        }
+
+        //play sound effect
+        super.playSoundEffect();
+    }
+
+    protected void displayAchievementUI() {
+        UtilityHelper.logEvent("Displaying achievement ui");
+        startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), 1);
+    }
+
+    protected void displayLeaderboardUI() {
+
+        String leaderboardId = "";
+
+        switch (MODE) {
+            case Challenge:
+
+                //display the appropriate leaderboard
+                switch (DIFFICULTY) {
+                    case Easy:
+                        leaderboardId = getString(R.string.leaderboard_challenge_easy);
+                        break;
+
+                    case Medium:
+                        leaderboardId = getString(R.string.leaderboard_challenge_medium);
+                        break;
+
+                    case Hard:
+                        leaderboardId = getString(R.string.leaderboard_challenge_hard);
+                        break;
+
+                    default:
+                        throw new RuntimeException("Difficulty not handled here: " + DIFFICULTY.toString());
+                }
+                break;
+
+            case Original:
+
+                //display the appropriate leaderboard
+                switch (DIFFICULTY) {
+                    case Easy:
+                        leaderboardId = getString(R.string.leaderboard_original_easy);
+                        break;
+
+                    case Medium:
+                        leaderboardId = getString(R.string.leaderboard_original_medium);
+                        break;
+
+                    case Hard:
+                        leaderboardId = getString(R.string.leaderboard_original_hard);
+                        break;
+
+                    default:
+                        throw new RuntimeException("Difficulty not handled here: " + DIFFICULTY.toString());
+                }
+                break;
+
+            case Infinite:
+
+                //display the appropriate leaderboard
+                switch (DIFFICULTY) {
+                    case Easy:
+                        leaderboardId = getString(R.string.leaderboard_infinite_easy);
+                        break;
+
+                    case Medium:
+                        leaderboardId = getString(R.string.leaderboard_infinite_medium);
+                        break;
+
+                    case Hard:
+                        leaderboardId = getString(R.string.leaderboard_infinite_hard);
+                        break;
+
+                    default:
+                        throw new RuntimeException("Difficulty not handled here: " + DIFFICULTY.toString());
+                }
+                break;
+
+            default:
+                throw new RuntimeException("Mode not handled here: " + MODE.toString());
+        }
+
+        UtilityHelper.logEvent("Displaying leaderboard ui " + leaderboardId);
+        startActivityForResult(Games.Leaderboards.getLeaderboardIntent(getApiClient(), leaderboardId), 1);
     }
 }

@@ -48,6 +48,8 @@ import com.google.android.gms.games.request.GameRequest;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.Plus.PlusOptions;
 
+import static com.gamesbykevin.a2048.services.BaseGameActivity.BYPASS_LOGIN;
+
 public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
@@ -362,7 +364,7 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
         debugLog("onStart");
         assertConfigured("onStart");
 
-        if (mConnectOnStart) {
+        if (mConnectOnStart && !BYPASS_LOGIN) {
             if (mGoogleApiClient.isConnected()) {
                 Log.w(TAG, "GameHelper: client was already connected on onStart()");
             } else {
@@ -534,8 +536,7 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
      * onActivityResult callback. If the activity result pertains to the sign-in
      * process, processes it appropriately.
      */
-    public void onActivityResult(int requestCode, int responseCode,
-                                 Intent intent) {
+    public void onActivityResult(int requestCode, int responseCode, Intent intent) {
         debugLog("onActivityResult: req=" + (requestCode == RC_RESOLVE ? "RC_RESOLVE" : String.valueOf(requestCode)) + ", resp=" + GameHelperUtils.activityResponseCodeToString(responseCode));
         if (requestCode != RC_RESOLVE) {
             debugLog("onActivityResult: request code not meant for us. Ignoring.");

@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.gamesbykevin.a2048.game.GameManagerHelper;
 import com.gamesbykevin.a2048.services.BaseGameActivity;
 import com.gamesbykevin.a2048.services.GameHelper;
+import com.gamesbykevin.a2048.util.UtilityHelper;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 
@@ -20,9 +21,6 @@ public class MainActivity extends BaseGameActivity {
      * Do we debug the application?
      */
     public static final boolean DEBUG = true;
-
-    //did we access the achievements
-    private boolean ACCESS_ACHIEVEMENT = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,27 +79,6 @@ public class MainActivity extends BaseGameActivity {
         super.playSoundEffect();
     }
 
-    public void onClickAchievements(View view) {
-
-        //if we are connected, display default achievements ui
-        if (getApiClient().isConnected()) {
-            displayAchievementUI();
-        } else {
-            //if not connected, re-attempt google play login
-            beginUserInitiatedSignIn();
-
-            //flag that we want to open the achievements
-            ACCESS_ACHIEVEMENT = true;
-        }
-
-        //play sound effect
-        super.playSoundEffect();
-    }
-
-    private void displayAchievementUI() {
-        startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), 1);
-    }
-
     public void onClickExit(View view) {
 
         //close all activities
@@ -111,75 +88,28 @@ public class MainActivity extends BaseGameActivity {
         super.signOut();
     }
 
-    public static void handleException(final Exception exception) {
-
-        //if not debugging, don't continue
-        if (!DEBUG)
-            return;
-
-        //log as error
-        Log.e("2048", exception.getMessage());
-
-        //handle process
-        exception.printStackTrace();
-    }
-
-    public static void logEvent(final String message) {
-
-        //if not debugging, don't continue
-        if (!DEBUG)
-            return;
-
-        //don't do anything if null
-        if (message == null)
-            return;
-
-        //length limit of each line we print
-        int maxLogSize = 4000;
-
-        //if the string is too long
-        if (message.length() > maxLogSize) {
-
-            //we will display a portion at a time
-            for(int i = 0; i <= message.length() / maxLogSize; i++) {
-                int start = i * maxLogSize;
-                int end = (i+1) * maxLogSize;
-                end = end > message.length() ? message.length() : end;
-                Log.i("2048", message.substring(start, end));
-            }
-
-        } else {
-            //log string as information
-            Log.i("2048", message);
-        }
-    }
-
-    public static void displayMessage(final Context context, final String message) {
-
-        //if not debugging, don't continue
-        if (!DEBUG)
-            return;
-
-        //show text
-        Toast.makeText(context, message , Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     public void onSignInSucceeded() {
-        MainActivity.displayMessage(this, "Google Play login worked!");
+        UtilityHelper.displayMessage(this, "Google Play login worked!");
 
         if (ACCESS_ACHIEVEMENT) {
 
-            //if we just came from achievements button and are now signed in, show achievements ui
+            //if we just came from achievements button and are now signed in, display ui
             displayAchievementUI();
 
             //flag back false
             ACCESS_ACHIEVEMENT = false;
         }
+
+        //don't bypass auto login
+        BYPASS_LOGIN = false;
     }
 
     @Override
     public void onSignInFailed() {
-        MainActivity.displayMessage(this, "Google play login failed!");
+        UtilityHelper.displayMessage(this, "Google play login failed!");
+
+        //bypass auto login
+        BYPASS_LOGIN = true;
     }
 }
