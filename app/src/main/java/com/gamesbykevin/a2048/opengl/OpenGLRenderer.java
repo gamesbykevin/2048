@@ -3,27 +3,28 @@ package com.gamesbykevin.a2048.opengl;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.opengl.GLES10;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLUtils;
 
-import com.gamesbykevin.a2048.GameActivity;
-import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.R;
-import com.gamesbykevin.a2048.opengl.text.GLText;
+import com.gamesbykevin.a2048.board.Block;
+import com.gamesbykevin.a2048.util.StatDescription;
 import com.gamesbykevin.a2048.util.UtilityHelper;
-
-import java.nio.IntBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import static com.gamesbykevin.a2048.GameActivity.MANAGER;
 import static com.gamesbykevin.a2048.board.Block.ANIMATION_DIMENSIONS;
-import static com.gamesbykevin.a2048.game.GameManager.FONT_FILE_NAME;
-import static com.gamesbykevin.a2048.game.GameManager.FONT_SIZE;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_BEST_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_GAMEOVER_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_LEVEL_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_SCORE_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_TIME_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TOTAL_WORD_TEXTURES;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.HEIGHT;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.WIDTH;
+import static com.gamesbykevin.a2048.util.StatDescription.TOTAL_CHARACTERS;
 
 /**
  * Created by Kevin on 6/1/2017.
@@ -41,7 +42,7 @@ public class OpenGLRenderer implements Renderer {
     public float scaleMotionX = 0, scaleMotionY = 0;
 
     //maintain list of texture id's so we can access when rendering textures
-    private int[] textures;
+    public static int[] TEXTURES;
 
     /**
      * Have all textures been loaded?
@@ -56,9 +57,6 @@ public class OpenGLRenderer implements Renderer {
         //flag the textures loaded as false
         LOADED = false;
     }
-
-    //our object to render gl text
-    public static GLText glText;
 
     public void onPause() {
         //do we do anything here?
@@ -85,7 +83,7 @@ public class OpenGLRenderer implements Renderer {
         gl.glScalef(scaleRenderX, scaleRenderY, 0.0f);
 
         //render game objects
-        MANAGER.draw(gl, this.textures);
+        MANAGER.draw(gl, TEXTURES);
     }
 
     /**
@@ -111,10 +109,6 @@ public class OpenGLRenderer implements Renderer {
 
         //flag that we have not yet loaded the textures
         LOADED = false;
-
-        //create new text rendering object
-        glText = new GLText(gl, activity.getAssets());
-        glText.load(FONT_FILE_NAME, FONT_SIZE, 2, 2);
 
         //store the ratio for the render
         this.scaleRenderX = width / (float) WIDTH;
@@ -202,19 +196,49 @@ public class OpenGLRenderer implements Renderer {
     private void loadTextures(GL10 gl) {
 
         //load 15 textures into our array
-        this.textures = new int[14];
+        TEXTURES = new int[Block.VALUES.length + TOTAL_CHARACTERS + TOTAL_WORD_TEXTURES];
 
         //get the sprite sheet containing all our animations
         Bitmap spriteSheet = BitmapFactory.decodeResource(activity.getResources(), R.drawable.blocks);
 
+        //temp bitmap image reference
+        Bitmap tmp = null;
+
         //load every texture that we need
-        for (int i = 0; i < textures.length; i++) {
+        for (int i = 0; i < Block.VALUES.length; i++) {
 
             //retrieve the current bitmap
-            Bitmap tmp = Bitmap.createBitmap(spriteSheet, i * ANIMATION_DIMENSIONS, 0, ANIMATION_DIMENSIONS, ANIMATION_DIMENSIONS);
+            tmp = Bitmap.createBitmap(spriteSheet, i * ANIMATION_DIMENSIONS, 0, ANIMATION_DIMENSIONS, ANIMATION_DIMENSIONS);
 
             //load the individual texture
-            loadTexture(tmp, gl, textures, i);
+            loadTexture(tmp, gl, TEXTURES, i);
         }
+
+        Bitmap numberSheet = BitmapFactory.decodeResource(activity.getResources(), R.drawable.numbers);
+
+        for (int i = 0; i < TOTAL_CHARACTERS; i++) {
+            tmp = Bitmap.createBitmap(
+                numberSheet,
+                i * StatDescription.ANIMATION_WIDTH,
+                0,
+                StatDescription.ANIMATION_WIDTH,
+                StatDescription.ANIMATION_HEIGHT
+            );
+
+            //load the individual texture
+            loadTexture(tmp, gl, TEXTURES, i + Block.VALUES.length);
+        }
+
+        //load the word textures
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.best);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_WORD_BEST_INDEX);
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.level);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_WORD_LEVEL_INDEX);
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.score);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_WORD_SCORE_INDEX);
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.game_over);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_WORD_GAMEOVER_INDEX);
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.time);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_WORD_TIME_INDEX);
     }
 }

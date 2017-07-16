@@ -49,7 +49,7 @@ public class Block extends EntityItem {
     /**
      * The starting coordinate of the north-west block
      */
-    public static int START_Y = 125;
+    public static int START_Y;
 
     /**
      * The max dimensions allowed for this block
@@ -65,7 +65,7 @@ public class Block extends EntityItem {
     private boolean expand, collapse;
 
     //the different values for the blocks
-    public static final int[] VALUES = {0, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192};
+    public static final int[] VALUES = {0, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576};
 
     /**
      * Default constructor

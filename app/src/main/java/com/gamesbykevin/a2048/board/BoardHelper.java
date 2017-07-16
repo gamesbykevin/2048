@@ -1,13 +1,12 @@
 package com.gamesbykevin.a2048.board;
 
-import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.game.GameManager;
-import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
 import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
 import com.gamesbykevin.a2048.util.UtilityHelper;
 import com.gamesbykevin.androidframework.base.Cell;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -19,6 +18,8 @@ import static com.gamesbykevin.a2048.board.Block.START_Y;
 import static com.gamesbykevin.a2048.board.Block.VALUES;
 import static com.gamesbykevin.a2048.board.Board.BORDER_THICKNESS;
 import static com.gamesbykevin.a2048.board.Board.PADDING;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.ORIGINAL_MODE_GOAL_VALUE;
+import static com.gamesbykevin.a2048.level.Stats.MODE;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.HEIGHT;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.WIDTH;
 
@@ -35,15 +36,11 @@ public class BoardHelper {
 
     public static final int SPAWN_VALUE_1 = VALUES[1];
     public static final int SPAWN_VALUE_2 = VALUES[2];
-    //public static final int SPAWN_VALUE_1 = VALUES[9];
-    //public static final int SPAWN_VALUE_2 = VALUES[10];
+    //public static final int SPAWN_VALUE_1 = VALUES[11];
+    //public static final int SPAWN_VALUE_2 = VALUES[12];
 
     //keep track of how many new blocks are created
-    public static int BLOCK_256 = 0;
-    public static int BLOCK_512 = 0;
-    public static int BLOCK_1024 = 0;
-    public static int BLOCK_4096 = 0;
-    public static int BLOCK_8192 = 0;
+    public static HashMap<Integer, Integer> NEW_BLOCKS = new HashMap<>();
 
     /**
      * Merge the blocks on the board
@@ -223,11 +220,9 @@ public class BoardHelper {
     protected static void updateMerged(Board board) {
 
         //reset our block counts to 0
-        BLOCK_256 = 0;
-        BLOCK_512 = 0;
-        BLOCK_1024 = 0;
-        BLOCK_4096 = 0;
-        BLOCK_8192 = 0;
+        for (int i = 0; i < VALUES.length; i++) {
+            NEW_BLOCKS.put(VALUES[i], 0);
+        }
 
         //get the list of blocks from our board
         List<Block> blocks = board.getBlocks();
@@ -268,16 +263,10 @@ public class BoardHelper {
                     block.setValue(block.getValue() + tmp.getValue());
 
                     //keep track of blocks created for achievements
-                    if (block.getValue() == VALUES[8])
-                        BLOCK_256++;
-                    if (block.getValue() == VALUES[9])
-                        BLOCK_512++;
-                    if (block.getValue() == VALUES[10])
-                        BLOCK_1024++;
-                    if (block.getValue() == VALUES[12])
-                        BLOCK_4096++;
-                    if (block.getValue() == VALUES[13])
-                        BLOCK_8192++;
+                    for (int index = 0; index < VALUES.length; index++) {
+                        if (block.getValue() == VALUES[index])
+                            NEW_BLOCKS.put(VALUES[index], NEW_BLOCKS.get(VALUES[index]) + 1);
+                    }
 
                     //flag the block to expand
                     block.setExpand(true);
@@ -329,7 +318,19 @@ public class BoardHelper {
         BLOCK_DIMENSIONS = goodSize;
 
         int middleX = (int)(WIDTH  * .5);
-        START_Y     = (int)(HEIGHT * .15);
+
+        //start y-coordinate could vary depending on the game mode
+        switch (MODE) {
+            case Original:
+            case Infinite:
+                START_Y = (int)(HEIGHT * .15);
+                break;
+
+            case Puzzle:
+            case Challenge:
+                START_Y = (int)(HEIGHT * .2);
+                break;
+        }
 
         //the total width of the blocks
         int blockWidth = (board.getCols() * BLOCK_DIMENSIONS);
@@ -362,8 +363,8 @@ public class BoardHelper {
         final int cols = board.getCols();
         final int rows = board.getRows();
 
-        //start at the max value
-        int value = VALUES[VALUES.length - 1];
+        //define our max value to start the game
+        int value = VALUES[VALUES.length - 7];
 
         //where do we start
         int startCol, startRow;

@@ -137,6 +137,21 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
         }
     }
 
+    public void trackEvent(final int resId) {
+        trackEvent(resId, 1);
+    }
+
+    public void trackEvent(final int resId, final int incrementValue) {
+        try {
+            String eventId = getString(resId);
+            UtilityHelper.logEvent("Tracking event " + eventId);
+            Games.Events.increment(getApiClient(), eventId, incrementValue);
+            UtilityHelper.logEvent("Event tracked " + eventId);
+        } catch (Exception e) {
+            UtilityHelper.handleException(e);
+        }
+    }
+
     public void updateLeaderboard(final int resId, final long score) {
         try {
             String leaderboardId = getString(resId);

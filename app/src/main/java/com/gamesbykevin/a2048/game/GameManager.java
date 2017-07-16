@@ -60,12 +60,6 @@ public class GameManager {
     //do we want to try and merge
     private boolean flagMerge = false;
 
-    //the name of our font file
-    public static final String FONT_FILE_NAME = "font.ttf";
-
-    //the font size of the text
-    public static final int FONT_SIZE = 36;
-
     /**
      * The pixel length the user needs to swipe a motion event in order to detect up/down/left/right
      */

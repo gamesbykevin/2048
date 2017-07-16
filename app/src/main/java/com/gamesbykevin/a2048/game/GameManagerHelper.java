@@ -1,21 +1,18 @@
 package com.gamesbykevin.a2048.game;
 
-import com.gamesbykevin.a2048.board.Block;
+import com.gamesbykevin.a2048.base.EntityItem;
 import com.gamesbykevin.a2048.board.Board;
-import com.gamesbykevin.a2048.board.BoardHelper;
-import com.google.gson.annotations.SerializedName;
+import com.gamesbykevin.a2048.util.StatDescription;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
 import javax.microedition.khronos.opengles.GL10;
 
 import static com.gamesbykevin.a2048.GameActivity.MANAGER;
 import static com.gamesbykevin.a2048.GameActivity.STATS;
-import static com.gamesbykevin.a2048.board.Block.START_X;
 import static com.gamesbykevin.a2048.board.Block.VALUES;
 import static com.gamesbykevin.a2048.level.Stats.MODE;
-import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.glText;
+import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.TEXTURES;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.FPS;
 
 /**
@@ -33,11 +30,6 @@ public class GameManagerHelper {
      * Do we want to reset the game?
      */
     public static boolean RESET = false;
-
-    /**
-     * Default size of board
-     */
-    public static final int DEFAULT_DIMENSIONS = 4;
 
     /**
      * Size of the board while playing easy
@@ -69,12 +61,6 @@ public class GameManagerHelper {
      */
     public static final int DIMENSIONS_HARD = 4;
 
-    //text where we render our score
-    public static final String TEXT_SCORE = "Score:";
-
-    //game over message
-    public static final String TEXT_GAME_OVER = "Game Over";
-
     //the description of the current level
     public static String LEVEL_DESC = "";
 
@@ -85,16 +71,11 @@ public class GameManagerHelper {
     public static String TIME_DESC = "";
 
     public enum Difficulty {
-        Easy,
-        Medium,
-        Hard
+        Easy, Medium, Hard
     }
 
     public enum Mode {
-        Original,
-        Puzzle,
-        Challenge,
-        Infinite
+        Original, Puzzle, Challenge, Infinite
     }
 
     /**
@@ -116,6 +97,63 @@ public class GameManagerHelper {
      * Value of a single block that indicates game over for original mode
      */
     public static final int ORIGINAL_MODE_GOAL_VALUE = VALUES[11];
+
+    //object used to render number images
+    private static StatDescription DESCRIPTION = new StatDescription();
+
+    //total number of words we will be displaying
+    public static final int TOTAL_WORD_TEXTURES = 5;
+
+    //index for each word in the texture array
+    public static final int TEXTURE_WORD_BEST_INDEX = 33;
+    public static final int TEXTURE_WORD_LEVEL_INDEX = 34;
+    public static final int TEXTURE_WORD_SCORE_INDEX = 35;
+    public static final int TEXTURE_WORD_GAMEOVER_INDEX = 36;
+    public static final int TEXTURE_WORD_TIME_INDEX = 37;
+
+    //how do we resize
+    private static final float RATIO = 0.33f;
+
+    //where to render best
+    private static final int X_COORD_BEST = 265;
+    private static final int Y_COORD_BEST = 20;
+    private static final int WIDTH_BEST = (int)(244 * RATIO);
+    private static final int HEIGHT_BEST = (int)(101 * RATIO);
+
+    //where to render score
+    private static final int X_COORD_SCORE = 20;
+    private static final int Y_COORD_SCORE = 20;
+    private static final int WIDTH_SCORE = (int)(315 * RATIO);
+    private static final int HEIGHT_SCORE = (int)(101 * RATIO);
+
+    //where to render game over
+    private static final int X_COORD_GAMEOVER = 40;
+    private static final int Y_COORD_GAMEOVER = 625;
+    private static final int WIDTH_GAMEOVER = 400;
+    private static final int HEIGHT_GAMEOVER = 75;
+
+    //where to render time
+    private static final int X_COORD_TIME = 20;
+    private static final int Y_COORD_TIME = 20;
+    private static final int WIDTH_TIME = (int)(231 * RATIO);
+    private static final int HEIGHT_TIME = (int)(101 * RATIO);
+
+    //where to render current stats
+    private static final int X_COORD_RESULTS = X_COORD_TIME;
+    private static final int Y_COORD_RESULTS = Y_COORD_TIME + HEIGHT_TIME;
+
+    //where to render previous record
+    private static final int X_COORD_RECORD = X_COORD_BEST;
+    private static final int Y_COORD_RECORD = Y_COORD_BEST + HEIGHT_BEST;
+
+    //where to render level
+    private static final int X_COORD_LEVEL = 20;
+    private static final int Y_COORD_LEVEL = Y_COORD_RESULTS + (int)(HEIGHT_TIME * 1.3);
+    private static final int WIDTH_LEVEL = (int)(297 * RATIO);
+    private static final int HEIGHT_LEVEL = (int)(101 * RATIO);
+
+    //object used to render texture words
+    private static EntityItem entity = new EntityItem();
 
     public static void updateDisplayStats() {
 
@@ -186,82 +224,122 @@ public class GameManagerHelper {
         }
     }
 
-
     /**
      * Render any text on screen using custom font
      * @param openGL Object used to render image
      */
     public static void drawText(GL10 openGL, long duration) {
 
-        //Set to ModelView mode
-        openGL.glMatrixMode(GL10.GL_MODELVIEW);
-        openGL.glLoadIdentity();
-
-        //enable texture, alpha, and alpha blending
+        //enable texture, alpha, and alpha blending which supports transparency
         openGL.glEnable(GL10.GL_TEXTURE_2D);
         openGL.glEnable(GL10.GL_BLEND);
         openGL.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
-        //TEST: render the entire font texture
-        //gl.glColor4f(1.0f, 0.0f, 0.0f, 1.0f);     // Set Color to Use
-
-        //get ready to render text in the specified color (r, g, b) alpha
-        glText.begin(1.0f, 1.0f, 1.0f, 1.0f);
-
-        //draw the entire font as a texture of the specified size
-        //glText.drawTexture(100, 100);
-
-        //starting y-coordinate
-        int y = 25 + (int)glText.getCharHeight();
-
-        if (MANAGER.GAME_OVER)
-            glText.draw(TEXT_GAME_OVER, START_X, y);
+        //if game over, notify the user
+        if (MANAGER.GAME_OVER) {
+            entity.setX(X_COORD_GAMEOVER);
+            entity.setY(Y_COORD_GAMEOVER);
+            entity.setWidth(WIDTH_GAMEOVER);
+            entity.setHeight(HEIGHT_GAMEOVER);
+            entity.setTextureId(TEXTURES[TEXTURE_WORD_GAMEOVER_INDEX]);
+            entity.render(openGL);
+        }
 
         switch (MODE) {
 
             case Puzzle:
-                y += glText.getCharHeight();
-                glText.draw("Time: " + DATE_FORMAT.format(duration), START_X, y);
-                y += glText.getCharHeight();
-                glText.draw("Best: " + TIME_DESC, START_X, y);
-                y += glText.getCharHeight();
-                glText.draw("Level " + LEVEL_DESC, START_X, y);
-                break;
-
             case Original:
-                y += glText.getCharHeight();
-                glText.draw("Time: " + DATE_FORMAT.format(duration), START_X, y);
-                y += glText.getCharHeight();
-                glText.draw("Best: " + TIME_DESC, START_X, y);
+                entity.setX(X_COORD_TIME);
+                entity.setY(Y_COORD_TIME);
+                entity.setWidth(WIDTH_TIME);
+                entity.setHeight(HEIGHT_TIME);
+                entity.setTextureId(TEXTURES[TEXTURE_WORD_TIME_INDEX]);
+                entity.render(openGL);
+
+                DESCRIPTION.setX(X_COORD_RESULTS);
+                DESCRIPTION.setY(Y_COORD_RESULTS);
+                DESCRIPTION.setDescription(DATE_FORMAT.format(duration), TEXTURES);
+                DESCRIPTION.render(openGL);
+
+                //render best text
+                entity.setX(X_COORD_BEST);
+                entity.setY(Y_COORD_BEST);
+                entity.setWidth(WIDTH_BEST);
+                entity.setHeight(HEIGHT_BEST);
+                entity.setTextureId(TEXTURES[TEXTURE_WORD_BEST_INDEX]);
+                entity.render(openGL);
+
+                //render the record as well
+                DESCRIPTION.setX(X_COORD_RECORD);
+                DESCRIPTION.setY(Y_COORD_RECORD);
+                DESCRIPTION.setDescription(TIME_DESC, TEXTURES);
+                DESCRIPTION.render(openGL);
+
+                //if puzzle render level #
+                if (MODE == Mode.Puzzle) {
+                    entity.setX(X_COORD_LEVEL);
+                    entity.setY(Y_COORD_LEVEL);
+                    entity.setWidth(WIDTH_LEVEL);
+                    entity.setHeight(HEIGHT_LEVEL);
+                    entity.setTextureId(TEXTURES[TEXTURE_WORD_LEVEL_INDEX]);
+                    entity.render(openGL);
+
+                    DESCRIPTION.setX(X_COORD_LEVEL + WIDTH_LEVEL + 10);
+                    DESCRIPTION.setY(Y_COORD_LEVEL + 3);
+                    DESCRIPTION.setDescription(LEVEL_DESC, TEXTURES);
+                    DESCRIPTION.render(openGL);
+                }
                 break;
 
             case Challenge:
-                y += glText.getCharHeight();
-
-                if (duration > CHALLENGE_DURATION) {
-                    glText.draw("Time: " + DATE_FORMAT.format(CHALLENGE_DURATION - CHALLENGE_DURATION), START_X, y);
-                } else {
-                    glText.draw("Time: " + DATE_FORMAT.format(CHALLENGE_DURATION - duration), START_X, y);
-                }
-                y += glText.getCharHeight();
-                glText.draw(TEXT_SCORE + MANAGER.getBoard().getScore(), START_X, y);
-                y += glText.getCharHeight();
-                glText.draw("High Score: " + SCORE, START_X, y);
-                break;
-
             case Infinite:
-                y += glText.getCharHeight();
-                glText.draw(TEXT_SCORE + MANAGER.getBoard().getScore(), START_X, y);
-                y += glText.getCharHeight();
-                glText.draw("High Score: " + SCORE, START_X, y);
+                entity.setX(X_COORD_SCORE);
+                entity.setY(Y_COORD_SCORE);
+                entity.setWidth(WIDTH_SCORE);
+                entity.setHeight(HEIGHT_SCORE);
+                entity.setTextureId(TEXTURES[TEXTURE_WORD_SCORE_INDEX]);
+                entity.render(openGL);
+
+                DESCRIPTION.setX(X_COORD_RESULTS);
+                DESCRIPTION.setY(Y_COORD_RESULTS);
+                DESCRIPTION.setDescription(MANAGER.getBoard().getScore(), TEXTURES);
+                DESCRIPTION.render(openGL);
+
+                //render best text
+                entity.setX(X_COORD_BEST);
+                entity.setY(Y_COORD_BEST);
+                entity.setWidth(WIDTH_BEST);
+                entity.setHeight(HEIGHT_BEST);
+                entity.setTextureId(TEXTURES[TEXTURE_WORD_BEST_INDEX]);
+                entity.render(openGL);
+
+                //render the record as well
+                DESCRIPTION.setX(X_COORD_RECORD);
+                DESCRIPTION.setY(Y_COORD_RECORD);
+                DESCRIPTION.setDescription(SCORE, TEXTURES);
+                DESCRIPTION.render(openGL);
+
+                //if challenge render the remaining time
+                if (MODE == Mode.Challenge) {
+
+                    entity.setX(X_COORD_LEVEL);
+                    entity.setY(Y_COORD_LEVEL);
+                    entity.setWidth(WIDTH_LEVEL);
+                    entity.setHeight(HEIGHT_LEVEL);
+                    entity.setTextureId(TEXTURES[TEXTURE_WORD_TIME_INDEX]);
+                    entity.render(openGL);
+
+                    DESCRIPTION.setX(X_COORD_LEVEL + WIDTH_LEVEL + 10);
+                    DESCRIPTION.setY(Y_COORD_LEVEL + 3);
+
+                    if (duration > CHALLENGE_DURATION) {
+                        DESCRIPTION.setDescription(DATE_FORMAT.format(0), TEXTURES);
+                    } else {
+                        DESCRIPTION.setDescription(DATE_FORMAT.format(CHALLENGE_DURATION - duration), TEXTURES);
+                    }
+                    DESCRIPTION.render(openGL);
+                }
                 break;
         }
-
-        //end text rendering
-        glText.end();
-
-        // disable texture + alpha
-        openGL.glDisable(GL10.GL_BLEND);
-        openGL.glDisable(GL10.GL_TEXTURE_2D);
     }
 }

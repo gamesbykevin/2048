@@ -20,13 +20,22 @@
     <string name="achievement_complete_a_game_in_less_than_5_seconds_mode_puzzle">CgkIufu--94YEAIQDw</string>
     <string name="achievement_complete_a_game_in_less_than_15_seconds_mode_puzzle">CgkIufu--94YEAIQEA</string>
     <string name="achievement_complete_a_game_in_less_than_30_seconds_mode_puzzle">CgkIufu--94YEAIQEQ</string>
-    <string name="achievement_get_a_4096_block_mode_infinite">CgkIufu--94YEAIQEg</string>
-    <string name="achievement_get_a_8192_block_mode_infinite">CgkIufu--94YEAIQEw</string>
-    <string name="achievement_get_a_256_block_mode_challenge">CgkIufu--94YEAIQFA</string>
-    <string name="achievement_get_a_512_block_mode_challenge">CgkIufu--94YEAIQFQ</string>
-    <string name="achievement_get_a_1024_block_mode_challenge">CgkIufu--94YEAIQFg</string>
+    <string name="achievement_4096_block">CgkIufu--94YEAIQEg</string>
+    <string name="achievement_8192_block">CgkIufu--94YEAIQEw</string>
+    <string name="achievement_256_block_mode_challenge">CgkIufu--94YEAIQFA</string>
+    <string name="achievement_512_block_mode_challenge">CgkIufu--94YEAIQFQ</string>
     <string name="achievement_create_a_4096_block_100_times_mode_challenge_infinite">CgkIufu--94YEAIQFw</string>
     <string name="achievement_create_a_8192_block_100_times_mode_challenge_infinite">CgkIufu--94YEAIQGA</string>
+    <string name="achievement_win_original_easy">CgkIufu--94YEAIQLQ</string>
+    <string name="achievement_win_original_medium">CgkIufu--94YEAIQLg</string>
+    <string name="achievement_win_original_hard">CgkIufu--94YEAIQLw</string>
+    <string name="achievement_16384_block">CgkIufu--94YEAIQNA</string>
+    <string name="achievement_32768_block">CgkIufu--94YEAIQNQ</string>
+    <string name="achievement_65536_block">CgkIufu--94YEAIQNg</string>
+    <string name="achievement_131072_block">CgkIufu--94YEAIQNw</string>
+    <string name="achievement_262144_block">CgkIufu--94YEAIQOA</string>
+    <string name="achievement_524288_block">CgkIufu--94YEAIQOQ</string>
+    <string name="achievement_1048576_block">CgkIufu--94YEAIQOg</string>
 
     <!-- LEADER BOARDS -->
     <string name="leaderboard_challenge_easy">CgkIufu--94YEAIQAA</string>
@@ -38,5 +47,22 @@
     <string name="leaderboard_original_easy">CgkIufu--94YEAIQGg</string>
     <string name="leaderboard_original_medium">CgkIufu--94YEAIQGw</string>
     <string name="leaderboard_original_hard">CgkIufu--94YEAIQHA</string>
+
+    <!-- EVENTS -->
+    <string name="event_played_games">CgkIufu--94YEAIQIQ</string>
+    <string name="event_original_games_count">CgkIufu--94YEAIQIg</string>
+    <string name="event_puzzle_games_count">CgkIufu--94YEAIQIw</string>
+    <string name="event_challenge_games_count">CgkIufu--94YEAIQJA</string>
+    <string name="event_infinite_games_count">CgkIufu--94YEAIQJQ</string>
+    <string name="event_2048_block_count">CgkIufu--94YEAIQJg</string>
+    <string name="event_4096_block_count">CgkIufu--94YEAIQJw</string>
+    <string name="event_8192_block_count">CgkIufu--94YEAIQKA</string>
+    <string name="event_16384_block_count">CgkIufu--94YEAIQKQ</string>
+    <string name="event_32768_block_count">CgkIufu--94YEAIQKg</string>
+    <string name="event_65536_block_count">CgkIufu--94YEAIQLA</string>
+    <string name="event_131072_block_count">CgkIufu--94YEAIQMA</string>
+    <string name="event_262144_block_count">CgkIufu--94YEAIQMQ</string>
+    <string name="event_524288_block_count">CgkIufu--94YEAIQMg</string>
+    <string name="event_1048576_block_count">CgkIufu--94YEAIQMw</string>
 </resources>
 

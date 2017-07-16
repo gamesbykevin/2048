@@ -6,11 +6,8 @@ import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.board.Board;
 import com.gamesbykevin.a2048.util.UtilityHelper;
 
-import static com.gamesbykevin.a2048.board.BoardHelper.BLOCK_1024;
-import static com.gamesbykevin.a2048.board.BoardHelper.BLOCK_256;
-import static com.gamesbykevin.a2048.board.BoardHelper.BLOCK_4096;
-import static com.gamesbykevin.a2048.board.BoardHelper.BLOCK_512;
-import static com.gamesbykevin.a2048.board.BoardHelper.BLOCK_8192;
+import static com.gamesbykevin.a2048.board.Block.VALUES;
+import static com.gamesbykevin.a2048.board.BoardHelper.NEW_BLOCKS;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.ORIGINAL_MODE_GOAL_VALUE;
 import static com.gamesbykevin.a2048.level.Stats.DIFFICULTY;
 import static com.gamesbykevin.a2048.level.Stats.MODE;
@@ -34,29 +31,38 @@ public class GooglePlayServicesHelper {
 
         UtilityHelper.logEvent("checkAchievementsCompletedGame");
 
+        //update event for games played
+        activity.trackEvent(R.string.event_played_games);
+
         switch (MODE) {
 
             case Original:
 
-                //make sure the board was actually solved before updating the leaderboard and achievements
-                if (board.hasValue(ORIGINAL_MODE_GOAL_VALUE)) {
+                //update event for games played
+                activity.trackEvent(R.string.event_original_games_count);
 
-                    //unlock achievements
-                    activity.unlockAchievement(R.string.achievement_complete_your_first_game_mode_original);
-                    activity.incrementAchievement(R.string.achievement_complete_100_games_mode_original, 1);
+                //unlock achievements
+                activity.unlockAchievement(R.string.achievement_complete_your_first_game_mode_original);
+                activity.incrementAchievement(R.string.achievement_complete_100_games_mode_original, 1);
+
+                //make sure the board was actually solved before updating the leaderboard and achievement
+                if (board.hasValue(ORIGINAL_MODE_GOAL_VALUE)) {
 
                     //update the appropriate leaderboard
                     switch (DIFFICULTY) {
 
                         case Easy:
+                            activity.unlockAchievement(R.string.achievement_win_original_easy);
                             activity.updateLeaderboard(R.string.leaderboard_original_easy, board.getDuration());
                             break;
 
                         case Medium:
+                            activity.unlockAchievement(R.string.achievement_win_original_medium);
                             activity.updateLeaderboard(R.string.leaderboard_original_medium, board.getDuration());
                             break;
 
                         case Hard:
+                            activity.unlockAchievement(R.string.achievement_win_original_hard);
                             activity.updateLeaderboard(R.string.leaderboard_original_hard, board.getDuration());
                             break;
                     }
@@ -64,6 +70,9 @@ public class GooglePlayServicesHelper {
                 break;
 
             case Challenge:
+
+                //update event for games played
+                activity.trackEvent(R.string.event_challenge_games_count);
 
                 //unlock achievements
                 activity.unlockAchievement(R.string.achievement_complete_your_first_game_mode_challenge);
@@ -88,12 +97,18 @@ public class GooglePlayServicesHelper {
 
             case Puzzle:
 
+                //update event for games played
+                activity.trackEvent(R.string.event_puzzle_games_count);
+
                 //unlock achievements
                 activity.unlockAchievement(R.string.achievement_complete_your_first_game_mode_puzzle);
                 activity.incrementAchievement(R.string.achievement_complete_100_games_mode_puzzle, 1);
                 break;
 
             case Infinite:
+
+                //update event for games played
+                activity.trackEvent(R.string.event_infinite_games_count);
 
                 //unlock achievements
                 activity.unlockAchievement(R.string.achievement_complete_your_first_game_mode_infinite);
@@ -178,10 +193,39 @@ public class GooglePlayServicesHelper {
             return;
 
         //if no blocks, we can't unlock any achievements
-        if (BLOCK_256 <= 0 && BLOCK_512 <= 0 && BLOCK_1024 <= 0 && BLOCK_4096 <= 0 && BLOCK_8192 <= 0)
+        boolean valid = false;
+
+
+        for (int i = 8; i < VALUES.length; i++) {
+            if (NEW_BLOCKS.get(VALUES[i]) > 0)
+                valid = true;
+        }
+
+        //if no new blocks, don't continue
+        if (!valid)
             return;
 
-        //UtilityHelper.logEvent("checkAchievementsNewBlocks");
+        //track events for total blocks created
+        if (NEW_BLOCKS.get(VALUES[11]) > 0)
+            activity.trackEvent(R.string.event_2048_block_count, NEW_BLOCKS.get(VALUES[11]));
+        if (NEW_BLOCKS.get(VALUES[12]) > 0)
+            activity.trackEvent(R.string.event_4096_block_count, NEW_BLOCKS.get(VALUES[12]));
+        if (NEW_BLOCKS.get(VALUES[13]) > 0)
+            activity.trackEvent(R.string.event_8192_block_count, NEW_BLOCKS.get(VALUES[13]));
+        if (NEW_BLOCKS.get(VALUES[14]) > 0)
+            activity.trackEvent(R.string.event_16384_block_count, NEW_BLOCKS.get(VALUES[14]));
+        if (NEW_BLOCKS.get(VALUES[15]) > 0)
+            activity.trackEvent(R.string.event_32768_block_count, NEW_BLOCKS.get(VALUES[15]));
+        if (NEW_BLOCKS.get(VALUES[16]) > 0)
+            activity.trackEvent(R.string.event_65536_block_count, NEW_BLOCKS.get(VALUES[16]));
+        if (NEW_BLOCKS.get(VALUES[17]) > 0)
+            activity.trackEvent(R.string.event_131072_block_count, NEW_BLOCKS.get(VALUES[17]));
+        if (NEW_BLOCKS.get(VALUES[18]) > 0)
+            activity.trackEvent(R.string.event_262144_block_count, NEW_BLOCKS.get(VALUES[18]));
+        if (NEW_BLOCKS.get(VALUES[19]) > 0)
+            activity.trackEvent(R.string.event_524288_block_count, NEW_BLOCKS.get(VALUES[19]));
+        if (NEW_BLOCKS.get(VALUES[20]) > 0)
+            activity.trackEvent(R.string.event_1048576_block_count, NEW_BLOCKS.get(VALUES[20]));
 
         switch (MODE) {
 
@@ -191,38 +235,51 @@ public class GooglePlayServicesHelper {
                 break;
 
             case Challenge:
-                if (BLOCK_256 > 0)
-                    activity.unlockAchievement(R.string.achievement_get_a_256_block_mode_challenge);
-                if (BLOCK_512 > 0)
-                    activity.unlockAchievement(R.string.achievement_get_a_512_block_mode_challenge);
-                if (BLOCK_1024 > 0)
-                    activity.unlockAchievement(R.string.achievement_get_a_1024_block_mode_challenge);
-                if (BLOCK_4096 > 0)
-                    activity.incrementAchievement(R.string.achievement_create_a_4096_block_100_times_mode_challenge_infinite, BLOCK_4096);
-                if (BLOCK_8192 > 0)
-                    activity.incrementAchievement(R.string.achievement_create_a_8192_block_100_times_mode_challenge_infinite, BLOCK_8192);
+                if (NEW_BLOCKS.get(VALUES[8]) > 0)
+                    activity.unlockAchievement(R.string.achievement_256_block_mode_challenge);
+                if (NEW_BLOCKS.get(VALUES[9]) > 0)
+                    activity.unlockAchievement(R.string.achievement_512_block_mode_challenge);
+                if (NEW_BLOCKS.get(VALUES[12]) > 0)
+                    activity.incrementAchievement(R.string.achievement_create_a_4096_block_100_times_mode_challenge_infinite, NEW_BLOCKS.get(VALUES[12]));
+                if (NEW_BLOCKS.get(VALUES[13]) > 0)
+                    activity.incrementAchievement(R.string.achievement_create_a_8192_block_100_times_mode_challenge_infinite, NEW_BLOCKS.get(VALUES[13]));
                 break;
 
             case Infinite:
 
-                if (BLOCK_4096 > 0) {
-                    activity.unlockAchievement(R.string.achievement_get_a_4096_block_mode_infinite);
-                    activity.incrementAchievement(R.string.achievement_create_a_4096_block_100_times_mode_challenge_infinite, BLOCK_4096);
+                if (NEW_BLOCKS.get(VALUES[12]) > 0) {
+                    activity.unlockAchievement(R.string.achievement_4096_block);
+                    activity.incrementAchievement(R.string.achievement_create_a_4096_block_100_times_mode_challenge_infinite, NEW_BLOCKS.get(VALUES[12]));
                 }
-                if (BLOCK_8192 > 0) {
-                    activity.unlockAchievement(R.string.achievement_get_a_8192_block_mode_infinite);
-                    activity.incrementAchievement(R.string.achievement_create_a_8192_block_100_times_mode_challenge_infinite, BLOCK_8192);
+
+                if (NEW_BLOCKS.get(VALUES[13]) > 0) {
+                    activity.unlockAchievement(R.string.achievement_8192_block);
+                    activity.incrementAchievement(R.string.achievement_create_a_8192_block_100_times_mode_challenge_infinite, NEW_BLOCKS.get(VALUES[13]));
                 }
+
+                if (NEW_BLOCKS.get(VALUES[14]) > 0)
+                    activity.unlockAchievement(R.string.achievement_16384_block);
+                if (NEW_BLOCKS.get(VALUES[15]) > 0)
+                    activity.unlockAchievement(R.string.achievement_32768_block);
+                if (NEW_BLOCKS.get(VALUES[16]) > 0)
+                    activity.unlockAchievement(R.string.achievement_65536_block);
+                if (NEW_BLOCKS.get(VALUES[17]) > 0)
+                    activity.unlockAchievement(R.string.achievement_131072_block);
+                if (NEW_BLOCKS.get(VALUES[18]) > 0)
+                    activity.unlockAchievement(R.string.achievement_262144_block);
+                if (NEW_BLOCKS.get(VALUES[19]) > 0)
+                    activity.unlockAchievement(R.string.achievement_524288_block);
+                if (NEW_BLOCKS.get(VALUES[20]) > 0)
+                    activity.unlockAchievement(R.string.achievement_1048576_block);
                 break;
 
             default:
                 throw new RuntimeException("Mode: " + MODE.toString() + " not handled here");
         }
 
-        BLOCK_256 = 0;
-        BLOCK_512 = 0;
-        BLOCK_1024 = 0;
-        BLOCK_4096 = 0;
-        BLOCK_8192 = 0;
+        //reset count back to 0
+        for (int i = 0; i < VALUES.length; i++) {
+            NEW_BLOCKS.put(VALUES[i], 0);
+        }
     }
 }

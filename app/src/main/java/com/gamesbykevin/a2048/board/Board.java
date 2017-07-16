@@ -42,7 +42,7 @@ public class Board {
     /**
      * The pixel thickness of the border outline
      */
-    protected static final int BORDER_THICKNESS = 5;
+    protected static final int BORDER_THICKNESS = 3;
 
     /**
      * Number of columns on our board
