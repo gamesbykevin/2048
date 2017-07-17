@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import static com.gamesbykevin.a2048.MainActivity.DEBUG;
+import static com.gamesbykevin.a2048.activity.MainActivity.DEBUG;
 
 /**
  * Created by Kevin on 7/13/2017.
@@ -46,12 +46,14 @@ public class UtilityHelper {
                 int start = i * maxLogSize;
                 int end = (i+1) * maxLogSize;
                 end = end > message.length() ? message.length() : end;
-                Log.i("2048", message.substring(start, end));
+                System.out.println(message.substring(start, end));
+                //Log.i("2048", message.substring(start, end));
             }
 
         } else {
             //log string as information
-            Log.i("2048", message);
+            //Log.i("2048", message);
+            System.out.println(message);
         }
     }
 

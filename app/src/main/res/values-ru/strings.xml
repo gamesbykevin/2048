@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> Возникла проблема со входом в систему, повторите попытку позже. </string>
+    <string name = "sign_in_failed"> Не удалось выполнить вход. Проверьте подключение к сети и повторите попытку. </string>
+    <string name = "app_misconfigured"> Приложение настроено неправильно. Убедитесь, что имя пакета и сертификат подписи соответствуют идентификатору клиента, созданному в консоли разработчика. Кроме того, если приложение еще не опубликовано, убедитесь, что учетная запись, с которой вы пытаетесь войти, указана в качестве учетной записи тестировщика. Подробнее см. Журналы. </string>
+    <string name = "license_failed"> Ошибка проверки лицензии. </string>
+    <string name = "unknown_error"> Неизвестная ошибка. </string>
+    <string name = "gamehelper_sign_in_failed"> Не удалось войти. Проверьте сетевое подключение и повторите попытку. </string>
+    <string name = "gamehelper_app_misconfigured"> Приложение неправильно настроено. Убедитесь, что имя пакета и сертификат подписи соответствуют идентификатору клиента, созданному в консоли разработчика. Кроме того, если приложение еще не опубликовано, убедитесь, что учетная запись, с которой вы пытаетесь войти, указана в качестве учетной записи тестировщика. Подробнее см. Журналы. </string>
+    <string name = "gamehelper_license_failed"> Ошибка проверки лицензии. </string>
+    <string name = "gamehelper_unknown_error"> Неизвестная ошибка. </string>
+    <string name = "button_text_next"> Далее </string>
+    <string name = "button_text_restart"> Restart </string>
+    <string name = "button_text_achievements"> Достижения </string>
+    <string name = "button_text_leaderboard"> Leaderboard </string>
+    <string name = "button_text_rate"> Rate </string>
+    <string name = "button_text_more"> Подробнее </string>
+    <string name = "button_text_menu"> Меню </string>
+    <string name = "button_text_start"> Пуск </string>
+    <string name = "button_text_options"> Параметры </string>
+    <string name = "button_text_exit"> Выход </string>
+    <string name = "vibrate_on"> Вибрация: Вкл </string>
+    <string name = "vibrate_off"> Вибрация: Выкл. </string>
+    <string name = "sound_on"> Звук: Вкл </string>
+    <string name = "sound_off"> Звук: Выкл. </string>
+    <string name = "text_header_level_select"> Выбрать уровень </string>
+    <string name = "header_option_difficulty"> Мастерство: </string>
+    <string name = "header_option_mode"> Режим: </string>
+</resources>

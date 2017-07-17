@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> Si è verificato un problema con il login, riprova più tardi. </string>
+    <string name = "sign_in_failed"> Impossibile accedere. Controllare la connessione di rete e riprovare. </string>
+    <string name = "app_misconfigured"> L\'applicazione è configurata in modo errato. Verifica che il nome del pacchetto e il certificato di firma corrispondano all\'ID client creato in Console per gli sviluppatori. Inoltre, se l\'applicazione non è ancora pubblicata, verificare che l\'account con cui si desidera eseguire l\'accesso è elencato come un account tester. Vedi i registri per ulteriori informazioni. </string>
+    <string name = "license_failed"> Il controllo della licenza non è riuscito. </string>
+    <string name = "unknown_error"> Errore sconosciuto. </string>
+    <string name = "gamehelper_sign_in_failed"> Impossibile accedere. Controllare la connessione di rete e riprovare. </string>
+    <string name = "gamehelper_app_misconfigured"> L\'applicazione è configurata in modo errato. Verifica che il nome del pacchetto e il certificato di firma corrispondano all\'ID client creato in Console per gli sviluppatori. Inoltre, se l\'applicazione non è ancora pubblicata, verificare che l\'account con cui si desidera eseguire l\'accesso è elencato come un account tester. Vedi i registri per ulteriori informazioni. </string>
+    <string name = "gamehelper_license_failed"> Il controllo della licenza non è riuscito. </string>
+    <string name = "gamehelper_unknown_error"> Errore sconosciuto. </string>
+    <string name = "button_text_next"> Avanti </string>
+    <string name = "button_text_restart"> Riavvia </string>
+    <string name = "button_text_achievements"> Achievements </string>
+    <string name = "button_text_leaderboard"> Leaderboard </string>
+    <string name = "button_text_rate"> Rate </string>
+    <string name = "button_text_more"> Altro </string>
+    <string name = "button_text_menu"> Menu </string>
+    <string name = "button_text_start"> Avvia </string>
+    <string name = "button_text_options"> Opzioni </string>
+    <string name = "button_text_exit"> Esci </string>
+    <string name = "vibrate_on"> Vibrare: On </string>
+    <string name = "vibrate_off"> Vibrare: Off </string>
+    <string name = "sound_on"> Suono: On </string>
+    <string name = "sound_off"> Suono: Off </string>
+    <string name = "text_header_level_select"> Seleziona Livello </string>
+    <string name = "header_option_difficulty"> Abilità: </string>
+    <string name = "header_option_mode"> Modo: </string>
+</resources>

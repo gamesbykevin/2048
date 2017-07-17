@@ -1,19 +1,13 @@
-package com.gamesbykevin.a2048;
+package com.gamesbykevin.a2048.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
-import com.gamesbykevin.a2048.game.GameManagerHelper;
+import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.services.BaseGameActivity;
-import com.gamesbykevin.a2048.services.GameHelper;
 import com.gamesbykevin.a2048.util.UtilityHelper;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.games.Games;
 
 public class MainActivity extends BaseGameActivity {
 

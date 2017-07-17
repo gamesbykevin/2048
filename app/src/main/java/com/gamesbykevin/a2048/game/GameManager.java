@@ -3,10 +3,9 @@ package com.gamesbykevin.a2048.game;
 /**
  * Created by Kevin on 5/26/2017.
  */
-
 import android.view.MotionEvent;
 
-import com.gamesbykevin.a2048.GameActivity;
+import com.gamesbykevin.a2048.activity.GameActivity;
 import com.gamesbykevin.a2048.board.Board;
 import com.gamesbykevin.a2048.board.BoardHelper;
 
@@ -16,17 +15,10 @@ import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
 import com.gamesbykevin.a2048.services.GooglePlayServicesHelper;
 import com.gamesbykevin.a2048.util.UtilityHelper;
 
-import static com.gamesbykevin.a2048.GameActivity.STATS;
-import static com.gamesbykevin.a2048.game.GameManagerHelper.DIMENSIONS_EASY;
-import static com.gamesbykevin.a2048.game.GameManagerHelper.DIMENSIONS_HARD;
-import static com.gamesbykevin.a2048.game.GameManagerHelper.DIMENSIONS_MEDIUM;
+import static com.gamesbykevin.a2048.activity.GameActivity.STATS;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.GAME_OVER_FRAMES_DELAY;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.ORIGINAL_MODE_GOAL_VALUE;
-import static com.gamesbykevin.a2048.game.GameManagerHelper.PUZZLE_DIMENSIONS_EASY;
-import static com.gamesbykevin.a2048.game.GameManagerHelper.PUZZLE_DIMENSIONS_HARD;
-import static com.gamesbykevin.a2048.game.GameManagerHelper.PUZZLE_DIMENSIONS_MEDIUM;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.RESET;
-import static com.gamesbykevin.a2048.level.Stats.DIFFICULTY;
 import static com.gamesbykevin.a2048.level.Stats.MODE;
 import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.LOADED;
 
@@ -79,32 +71,8 @@ public class GameManager {
         //store our activity reference
         this.activity = activity;
 
-        //size of the board
-        final int dimensions;
-
-        //puzzle mode will have a different size board
-        boolean puzzle = (MODE == Mode.Puzzle);
-
-        //figure out the size of the board based on difficulty and game mode
-        switch (DIFFICULTY) {
-            case Easy:
-                dimensions = (puzzle) ? PUZZLE_DIMENSIONS_EASY : DIMENSIONS_EASY;
-                break;
-
-            case Medium:
-                dimensions = (puzzle) ? PUZZLE_DIMENSIONS_MEDIUM : DIMENSIONS_MEDIUM;
-                break;
-
-            case Hard:
-                dimensions = (puzzle) ? PUZZLE_DIMENSIONS_HARD : DIMENSIONS_HARD;
-                break;
-
-            default:
-                throw new RuntimeException("Difficulty not managed");
-        }
-
         //create a new game board
-        this.board = new Board(dimensions, dimensions);
+        this.board = new Board();
 
         //default false
         GAME_OVER = false;
@@ -170,16 +138,10 @@ public class GameManager {
                         //if the x difference is greater than y then we are swiping horizontal
                         if (x > this.downX) {
 
-                            //we are swiping right
-                            UtilityHelper.logEvent("Swiping Right");
-
                             //merging east
                             this.merge = Merge.East;
 
                         } else {
-
-                            //we are swiping left
-                            UtilityHelper.logEvent("Swiping Left");
 
                             //merging west
                             this.merge = Merge.West;
@@ -190,16 +152,10 @@ public class GameManager {
                         //if the y difference is greater than x then we are swiping vertical
                         if (y > this.downY) {
 
-                            //we are swiping down
-                            UtilityHelper.logEvent("Swiping Down");
-
                             //merging south
                             this.merge = Merge.South;
 
                         } else {
-
-                            //we are swiping up
-                            UtilityHelper.logEvent("Swiping Up");
 
                             //merging north
                             this.merge = Merge.North;
@@ -255,6 +211,9 @@ public class GameManager {
 
             //check if the textures have loaded
             if (LOADED) {
+
+                //update the text displayed on the screen
+                GameManagerHelper.updateDisplayStats();
 
                 switch (MODE) {
 
@@ -318,7 +277,7 @@ public class GameManager {
                 //reset frames timer
                 frames = 0;
 
-                UtilityHelper.logEvent("GAME OVER!!!");
+                //UtilityHelper.logEvent("GAME OVER!!!");
 
                 //update our achievements
                 GooglePlayServicesHelper.checkCompletedGame(activity, getBoard());
@@ -387,9 +346,9 @@ public class GameManager {
 
     /**
      * Render the game objects
-     * @param gl Surface used for rendering pixels
+     * @param openGL Surface used for rendering pixels
      */
-    public void draw(GL10 gl, final int[] textures) {
+    public void draw(GL10 openGL, final int[] textures) {
 
         try {
             //don't display if we are resetting
@@ -404,10 +363,10 @@ public class GameManager {
             getBoard().assignTextures(textures);
 
             //draw everything on the board
-            getBoard().draw(gl);
+            getBoard().draw(openGL);
 
             //draw our text on-screen
-            GameManagerHelper.drawText(gl, getBoard().getDuration());
+            GameManagerHelper.drawText(openGL, getBoard().getDuration());
 
         } catch (Exception e) {
             UtilityHelper.handleException(e);

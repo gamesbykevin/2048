@@ -14,7 +14,7 @@ import com.gamesbykevin.a2048.util.UtilityHelper;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import static com.gamesbykevin.a2048.GameActivity.MANAGER;
+import static com.gamesbykevin.a2048.activity.GameActivity.MANAGER;
 import static com.gamesbykevin.a2048.board.Block.ANIMATION_DIMENSIONS;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_BEST_INDEX;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_GAMEOVER_INDEX;
@@ -94,7 +94,7 @@ public class OpenGLRenderer implements Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         //display the version of open gl
-        UtilityHelper.logEvent("OpenGL Version: " + gl.glGetString(GL10.GL_VERSION));
+        //UtilityHelper.logEvent("OpenGL Version: " + gl.glGetString(GL10.GL_VERSION));
     }
 
     /**
@@ -182,7 +182,7 @@ public class OpenGLRenderer implements Renderer {
                 throw new Exception("Error loading texture: " + index);
             } else {
                 //display texture id
-                UtilityHelper.logEvent("Texture loaded id: " + textures[index]);
+                //UtilityHelper.logEvent("Texture loaded id: " + textures[index]);
             }
 
         } catch (Exception e) {

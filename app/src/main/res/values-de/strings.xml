@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name = "sign_in_other_error"> Es gab ein Problem mit Anmeldung, bitte versuchen Sie es später noch einmal. </string>
+    <string name = "sign_in_failed"> konnte nicht angemeldet werden. Bitte überprüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut. </string>
+    <string name = "app_misconfigured"> Die Anwendung ist falsch konfiguriert. Überprüfen Sie, ob der Paketname und das Signaturzertifikat mit der in der Developer Console erstellten Client-ID übereinstimmen. Auch wenn die Anwendung noch nicht veröffentlicht ist, überprüfen Sie, ob das Konto, mit dem Sie sich anmelden möchten, als Testerkonto aufgeführt ist. Weitere Informationen finden Sie unter Protokolle. </string>
+    <string name = "license_failed"> Lizenzprüfung fehlgeschlagen </string>
+    <string name = "unknown_error"> Unbekannter Fehler </string>
+    <string name = "gamehelper_sign_in_failed"> konnte sich nicht anmelden. Bitte überprüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut. </string>
+    <string name = "gamehelper_app_misconfigured"> Die Anwendung ist falsch konfiguriert. Überprüfen Sie, ob der Paketname und das Signaturzertifikat mit der in der Developer Console erstellten Client-ID übereinstimmen. Auch wenn die Anwendung noch nicht veröffentlicht ist, überprüfen Sie, ob das Konto, mit dem Sie sich anmelden möchten, als Testerkonto aufgeführt ist. Weitere Informationen finden Sie unter Protokolle. </string>
+    <string name = "gamehelper_license_failed"> Lizenzprüfung fehlgeschlagen </string>
+    <string name = "gamehelper_unknown_error"> Unbekannter Fehler </string>
+    <string name = "button_text_next"> Weiter </string>
+    <string name = "button_text_restart"> neu starten </string>
+    <string name = "button_text_achievements"> Erfolge </string>
+    <string name = "button_text_leaderboard"> Leaderboard </string>
+    <string name = "button_text_rate"> Rate </string>
+    <string name = "button_text_more"> Mehr </string>
+    <string name = "button_text_menu"> Menü </string>
+    <string name = "button_text_start"> Start </string>
+    <string name = "button_text_options"> Optionen </string>
+    <string name = "button_text_exit"> Exit </string>
+    <string name = "vibrate_on"> vibrieren: Ein </string>
+    <string name = "vibrate_off"> Vibrieren: Aus </string>
+    <string name = "sound_on"> Sound: Ein </string>
+    <string name = "sound_off"> Ton: Aus </string>
+    <string name = "text_header_level_select"> Select Level </string>
+    <string name = "header_option_difficulty"> Geschicklichkeit: </string>
+    <string name = "header_option_mode"> Modus: </string>
+</resources>

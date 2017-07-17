@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name ="sign_in_other_error">登录时出现问题，请稍后再试。</string>
+    <string name ="sign_in_failed">无法登录。请检查您的网络连接，然后重试。</string>
+    <string name ="app_misconfigured">应用程序配置不正确。检查包名称和签名证书是否与在Developer Console中创建的客户端ID相匹配。另外，如果应用程序尚未发布，请检查您尝试登录的帐户是否列为测试人员帐户。有关更多信息，请参阅日志。</string>
+    <string name ="license_failed">许可证检查失败。</string>
+    <string name ="unknown_error">未知错误。</string>
+    <string name ="gamehelper_sign_in_failed">无法登录。请检查您的网络连接，然后重试。</string>
+    <string name ="gamehelper_app_misconfigured">应用程序配置不正确。检查包名称和签名证书是否与在Developer Console中创建的客户端ID相匹配。另外，如果应用程序尚未发布，请检查您尝试登录的帐户是否列为测试人员帐户。有关更多信息，请参阅日志。</string>
+    <string name ="gamehelper_license_failed">许可证检查失败。</string>
+    <string name ="gamehelper_unknown_error">未知错误。</string>
+    <string name ="button_text_next"> Next </string>
+    <string name ="button_text_restart">重新启动</string>
+    <string name ="button_text_achievements">成就</string>
+    <string name ="button_text_leaderboard">排行榜</string>
+    <string name ="button_text_rate">评价</string>
+    <string name ="button_text_more">更多</string>
+    <string name ="button_text_menu">菜单</string>
+    <string name ="button_text_start">开始</string>
+    <string name ="button_text_options">选项</string>
+    <string name ="button_text_exit">退出</string>
+    <string name ="vibrate_on"> Vibrate：On </string>
+    <string name ="vibrate_off"> Vibrate：Off </string>
+    <string name ="sound_on">声音：On </string>
+    <string name ="sound_off">声音：关闭</string>
+    <string name ="text_header_level_select">选择级别</string>
+    <string name ="header_option_difficulty">技能：</string>
+    <string name ="header_option_mode"> Mode：</string>
+</resources>

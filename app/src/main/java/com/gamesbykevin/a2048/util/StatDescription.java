@@ -7,23 +7,21 @@ import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.TEXTURES;
+
 /**
  * Created by Kevin on 7/15/2017.
  */
 public class StatDescription extends EntityItem {
 
-    //the dimensions of each number animation
+    //the dimensions of each number character animation
     public static final int ANIMATION_WIDTH = 66;
     public static final int ANIMATION_HEIGHT = 83;
 
     private final float RATIO = 0.35F;
 
-    private final int WIDTH = (int)(ANIMATION_WIDTH * RATIO);
-    private final int HEIGHT = (int)(ANIMATION_HEIGHT * RATIO);
-
-    //the starting coordinates where we render the number
-    public static final int START_Y = 50;
-    public static final int START_X = 50;
+    private final int STAT_WIDTH = (int)(ANIMATION_WIDTH * RATIO);
+    private final int STAT_HEIGHT = (int)(ANIMATION_HEIGHT * RATIO);
 
     //our array object for each digit in our score
     private ArrayList<Character> characters;
@@ -31,8 +29,16 @@ public class StatDescription extends EntityItem {
     //the text to display
     private String desc = "";
 
+    //track the value
+    private long statValue = -1;
+
+    private double anchorX = 0;
+
     //the total number of characters we need access to render
     public static final int TOTAL_CHARACTERS = 12;
+
+    //object to format the text displayed
+    private static StringBuilder BUILDER = new StringBuilder();
 
     /**
      * Default constructor
@@ -44,125 +50,148 @@ public class StatDescription extends EntityItem {
 
         //set the dimensions
         setDefaultDimensions();
-
-        //set the start location
-        super.setX(START_X);
-        super.setY(START_Y);
     }
 
     public void setDefaultDimensions() {
+
         //set the dimensions
-        super.setWidth(WIDTH);
-        super.setHeight(HEIGHT);
+        super.setWidth(STAT_WIDTH);
+        super.setHeight(STAT_HEIGHT);
     }
 
-    public void setDescription(final int desc, final int[] textures)
-    {
-        setDescription(desc + "", textures);
+    public void setAnchorX(final double anchorX) {
+        this.anchorX = anchorX;
     }
 
-    public void setDescription(final String desc, final int[] textures)
-    {
-        //assign the value
-        this.desc = desc;
+    public long getStatValue() {
+        return this.statValue;
+    }
 
+    public void setDescription(long newStatValue, boolean time)
+    {
+        if (getStatValue() == newStatValue)
+            return;
+
+        //assign value
+        this.statValue = newStatValue;
+
+        if (time) {
+
+            int minutes = (int)((statValue / (60000)) % 60);
+            int seconds = (int)(statValue / 1000) % 60;
+            int millis  = (int)(statValue % 1000);
+
+            //BUILDER.delete(0, BUILDER.length());
+            BUILDER.setLength(0);
+
+            if (minutes < 10)
+                BUILDER.append("0");
+
+            BUILDER.append(minutes);
+            BUILDER.append(":");
+
+            if (seconds < 10)
+                BUILDER.append("0");
+
+            BUILDER.append(seconds);
+            BUILDER.append(".");
+            BUILDER.append(millis);
+
+            //get our description
+            setDescription(BUILDER.toString(), time);
+
+        } else {
+
+            //convert score to string
+            setDescription(String.valueOf(statValue), time);
+        }
+    }
+
+    public void setDescription(String desc, boolean time)
+    {
         //disable any unnecessary digits
         for (int i = desc.length(); i < characters.size(); i++)
         {
             characters.get(i).enabled = false;
         }
 
-        //convert string to single characters
-        char[] text = desc.toCharArray();
-
-        //get the x-coordinate for our starting point
-        int x = (int)getX();
-
         //check each character so we can map the animations
-        for (int i = 0; i < text.length; i++)
+        for (int i = 0; i < desc.length(); i++)
         {
-            int textureId;
+            final int textureId;
 
             //identify which animation
-            switch (text[i])
+            switch (desc.charAt(i))
             {
                 case '0':
-                    textureId = textures[Block.VALUES.length + 0];
+                    textureId = TEXTURES[Block.VALUES.length + 0];
                     break;
 
                 case '1':
-                    textureId = textures[Block.VALUES.length + 1];
+                    textureId = TEXTURES[Block.VALUES.length + 1];
                     break;
 
                 case '2':
-                    textureId = textures[Block.VALUES.length + 2];
+                    textureId = TEXTURES[Block.VALUES.length + 2];
                     break;
 
                 case '3':
-                    textureId = textures[Block.VALUES.length + 3];
+                    textureId = TEXTURES[Block.VALUES.length + 3];
                     break;
 
                 case '4':
-                    textureId = textures[Block.VALUES.length + 4];
+                    textureId = TEXTURES[Block.VALUES.length + 4];
                     break;
 
                 case '5':
-                    textureId = textures[Block.VALUES.length + 5];
+                    textureId = TEXTURES[Block.VALUES.length + 5];
                     break;
 
                 case '6':
-                    textureId = textures[Block.VALUES.length + 6];
+                    textureId = TEXTURES[Block.VALUES.length + 6];
                     break;
 
                 case '7':
-                    textureId = textures[Block.VALUES.length + 7];
+                    textureId = TEXTURES[Block.VALUES.length + 7];
                     break;
 
                 case '8':
-                    textureId = textures[Block.VALUES.length + 8];
+                    textureId = TEXTURES[Block.VALUES.length + 8];
                     break;
 
                 case '9':
-                    textureId = textures[Block.VALUES.length + 9];
+                    textureId = TEXTURES[Block.VALUES.length + 9];
                     break;
 
                 case ':':
-                    textureId = textures[Block.VALUES.length + 10];
+                    textureId = TEXTURES[Block.VALUES.length + 10];
                     break;
 
                 case '.':
-                    textureId = textures[Block.VALUES.length + 11];
+                    textureId = TEXTURES[Block.VALUES.length + 11];
                     break;
 
                 default:
-                    throw new RuntimeException("Character not found '" + text[i] + "'");
+                    throw new RuntimeException("Character not found '" + desc.charAt(i) + "'");
             }
 
             //if we are within the array we can reuse
             if (i < characters.size())
             {
-                characters.get(i).x = x;
                 characters.get(i).enabled = true;
                 characters.get(i).textureId = textureId;
             }
             else
             {
                 //else we add a new object to the array
-                characters.add(new Character(x, textureId));
+                characters.add(new Character(textureId));
             }
-
-            //adjust x-coordinate
-            x += super.getWidth();
         }
     }
 
     @Override
     public void render(GL10 gl)
     {
-        //store coordinates
-        final double x = getX();
-        final double y = getY();
-
         //check every digit in the list
         for (int i = 0; i < characters.size(); i++)
         {
@@ -174,7 +203,7 @@ public class StatDescription extends EntityItem {
                 return;
 
             //assign x-coordinate location
-            setX(character.x);
+            setX(anchorX + (i * super.getWidth()));
 
             //assign texture
             super.setTextureId(character.textureId);
@@ -182,10 +211,6 @@ public class StatDescription extends EntityItem {
             //render animation
             super.render(gl);
         }
-
-        //restore original coordinates
-        setX(x);
-        setY(y);
     }
 
     /**
@@ -193,18 +218,14 @@ public class StatDescription extends EntityItem {
      */
     private class Character
     {
-        //location
-        protected int x;
-
         //texture to render
         protected int textureId;
 
-        //are we rendering this digit?
+        //are we rendering this?
         protected boolean enabled = true;
 
-        private Character(final int x, final int textureId)
+        private Character(final int textureId)
         {
-            this.x = x;
             this.textureId = textureId;
             this.enabled = true;
         }

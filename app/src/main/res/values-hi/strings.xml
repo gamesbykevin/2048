@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> साइन-इन के साथ एक समस्या थी, कृपया बाद में फिर से प्रयास करें। </string>
+    <string name = "sign_in_failed"> साइन इन करने में असफल। कृपया अपने नेटवर्क कनेक्शन की जांच करें और पुनः प्रयास करें। </string>
+    <string name = "app_misconfigured"> एप्लिकेशन गलत तरीके से कॉन्फ़िगर किया गया है। यह जांचें कि डेवलपर कंसोल में बनाए गए क्लाइंट आईडी से पैकेज का नाम और साइनिंग प्रमाणपत्र मेल खाता है। साथ ही, यदि आवेदन अभी तक प्रकाशित नहीं हुआ है, तो जांच लें कि जिस खाते से आप साइन इन करने का प्रयास कर रहे हैं वह एक परीक्षक खाते के रूप में सूचीबद्ध है। अधिक जानकारी के लिए लॉग देखें। </string>
+    <string name = "license_failed"> लाइसेंस जांच विफल। </string>
+    <string name = "unknown_error"> अज्ञात त्रुटि। </string>
+    <string name = "gamehelper_sign_in_failed"> साइन इन करने में विफल। कृपया अपने नेटवर्क कनेक्शन की जांच करें और पुनः प्रयास करें। </string>
+    <string name = "gamehelper_app_misconfigured"> एप्लिकेशन गलत तरीके से कॉन्फ़िगर किया गया है। यह जांचें कि डेवलपर कंसोल में बनाए गए क्लाइंट आईडी से पैकेज का नाम और साइनिंग प्रमाणपत्र मेल खाता है। साथ ही, यदि आवेदन अभी तक प्रकाशित नहीं हुआ है, तो जांच लें कि जिस खाते से आप साइन इन करने का प्रयास कर रहे हैं वह एक परीक्षक खाते के रूप में सूचीबद्ध है। अधिक जानकारी के लिए लॉग देखें। </string>
+    <string name = "gamehelper_license_failed"> लाइसेंस जांच विफल। </string>
+    <string name = "gamehelper_unknown_error"> अज्ञात त्रुटि। </string>
+    <string name = "button_text_next"> अगला </string>
+    <string name = "button_text_restart"> पुनरारंभ करें </string>
+    <string name = "button_text_achievements"> उपलब्धियां </string>
+    <string name = "button_text_leaderboard"> लीडरबोर्ड </string>
+    <string name = "button_text_rate"> दर </string>
+    <string name = "button_text_more"> अधिक </string>
+    <string name = "button_text_menu"> मेनू </string>
+    <string name = "button_text_start"> प्रारंभ करें </string>
+    <string name = "button_text_options"> विकल्प </string>
+    <string name = "button_text_exit"> बाहर निकलें </string>
+    <string name = "vibrate_on"> कंपन: चालू </string> पर
+    <string name = "vibrate_off"> कंपन: बंद </string>
+    <string name = "sound_on"> ध्वनि: चालू </string> पर
+    <string name = "sound_off"> ध्वनि: बंद </string>
+    <string name = "text_header_level_select"> चयन स्तर </string>
+    <string name = "header_option_difficulty"> कौशल: </string>
+    <string name = "header_option_mode"> मोड: </string>
+</resources>

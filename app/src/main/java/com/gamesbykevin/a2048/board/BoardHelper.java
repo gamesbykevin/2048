@@ -1,6 +1,7 @@
 package com.gamesbykevin.a2048.board;
 
 import com.gamesbykevin.a2048.game.GameManager;
+import com.gamesbykevin.a2048.game.GameManagerHelper;
 import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
 import com.gamesbykevin.a2048.util.UtilityHelper;
 import com.gamesbykevin.androidframework.base.Cell;
@@ -18,7 +19,14 @@ import static com.gamesbykevin.a2048.board.Block.START_Y;
 import static com.gamesbykevin.a2048.board.Block.VALUES;
 import static com.gamesbykevin.a2048.board.Board.BORDER_THICKNESS;
 import static com.gamesbykevin.a2048.board.Board.PADDING;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.DIMENSIONS_EASY;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.DIMENSIONS_HARD;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.DIMENSIONS_MEDIUM;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.ORIGINAL_MODE_GOAL_VALUE;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.PUZZLE_DIMENSIONS_EASY;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.PUZZLE_DIMENSIONS_HARD;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.PUZZLE_DIMENSIONS_MEDIUM;
+import static com.gamesbykevin.a2048.level.Stats.DIFFICULTY;
 import static com.gamesbykevin.a2048.level.Stats.MODE;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.HEIGHT;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.WIDTH;
@@ -217,7 +225,7 @@ public class BoardHelper {
      * If more than 1 block is at the same location/value it will be merged into 1 block and double the value
      * @param board The board containing the blocks we want to check
      */
-    protected static void updateMerged(Board board) {
+    protected final static void updateMerged(Board board) {
 
         //reset our block counts to 0
         for (int i = 0; i < VALUES.length; i++) {
@@ -249,15 +257,15 @@ public class BoardHelper {
                     if (block.getValue() != tmp.getValue()) {
 
                         //for some reason we tried to merge these blocks
-                        UtilityHelper.logEvent("Block 1: (" + block.getCol() + ", " + block.getRow() + ") " + block.getValue());
-                        UtilityHelper.logEvent("Block 2: (" + tmp.getCol() + ", " + tmp.getRow() + ") " + tmp.getValue());
+                        //UtilityHelper.logEvent("Block 1: (" + block.getCol() + ", " + block.getRow() + ") " + block.getValue());
+                        //UtilityHelper.logEvent("Block 2: (" + tmp.getCol() + ", " + tmp.getRow() + ") " + tmp.getValue());
 
                         //skip to the next block
                         continue;
                     }
 
-                    UtilityHelper.logEvent("Merged 1: (" + block.getCol() + ", " + block.getRow() + ") " + block.getValue());
-                    UtilityHelper.logEvent("Merged 2: (" + tmp.getCol() + ", " + tmp.getRow() + ") " + tmp.getValue());
+                    //UtilityHelper.logEvent("Merged 1: (" + block.getCol() + ", " + block.getRow() + ") " + block.getValue());
+                    //UtilityHelper.logEvent("Merged 2: (" + tmp.getCol() + ", " + tmp.getRow() + ") " + tmp.getValue());
 
                     //update block value
                     block.setValue(block.getValue() + tmp.getValue());
@@ -290,7 +298,7 @@ public class BoardHelper {
     /**
      * Assign the size, xy, etc... coordinates for the board
      */
-    protected static void assignLogistics(Board board) {
+    protected final static void assignLogistics(Board board) {
 
         //amount of space we can render the board and elements
         int dimension = WIDTH - (PADDING * 2);
@@ -495,5 +503,27 @@ public class BoardHelper {
             RANDOM_OBJECT = new Random();
 
         return RANDOM_OBJECT;
+    }
+
+    public static int getBoardDimensions() {
+
+        //puzzle mode will have a different size board
+        boolean puzzle = (MODE == GameManagerHelper.Mode.Puzzle);
+
+        //figure out the size of the board based on difficulty and game mode
+        switch (DIFFICULTY) {
+
+            case Easy:
+                return ((puzzle) ? PUZZLE_DIMENSIONS_EASY : DIMENSIONS_EASY);
+
+            case Medium:
+                return ((puzzle) ? PUZZLE_DIMENSIONS_MEDIUM : DIMENSIONS_MEDIUM);
+
+            case Hard:
+                return ((puzzle) ? PUZZLE_DIMENSIONS_HARD : DIMENSIONS_HARD);
+
+            default:
+                throw new RuntimeException("Difficulty not managed");
+        }
     }
 }

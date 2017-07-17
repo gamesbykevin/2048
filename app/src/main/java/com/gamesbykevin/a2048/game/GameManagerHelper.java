@@ -1,15 +1,21 @@
 package com.gamesbykevin.a2048.game;
 
+import android.text.TextUtils;
+
+import com.gamesbykevin.a2048.activity.MainActivity;
 import com.gamesbykevin.a2048.base.EntityItem;
 import com.gamesbykevin.a2048.board.Board;
 import com.gamesbykevin.a2048.util.StatDescription;
+import com.gamesbykevin.a2048.util.UtilityHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
+
 import javax.microedition.khronos.opengles.GL10;
 
-import static com.gamesbykevin.a2048.GameActivity.MANAGER;
-import static com.gamesbykevin.a2048.GameActivity.STATS;
+import static com.gamesbykevin.a2048.activity.GameActivity.MANAGER;
+import static com.gamesbykevin.a2048.activity.GameActivity.STATS;
 import static com.gamesbykevin.a2048.board.Block.VALUES;
 import static com.gamesbykevin.a2048.level.Stats.MODE;
 import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.TEXTURES;
@@ -64,12 +70,6 @@ public class GameManagerHelper {
     //the description of the current level
     public static String LEVEL_DESC = "";
 
-    //best score
-    public static int SCORE = 0;
-
-    //best time
-    public static String TIME_DESC = "";
-
     public enum Difficulty {
         Easy, Medium, Hard
     }
@@ -79,17 +79,7 @@ public class GameManagerHelper {
     }
 
     /**
-     * How do we want to display the time
-     */
-    private static final String TIME_FORMAT = "mm:ss:SSS";
-
-    /**
-     * Object to format the time
-     */
-    private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(TIME_FORMAT);
-
-    /**
-     * How much time do we have remaining in challenge mode
+     * How much time do we have remaining in challenge mode?
      */
     public static final long CHALLENGE_DURATION = 60000;
 
@@ -99,7 +89,10 @@ public class GameManagerHelper {
     public static final int ORIGINAL_MODE_GOAL_VALUE = VALUES[11];
 
     //object used to render number images
-    private static StatDescription DESCRIPTION = new StatDescription();
+    private static StatDescription STAT_RECORD = new StatDescription();
+    private static StatDescription STAT_CURRENT = new StatDescription();
+    private static StatDescription STAT_TIME = new StatDescription();
+    private static StatDescription STAT_LEVEL = new StatDescription();
 
     //total number of words we will be displaying
     public static final int TOTAL_WORD_TEXTURES = 5;
@@ -157,13 +150,57 @@ public class GameManagerHelper {
 
     public static void updateDisplayStats() {
 
-        //load the best level stats
-        final Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(STATS.getLevel().getDuration());
+        //set coordinates etc... for the text we are rendering based on game mode
+        switch (MODE) {
 
-        TIME_DESC = DATE_FORMAT.format(cal.getTime());
-        LEVEL_DESC = STATS.getLevel().getTitle();
-        SCORE = STATS.getLevel().getScore();
+            case Puzzle:
+            case Original:
+
+                STAT_CURRENT.setX(X_COORD_RESULTS);
+                STAT_CURRENT.setAnchorX(STAT_CURRENT.getX());
+                STAT_CURRENT.setY(Y_COORD_RESULTS);
+                STAT_CURRENT.setDescription(0, true);
+
+                STAT_RECORD.setX(X_COORD_RECORD);
+                STAT_RECORD.setAnchorX(STAT_RECORD.getX());
+                STAT_RECORD.setY(Y_COORD_RECORD);
+                STAT_RECORD.setDescription(STATS.getLevel().getDuration(), true);
+
+                //if puzzle render level #
+                if (MODE == Mode.Puzzle) {
+                    STAT_LEVEL.setX(X_COORD_LEVEL + WIDTH_LEVEL + 10);
+                    STAT_LEVEL.setAnchorX(STAT_LEVEL.getX());
+                    STAT_LEVEL.setY(Y_COORD_LEVEL + 3);
+                    STAT_LEVEL.setDescription(STATS.getLevel().getTitle(), false);
+                }
+                break;
+
+            case Challenge:
+            case Infinite:
+
+                STAT_CURRENT.setX(X_COORD_RESULTS);
+                STAT_CURRENT.setAnchorX(STAT_CURRENT.getX());
+                STAT_CURRENT.setY(Y_COORD_RESULTS);
+                STAT_CURRENT.setDescription(MANAGER.getBoard().getScore(), false);
+
+                //render the record as well
+                STAT_RECORD.setX(X_COORD_RECORD);
+                STAT_RECORD.setAnchorX(STAT_RECORD.getX());
+                STAT_RECORD.setY(Y_COORD_RECORD);
+                STAT_RECORD.setDescription(STATS.getLevel().getScore(), false);
+
+                //if challenge render the remaining time
+                if (MODE == Mode.Challenge) {
+                    STAT_TIME.setX(X_COORD_LEVEL + WIDTH_LEVEL + 10);
+                    STAT_TIME.setAnchorX(STAT_TIME.getX());
+                    STAT_TIME.setY(Y_COORD_LEVEL + 3);
+                    STAT_TIME.setDescription(0, true);
+                }
+                break;
+
+            default:
+                throw new RuntimeException("Mode not handled here: " + MODE.toString());
+        }
     }
 
     /**
@@ -236,110 +273,68 @@ public class GameManagerHelper {
         openGL.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
         //if game over, notify the user
-        if (MANAGER.GAME_OVER) {
-            entity.setX(X_COORD_GAMEOVER);
-            entity.setY(Y_COORD_GAMEOVER);
-            entity.setWidth(WIDTH_GAMEOVER);
-            entity.setHeight(HEIGHT_GAMEOVER);
-            entity.setTextureId(TEXTURES[TEXTURE_WORD_GAMEOVER_INDEX]);
-            entity.render(openGL);
-        }
+        if (MANAGER.GAME_OVER)
+            entity.render(openGL, X_COORD_GAMEOVER, Y_COORD_GAMEOVER, WIDTH_GAMEOVER, HEIGHT_GAMEOVER, TEXTURES[TEXTURE_WORD_GAMEOVER_INDEX]);
 
         switch (MODE) {
 
             case Puzzle:
             case Original:
-                entity.setX(X_COORD_TIME);
-                entity.setY(Y_COORD_TIME);
-                entity.setWidth(WIDTH_TIME);
-                entity.setHeight(HEIGHT_TIME);
-                entity.setTextureId(TEXTURES[TEXTURE_WORD_TIME_INDEX]);
-                entity.render(openGL);
 
-                DESCRIPTION.setX(X_COORD_RESULTS);
-                DESCRIPTION.setY(Y_COORD_RESULTS);
-                DESCRIPTION.setDescription(DATE_FORMAT.format(duration), TEXTURES);
-                DESCRIPTION.render(openGL);
+                //render header text
+                entity.render(openGL, X_COORD_TIME, Y_COORD_TIME, WIDTH_TIME, HEIGHT_TIME, TEXTURES[TEXTURE_WORD_TIME_INDEX]);
+
+                //render current status
+                STAT_CURRENT.setDescription(duration, true);
+                STAT_CURRENT.render(openGL);
 
                 //render best text
-                entity.setX(X_COORD_BEST);
-                entity.setY(Y_COORD_BEST);
-                entity.setWidth(WIDTH_BEST);
-                entity.setHeight(HEIGHT_BEST);
-                entity.setTextureId(TEXTURES[TEXTURE_WORD_BEST_INDEX]);
-                entity.render(openGL);
+                entity.render(openGL, X_COORD_BEST, Y_COORD_BEST, WIDTH_BEST, HEIGHT_BEST, TEXTURES[TEXTURE_WORD_BEST_INDEX]);
 
                 //render the record as well
-                DESCRIPTION.setX(X_COORD_RECORD);
-                DESCRIPTION.setY(Y_COORD_RECORD);
-                DESCRIPTION.setDescription(TIME_DESC, TEXTURES);
-                DESCRIPTION.render(openGL);
+                STAT_RECORD.render(openGL);
 
                 //if puzzle render level #
                 if (MODE == Mode.Puzzle) {
-                    entity.setX(X_COORD_LEVEL);
-                    entity.setY(Y_COORD_LEVEL);
-                    entity.setWidth(WIDTH_LEVEL);
-                    entity.setHeight(HEIGHT_LEVEL);
-                    entity.setTextureId(TEXTURES[TEXTURE_WORD_LEVEL_INDEX]);
-                    entity.render(openGL);
 
-                    DESCRIPTION.setX(X_COORD_LEVEL + WIDTH_LEVEL + 10);
-                    DESCRIPTION.setY(Y_COORD_LEVEL + 3);
-                    DESCRIPTION.setDescription(LEVEL_DESC, TEXTURES);
-                    DESCRIPTION.render(openGL);
+                    //render the header text
+                    entity.render(openGL, X_COORD_LEVEL, Y_COORD_LEVEL, WIDTH_LEVEL, HEIGHT_LEVEL, TEXTURES[TEXTURE_WORD_LEVEL_INDEX]);
+
+                    //render the level #
+                    STAT_LEVEL.render(openGL);
                 }
                 break;
 
             case Challenge:
             case Infinite:
-                entity.setX(X_COORD_SCORE);
-                entity.setY(Y_COORD_SCORE);
-                entity.setWidth(WIDTH_SCORE);
-                entity.setHeight(HEIGHT_SCORE);
-                entity.setTextureId(TEXTURES[TEXTURE_WORD_SCORE_INDEX]);
-                entity.render(openGL);
 
-                DESCRIPTION.setX(X_COORD_RESULTS);
-                DESCRIPTION.setY(Y_COORD_RESULTS);
-                DESCRIPTION.setDescription(MANAGER.getBoard().getScore(), TEXTURES);
-                DESCRIPTION.render(openGL);
+                //render header text
+                entity.render(openGL, X_COORD_SCORE, Y_COORD_SCORE, WIDTH_SCORE, HEIGHT_SCORE, TEXTURES[TEXTURE_WORD_SCORE_INDEX]);
+
+                //render current status
+                STAT_CURRENT.setDescription(MANAGER.getBoard().getScore(), false);
+                STAT_CURRENT.render(openGL);
 
                 //render best text
-                entity.setX(X_COORD_BEST);
-                entity.setY(Y_COORD_BEST);
-                entity.setWidth(WIDTH_BEST);
-                entity.setHeight(HEIGHT_BEST);
-                entity.setTextureId(TEXTURES[TEXTURE_WORD_BEST_INDEX]);
-                entity.render(openGL);
+                entity.render(openGL, X_COORD_BEST, Y_COORD_BEST, WIDTH_BEST, HEIGHT_BEST, TEXTURES[TEXTURE_WORD_BEST_INDEX]);
 
                 //render the record as well
-                DESCRIPTION.setX(X_COORD_RECORD);
-                DESCRIPTION.setY(Y_COORD_RECORD);
-                DESCRIPTION.setDescription(SCORE, TEXTURES);
-                DESCRIPTION.render(openGL);
+                STAT_RECORD.render(openGL);
 
                 //if challenge render the remaining time
                 if (MODE == Mode.Challenge) {
 
-                    entity.setX(X_COORD_LEVEL);
-                    entity.setY(Y_COORD_LEVEL);
-                    entity.setWidth(WIDTH_LEVEL);
-                    entity.setHeight(HEIGHT_LEVEL);
-                    entity.setTextureId(TEXTURES[TEXTURE_WORD_TIME_INDEX]);
-                    entity.render(openGL);
+                    //render header text
+                    entity.render(openGL, X_COORD_LEVEL, Y_COORD_LEVEL, WIDTH_LEVEL, HEIGHT_LEVEL, TEXTURES[TEXTURE_WORD_TIME_INDEX]);
 
-                    DESCRIPTION.setX(X_COORD_LEVEL + WIDTH_LEVEL + 10);
-                    DESCRIPTION.setY(Y_COORD_LEVEL + 3);
-
-                    if (duration > CHALLENGE_DURATION) {
-                        DESCRIPTION.setDescription(DATE_FORMAT.format(0), TEXTURES);
-                    } else {
-                        DESCRIPTION.setDescription(DATE_FORMAT.format(CHALLENGE_DURATION - duration), TEXTURES);
-                    }
-                    DESCRIPTION.render(openGL);
+                    //render the time remaining
+                    STAT_TIME.setDescription((duration > CHALLENGE_DURATION) ? 0 : CHALLENGE_DURATION - duration, true);
+                    STAT_TIME.render(openGL);
                 }
                 break;
+
+            default:
+                throw new RuntimeException("Mode not handled here: " + MODE.toString());
         }
     }
 }

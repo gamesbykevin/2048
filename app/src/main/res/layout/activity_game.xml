@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:id="@+id/layoutGame"
-    tools:context="com.gamesbykevin.a2048.GameActivity">
+    tools:context="com.gamesbykevin.a2048.activity.GameActivity">
 
     <!-- OpenGL Surface View container -->
     <com.gamesbykevin.a2048.opengl.OpenGLSurfaceView

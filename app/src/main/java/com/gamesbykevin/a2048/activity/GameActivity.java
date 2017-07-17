@@ -1,4 +1,4 @@
-package com.gamesbykevin.a2048;
+package com.gamesbykevin.a2048.activity;
 
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
@@ -10,6 +10,7 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 
+import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.game.GameManager;
 import com.gamesbykevin.a2048.game.GameManagerHelper;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
@@ -19,14 +20,7 @@ import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
 import com.gamesbykevin.a2048.services.BaseGameActivity;
 import com.gamesbykevin.a2048.ui.CustomAdapter;
 import com.gamesbykevin.a2048.util.UtilityHelper;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
 
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -98,9 +92,6 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
 
         //first assign default level is 0
         STATS.setLevelIndex(0);
-
-        //update display stats
-        updateDisplayStats();
 
         //flag reset
         GameManagerHelper.RESET = true;
@@ -186,7 +177,7 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
             RANDOM = new Random(time);
 
             //print the random seed
-            UtilityHelper.logEvent("Random seed: " + time);
+            //UtilityHelper.logEvent("Random seed: " + time);
         }
 
         return RANDOM;

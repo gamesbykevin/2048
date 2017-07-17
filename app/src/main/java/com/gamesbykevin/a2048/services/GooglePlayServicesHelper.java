@@ -1,7 +1,6 @@
 package com.gamesbykevin.a2048.services;
 
-import com.gamesbykevin.a2048.GameActivity;
-import com.gamesbykevin.a2048.MainActivity;
+import com.gamesbykevin.a2048.activity.GameActivity;
 import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.board.Board;
 import com.gamesbykevin.a2048.util.UtilityHelper;
@@ -29,7 +28,7 @@ public class GooglePlayServicesHelper {
         if (!activity.getApiClient().isConnected())
             return;
 
-        UtilityHelper.logEvent("checkAchievementsCompletedGame");
+        //UtilityHelper.logEvent("checkAchievementsCompletedGame");
 
         //update event for games played
         activity.trackEvent(R.string.event_played_games);
@@ -139,7 +138,7 @@ public class GooglePlayServicesHelper {
         if (!activity.getApiClient().isConnected())
             return;
 
-        UtilityHelper.logEvent("checkAchievementsNewRecord");
+        //UtilityHelper.logEvent("checkAchievementsNewRecord");
 
         switch (MODE) {
             case Original:
@@ -166,7 +165,7 @@ public class GooglePlayServicesHelper {
         if (!activity.getApiClient().isConnected())
             return;
 
-        UtilityHelper.logEvent("checkAchievementsPuzzleTime");
+        //UtilityHelper.logEvent("checkAchievementsPuzzleTime");
 
         switch (DIFFICULTY) {
             case Easy:

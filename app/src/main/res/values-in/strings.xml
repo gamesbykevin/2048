@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> Terjadi masalah saat masuk, coba lagi nanti. </string>
+    <string name = "sign_in_failed"> Gagal masuk. Periksa koneksi jaringan Anda dan coba lagi. </string>
+    <string name = "app_misconfigured"> Aplikasi salah dikonfigurasi. Periksa apakah nama paket dan sertifikat penandatanganan cocok dengan ID klien yang dibuat di Konsol Pengembang. Selain itu, jika aplikasi belum dipublikasikan, periksa apakah akun yang Anda coba masuk dengan tercantum sebagai akun penguji. Lihat log untuk informasi lebih lanjut. </string>
+    <string name = "license_failed"> Cek lisensi gagal. </string>
+    <string name = "unknown_error"> Kesalahan tidak dikenal. </string>
+    <string name = "gamehelper_sign_in_failed"> Gagal masuk. Periksa koneksi jaringan Anda dan coba lagi. </string>
+    <string name = "gamehelper_app_misconfigured"> Aplikasi salah dikonfigurasi. Periksa apakah nama paket dan sertifikat penandatanganan cocok dengan ID klien yang dibuat di Konsol Pengembang. Selain itu, jika aplikasi belum dipublikasikan, periksa apakah akun yang Anda coba masuk dengan tercantum sebagai akun penguji. Lihat log untuk informasi lebih lanjut. </string>
+    <string name = "gamehelper_license_failed"> Cek lisensi gagal. </string>
+    <string name = "gamehelper_unknown_error"> Kesalahan tidak dikenal. </string>
+    <string name = "button_text_next"> Berikutnya </string>
+    <string name = "button_text_restart"> Mulai ulang </string>
+    <string name = "button_text_achievements"> Prestasi </string>
+    <string name = "button_text_leaderboard"> Spanduk Utama </string>
+    <string name = "button_text_rate"> Beri nilai </string>
+    <string name = "button_text_more"> Lainnya </string>
+    <string name = "button_text_menu"> Menu </string>
+    <string name = "button_text_start"> Mulai </string>
+    <string name = "button_text_options"> Pilihan </string>
+    <string name = "button_text_exit"> Keluar </string>
+    <string name = "vibrate_on"> Getar: Aktif </string>
+    <string name = "vibrate_off"> Getar: Nonaktif </string>
+    <string name = "sound_on"> Suara: Aktif </string>
+    <string name = "sound_off"> Suara: Mati </string>
+    <string name = "text_header_level_select"> Pilih Level </string>
+    <string name = "header_option_difficulty"> Skill: </string>
+    <string name = "header_option_mode"> Mode: </string>
+</resources>

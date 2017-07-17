@@ -1,12 +1,11 @@
-package com.gamesbykevin.a2048;
+package com.gamesbykevin.a2048.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.level.Stats;
-
-import static com.gamesbykevin.a2048.GameActivity.STATS;
 
 public class SplashActivity extends BaseActivity implements Runnable {
 
@@ -29,7 +28,7 @@ public class SplashActivity extends BaseActivity implements Runnable {
         //new Thread(this).start();
 
         //create a new instance of our level items
-        STATS = new Stats(this);
+        GameActivity.STATS = new Stats(this);
 
         //delay a couple seconds before going to main page
         new Handler().postDelayed(new Runnable() {
@@ -48,7 +47,7 @@ public class SplashActivity extends BaseActivity implements Runnable {
     public void run() {
 
         //create a new instance of our level items
-        STATS = new Stats(this);
+        GameActivity.STATS = new Stats(this);
 
         //start the new activity
         startActivity(new Intent(SplashActivity.this, MainActivity.class));

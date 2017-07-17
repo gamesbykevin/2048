@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> 로그인에 문제가 있습니다. 나중에 다시 시도하십시오. </string>
+    <string name = "sign_in_failed"> 로그인하지 못했습니다. 네트워크 연결을 확인하고 다시 시도하십시오. </string>
+    <string name = "app_misconfigured"> 응용 프로그램이 잘못 구성되었습니다. 패키지 이름과 서명 인증서가 개발자 콘솔에서 생성 된 클라이언트 ID와 일치하는지 확인합니다. 또한 응용 프로그램이 아직 게시되지 않은 경우 로그인하려는 계정이 테스터 계정으로 나열되어 있는지 확인하십시오. 자세한 내용은 로그를 참조하십시오. </string>
+    <string name = "license_failed"> 라이센스 확인에 실패했습니다. </string>
+    <string name = "unknown_error"> 알 수없는 오류입니다. </string>
+    <string name = "gamehelper_sign_in_failed"> 로그인하지 못했습니다. 네트워크 연결을 확인하고 다시 시도하십시오. </string>
+    <string name = "gamehelper_app_misconfigured"> 응용 프로그램이 잘못 구성되었습니다. 패키지 이름과 서명 인증서가 개발자 콘솔에서 생성 된 클라이언트 ID와 일치하는지 확인합니다. 또한 응용 프로그램이 아직 게시되지 않은 경우 로그인하려는 계정이 테스터 계정으로 나열되어 있는지 확인하십시오. 자세한 내용은 로그를 참조하십시오. </string>
+    <string name = "gamehelper_license_failed"> 라이센스 확인에 실패했습니다. </string>
+    <string name = "gamehelper_unknown_error"> 알 수없는 오류입니다. </string>
+    <string name = "button_text_next"> 다음 </string>
+    <string name = "button_text_restart"> 다시 시작 </string>
+    <string name = "button_text_achievements"> 업적 </string>
+    <string name = "button_text_leaderboard"> 리더 보드 </string>
+    <string name = "button_text_rate"> 평가 </string>
+    <string name = "button_text_more"> 더보기 </string>
+    <string name = "button_text_menu"> 메뉴 </string>
+    <string name = "button_text_start"> 시작 </string>
+    <string name = "button_text_options"> 옵션 </string>
+    <string name = "button_text_exit"> 종료 </string>
+    <string name = "vibrate_on"> 진동 : 켜기 </string>
+    <string name = "vibrate_off"> 진동 : 끄기 </string>
+    <string name = "sound_on"> 소리 : 켜기 </string>
+    <string name = "sound_off"> 소리 : 끄기 </string>
+    <string name = "text_header_level_select"> 레벨 선택 </string>
+    <string name = "header_option_difficulty"> 기술 : </string>
+    <string name = "header_option_mode"> 모드 : </string>
+</resources>

@@ -2,7 +2,7 @@ package com.gamesbykevin.a2048.level;
 
 import android.content.SharedPreferences;
 
-import com.gamesbykevin.a2048.BaseActivity;
+import com.gamesbykevin.a2048.activity.BaseActivity;
 import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
@@ -16,13 +16,12 @@ import java.util.HashMap;
 /**
  * Created by Kevin on 7/6/2017.
  */
-
 public class Stats {
 
     /**
      * Total number of levels for puzzle mode
      */
-    private static final int LEVELS = 100;
+    public static final int LEVELS = 100;
 
     //this will contain all the stats for our levels
     private HashMap<Entry, ArrayList<Level>> data = new HashMap<>();
@@ -170,11 +169,6 @@ public class Stats {
         //set complete true
         level.setCompleted(true);
 
-        UtilityHelper.logEvent("Time New: " + duration);
-        UtilityHelper.logEvent("Time Old: " + level.getDuration());
-        UtilityHelper.logEvent("Score New: " + score);
-        UtilityHelper.logEvent("Score Old: " + level.getScore());
-
         //did we set a new record?
         boolean newRecordTime = false;
         boolean newRecordScore = false;
@@ -192,7 +186,7 @@ public class Stats {
                     level.setDuration(duration);
 
                     //we beat our personal best
-                    UtilityHelper.logEvent("New Record (time)");
+                    //UtilityHelper.logEvent("New Record (time)");
                     newRecordTime = true;
                 }
                 break;
@@ -207,7 +201,7 @@ public class Stats {
                     level.setScore(score);
 
                     //we beat our personal best
-                    UtilityHelper.logEvent("New Record (score)");
+                    //UtilityHelper.logEvent("New Record (score)");
                     newRecordScore = true;
                 }
                 break;
@@ -235,7 +229,7 @@ public class Stats {
         final String json = activity.GSON.toJson(data);
 
         //print data
-        UtilityHelper.logEvent(json);
+        //UtilityHelper.logEvent(json);
 
         //convert to json string and store in preferences
         editor.putString(activity.getString(R.string.game_stats_file_key), json);

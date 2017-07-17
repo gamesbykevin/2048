@@ -8,11 +8,10 @@ import com.gamesbykevin.a2048.base.EntityItem;
 
 import static com.gamesbykevin.a2048.board.BoardHelper.SPAWN_VALUE_1;
 import static com.gamesbykevin.a2048.board.BoardHelper.SPAWN_VALUE_2;
+import static com.gamesbykevin.a2048.board.BoardHelper.getBoardDimensions;
 import static com.gamesbykevin.a2048.game.GameManager.GAME_OVER;
-import static com.gamesbykevin.a2048.level.Stats.MODE;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.DIRTY_FLAG;
 
-import com.gamesbykevin.a2048.game.GameManagerHelper;
 import com.gamesbykevin.androidframework.base.Cell;
 
 import java.util.ArrayList;
@@ -20,9 +19,8 @@ import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import static com.gamesbykevin.a2048.GameActivity.getRandomObject;
+import static com.gamesbykevin.a2048.activity.GameActivity.getRandomObject;
 import static com.gamesbykevin.a2048.board.Block.BLOCK_DIMENSIONS;
-import static com.gamesbykevin.a2048.board.Block.VALUES;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.FRAME_DURATION;
 
 /**
@@ -66,16 +64,16 @@ public class Board {
     //the size of the board
     private int cols, rows;
 
+    //list of available places to spawn a piece
+    private List<Cell> available;
+
     /**
      * Default constructor
      */
     public Board() {
-        this(DEFAULT_COLUMNS, DEFAULT_ROWS);
+        this(getBoardDimensions(), getBoardDimensions());
     }
 
-    /**
-     * Create a board with the specified dimensions
-     */
     public Board(final int cols, final int rows) {
 
         //set the size of the board
@@ -215,7 +213,9 @@ public class Board {
     public void spawn() {
 
         //create the list that will contain our available blocks
-        List<Cell> available = new ArrayList<>();
+        if (available == null)
+            available = new ArrayList<>();
+        available.clear();
 
         //check every location to see what is available
         for (int col = 0; col < getCols(); col++) {
@@ -226,11 +226,11 @@ public class Board {
             }
         }
 
-        //pick a random index
-        int index = getRandomObject().nextInt(available.size());
-
         //if the board is empty we will spawn 2 blocks
         if (this.blocks.isEmpty()) {
+
+            //pick a random index
+            int index = getRandomObject().nextInt(available.size());
 
             //spawn one block at this random location
             addBlock(available.get(index), getRandomObject().nextBoolean() ? SPAWN_VALUE_1 : SPAWN_VALUE_2);
@@ -246,8 +246,15 @@ public class Board {
 
         } else {
 
-            //spawn one block at this random location
-            addBlock(available.get(index), getRandomObject().nextBoolean() ? SPAWN_VALUE_1 : SPAWN_VALUE_2);
+            //make sure there is at least one spot available (should always be true)
+            if (!available.isEmpty()) {
+
+                //pick a random index
+                int index = getRandomObject().nextInt(available.size());
+
+                //spawn one block at this random location
+                addBlock(available.get(index), getRandomObject().nextBoolean() ? SPAWN_VALUE_1 : SPAWN_VALUE_2);
+            }
         }
     }
 

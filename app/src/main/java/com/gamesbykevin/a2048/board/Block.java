@@ -1,8 +1,6 @@
 package com.gamesbykevin.a2048.board;
 
-import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.base.EntityItem;
-import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
 import com.gamesbykevin.androidframework.base.Cell;
 import com.gamesbykevin.androidframework.base.Entity;
 

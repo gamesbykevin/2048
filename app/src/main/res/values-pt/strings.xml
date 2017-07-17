@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> Ocorreu um problema com o login, tente novamente mais tarde. </string>
+    <string name = "sign_in_failed"> Falha ao fazer login. Verifique sua conexão de rede e tente novamente. </string>
+    <string name = "app_misconfigured"> O aplicativo está incorretamente configurado. Verifique se o nome do pacote e o certificado de assinatura correspondem à ID do cliente criada no Console do desenvolvedor. Além disso, se o aplicativo ainda não estiver publicado, verifique se a conta com a qual você está tentando fazer login está listada como uma conta de testador. Consulte os logs para obter mais informações. </string>
+    <string name = "license_failed"> A verificação da licença falhou. </string>
+    <string name = "unknown_error"> erro desconhecido. </string>
+    <string name = "gamehelper_sign_in_failed"> Falha ao fazer login. Verifique sua conexão de rede e tente novamente. </string>
+    <string name = "gamehelper_app_misconfigured"> O aplicativo está incorretamente configurado. Verifique se o nome do pacote e o certificado de assinatura correspondem à ID do cliente criada no Console do desenvolvedor. Além disso, se o aplicativo ainda não estiver publicado, verifique se a conta com a qual você está tentando fazer login está listada como uma conta de testador. Consulte os logs para obter mais informações. </string>
+    <string name = "gamehelper_license_failed"> A verificação da licença falhou. </string>
+    <string name = "gamehelper_unknown_error"> erro desconhecido. </string>
+    <string name = "button_text_next"> Próximo </string>
+    <string name = "button_text_restart"> Reiniciar </string>
+    <string name = "button_text_achievements"> Realizações </string>
+    <string name = "button_text_leaderboard"> Leaderboard </string>
+    <string name = "button_text_rate"> Taxa </string>
+    <string name = "button_text_more"> Mais </string>
+    <string name = "button_text_menu"> Menu </string>
+    <string name = "button_text_start"> Iniciar </string>
+    <string name = "button_text_options"> Opções </string>
+    <string name = "button_text_exit"> Sair </string>
+    <string name = "vibrate_on"> Vibrar: Ligado </string>
+    <string name = "vibrate_off"> Vibrar: Desligado </string>
+    <string name = "sound_on"> Som: Ligado </string>
+    <string name = "sound_off"> Som: Desligado </string>
+    <string name = "text_header_level_select"> Selecione Nível </string>
+    <string name = "header_option_difficulty"> Habilidade: </string>
+    <string name = "header_option_mode"> Modo: </string>
+</resources>

@@ -1,18 +1,17 @@
 package com.gamesbykevin.a2048.services;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.gamesbykevin.a2048.BaseActivity;
+import com.gamesbykevin.a2048.activity.BaseActivity;
 import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.util.UtilityHelper;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 
-import static com.gamesbykevin.a2048.MainActivity.DEBUG;
+import static com.gamesbykevin.a2048.activity.MainActivity.DEBUG;
 import static com.gamesbykevin.a2048.level.Stats.DIFFICULTY;
 import static com.gamesbykevin.a2048.level.Stats.MODE;
 
@@ -118,9 +117,9 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
     public void unlockAchievement(final int resId) {
         try {
             String achievementId = getString(resId);
-            UtilityHelper.logEvent("Unlocking achievement " + achievementId);
+            //UtilityHelper.logEvent("Unlocking achievement " + achievementId);
             Games.Achievements.unlock(getApiClient(), achievementId);
-            UtilityHelper.logEvent("Achievement unlocked " + achievementId);
+            //UtilityHelper.logEvent("Achievement unlocked " + achievementId);
         } catch (Exception e) {
             UtilityHelper.handleException(e);
         }
@@ -129,9 +128,9 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
     public void incrementAchievement(final int resId, final int incrementValue) {
         try {
             String achievementId = getString(resId);
-            UtilityHelper.logEvent("Incrementing achievement " + achievementId);
+            //UtilityHelper.logEvent("Incrementing achievement " + achievementId);
             Games.Achievements.increment(getApiClient(), achievementId, incrementValue);
-            UtilityHelper.logEvent("Achievement incremented " + achievementId);
+            //UtilityHelper.logEvent("Achievement incremented " + achievementId);
         } catch (Exception e) {
             UtilityHelper.handleException(e);
         }
@@ -144,9 +143,9 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
     public void trackEvent(final int resId, final int incrementValue) {
         try {
             String eventId = getString(resId);
-            UtilityHelper.logEvent("Tracking event " + eventId);
+            //UtilityHelper.logEvent("Tracking event " + eventId);
             Games.Events.increment(getApiClient(), eventId, incrementValue);
-            UtilityHelper.logEvent("Event tracked " + eventId);
+            //UtilityHelper.logEvent("Event tracked " + eventId);
         } catch (Exception e) {
             UtilityHelper.handleException(e);
         }
@@ -155,9 +154,9 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
     public void updateLeaderboard(final int resId, final long score) {
         try {
             String leaderboardId = getString(resId);
-            UtilityHelper.logEvent("Submitting score:  " + leaderboardId);
+            //UtilityHelper.logEvent("Submitting score:  " + leaderboardId);
             Games.Leaderboards.submitScore(getApiClient(), leaderboardId, score);
-            UtilityHelper.logEvent("Score submitted:  " + leaderboardId);
+            //UtilityHelper.logEvent("Score submitted:  " + leaderboardId);
         } catch (Exception e) {
             UtilityHelper.handleException(e);
         }
@@ -217,10 +216,10 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
         if (getApiClient().isConnected()) {
             displayAchievementUI();
         } else {
-            UtilityHelper.logEvent("beginUserInitiatedSignIn() before");
+            //UtilityHelper.logEvent("beginUserInitiatedSignIn() before");
             //if not connected, re-attempt google play login
             beginUserInitiatedSignIn();
-            UtilityHelper.logEvent("beginUserInitiatedSignIn() after");
+            //UtilityHelper.logEvent("beginUserInitiatedSignIn() after");
 
             //flag that we want to open the achievements
             ACCESS_ACHIEVEMENT = true;
@@ -236,10 +235,10 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
         if (getApiClient().isConnected()) {
             displayLeaderboardUI();
         } else {
-            UtilityHelper.logEvent("beginUserInitiatedSignIn() before");
+            //UtilityHelper.logEvent("beginUserInitiatedSignIn() before");
             //if not connected, re-attempt google play login
             beginUserInitiatedSignIn();
-            UtilityHelper.logEvent("beginUserInitiatedSignIn() after");
+            //UtilityHelper.logEvent("beginUserInitiatedSignIn() after");
 
             //flag that we want to open the achievements
             ACCESS_LEADERBOARD = true;
@@ -250,7 +249,7 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
     }
 
     protected void displayAchievementUI() {
-        UtilityHelper.logEvent("Displaying achievement ui");
+        //UtilityHelper.logEvent("Displaying achievement ui");
         startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()), 1);
     }
 
@@ -326,7 +325,7 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
                 throw new RuntimeException("Mode not handled here: " + MODE.toString());
         }
 
-        UtilityHelper.logEvent("Displaying leaderboard ui " + leaderboardId);
+        //UtilityHelper.logEvent("Displaying leaderboard ui " + leaderboardId);
         startActivityForResult(Games.Leaderboards.getLeaderboardIntent(getApiClient(), leaderboardId), 1);
     }
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> Det gick inte att logga in, var vänlig försök igen senare. </string>
+    <string name = "sign_in_failed"> Misslyckades med att logga in. Kontrollera din nätverksanslutning och försök igen. </string>
+    <string name = "app_misconfigured"> Programmet är felaktigt konfigurerat. Kontrollera att paketets namn och signeringscertifikat matchar det klient-ID som skapats i utvecklarkonsolen. Om programmet inte är publicerat, kontrollera att kontot du försöker logga in med är listat som ett testerkonto. Se loggar för mer information. </string>
+    <string name = "license_failed"> Licenskontroll misslyckades. </string>
+    <string name = "unknown_error"> Okänt fel. </string>
+    <string name = "gamehelper_sign_in_failed"> Misslyckades med att logga in. Kontrollera din nätverksanslutning och försök igen. </string>
+    <string name = "gamehelper_app_misconfigured"> Programmet är felaktigt konfigurerat. Kontrollera att paketets namn och signeringscertifikat matchar det klient-ID som skapats i utvecklarkonsolen. Om programmet inte är publicerat, kontrollera att kontot du försöker logga in med är listat som ett testerkonto. Se loggar för mer information. </string>
+    <string name = "gamehelper_license_failed"> Licenskontrollen misslyckades. </string>
+    <string name = "gamehelper_unknown_error"> Okänt fel. </string>
+    <string name = "button_text_next"> Nästa </string>
+    <string name = "button_text_restart"> Starta om </string>
+    <string name = "button_text_achievements"> Prestationer </string>
+    <string name = "button_text_leaderboard"> Leaderboard </string>
+    <string name = "button_text_rate"> Betygsätt </string>
+    <string name = "button_text_more"> Mer </string>
+    <string name = "button_text_menu"> Meny </string>
+    <string name = "button_text_start"> Start </string>
+    <string name = "button_text_options"> Alternativ </string>
+    <string name = "button_text_exit"> Avsluta </string>
+    <string name = "vibrate_on"> Vibrate: On </string>
+    <string name = "vibrate_off"> Vibrate: Av </string>
+    <string name = "sound_on"> Ljud: På </string>
+    <string name = "sound_off"> Ljud: Av </string>
+    <string name = "text_header_level_select"> Välj nivå </string>
+    <string name = "header_option_difficulty"> Skicklighet: </string>
+    <string name = "header_option_mode"> Läge: </string>
+</resources>

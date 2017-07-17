@@ -57,14 +57,22 @@ public class EntityItem extends com.gamesbykevin.androidframework.base.Entity {
         return this.textureId;
     }
 
+    public void render(GL10 gl, double x, double y, double w, double h, int textureId) {
+        setX(x);
+        setY(y);
+        setWidth(w);
+        setHeight(h);
+        setTextureId(textureId);
+        render(gl);
+    }
+
     public void render(GL10 gl) {
 
-        float x, y, w, h;
-
-        x = (float)getX();
-        y = (float)getY();
-        w = (float)getWidth();
-        h = (float)getHeight();
+        //get the coordinates
+        float x = (float)getX();
+        float y = (float)getY();
+        float w = (float)getWidth();
+        float h = (float)getHeight();
 
         //use for quick transformations so it will only apply to this object
         gl.glPushMatrix();

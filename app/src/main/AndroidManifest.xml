@@ -20,7 +20,7 @@
         <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="@string/app_id" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
@@ -31,7 +31,7 @@
         </activity>
 
         <activity
-            android:name=".SplashActivity"
+            android:name=".activity.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
@@ -42,13 +42,13 @@
         </activity>
 
         <activity
-            android:name=".OptionsActivity"
+            android:name=".activity.OptionsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".GameActivity"
+            android:name=".activity.GameActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />

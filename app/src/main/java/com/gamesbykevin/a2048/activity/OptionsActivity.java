@@ -1,20 +1,15 @@
-package com.gamesbykevin.a2048;
+package com.gamesbykevin.a2048.activity;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ToggleButton;
 
-import com.gamesbykevin.a2048.game.GameManager;
+import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
 import com.gamesbykevin.a2048.ui.MultiStateToggleButton;
 import com.gamesbykevin.a2048.util.UtilityHelper;
-import com.google.gson.Gson;
 
 public class OptionsActivity extends BaseActivity {
 
@@ -31,10 +26,11 @@ public class OptionsActivity extends BaseActivity {
         ToggleButton buttonVibrate = (ToggleButton)findViewById(R.id.ToggleButtonVibrate);
         this.buttonMode = (MultiStateToggleButton)findViewById(R.id.ToggleButtonMode);
         this.buttonMode.setOptions(Mode.values());
-        this.buttonMode.setHeader(getString(R.string.header_game_mode));
+        this.buttonMode.setHeader(getString(R.string.header_option_mode));
+
         this.buttonDifficulty = (MultiStateToggleButton)findViewById(R.id.ToggleButtonDifficulty);
         this.buttonDifficulty.setOptions(Difficulty.values());
-        this.buttonDifficulty.setHeader(getString(R.string.header_game_difficulty));
+        this.buttonDifficulty.setHeader(getString(R.string.header_option_difficulty));
 
         //update our buttons accordingly
         buttonSound.setChecked(getBooleanValue(R.string.sound_file_key));
@@ -79,10 +75,6 @@ public class OptionsActivity extends BaseActivity {
         super.onBackPressed();
     }
 
-    /**
-     * Handle the button click
-     * @param view Current view
-     */
     public void onClickVibrate(View view) {
 
         //get the button
@@ -97,10 +89,6 @@ public class OptionsActivity extends BaseActivity {
         playSoundEffect();
     }
 
-    /**
-     * Handle the button click
-     * @param view Current view
-     */
     public void onClickSound(View view) {
 
         //get the button
@@ -110,10 +98,6 @@ public class OptionsActivity extends BaseActivity {
         playSoundEffect();
     }
 
-    /**
-     * Handle the button click
-     * @param view Current view
-     */
     public void onClickMode(View view) {
 
         //move to the next option
@@ -123,10 +107,6 @@ public class OptionsActivity extends BaseActivity {
         playSoundEffect();
     }
 
-    /**
-     *
-     * @param view
-     */
     public void onClickDifficulty(View view) {
 
         //move to the next option

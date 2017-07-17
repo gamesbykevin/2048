@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> Er is een probleem met aanmelden, probeer het later nogmaals. </string>
+    <string name = "sign_in_failed"> Mislukt om in te loggen. Controleer uw netwerkverbinding en probeer het opnieuw. </string>
+    <string name = "app_misconfigured"> De toepassing is onjuist geconfigureerd. Controleer of de pakketnaam en het ondertekeningscertificaat overeenstemmen met de client-id die is gemaakt in Developer Console. Als de applicatie nog niet is gepubliceerd, controleer dan of het account waarmee u wilt inloggen, een testeraccount vermelden. Zie logboeken voor meer informatie. </string>
+    <string name = "license_failed"> Licentiecontrole is mislukt. </string>
+    <string name = "unknown_error"> Onbekende fout. </string>
+    <string name = "gamehelper_sign_in_failed"> Mislukt om in te loggen. Controleer uw netwerkverbinding en probeer het opnieuw. </string>
+    <string name = "gamehelper_app_misconfigured"> De applicatie is onjuist geconfigureerd. Controleer of de pakketnaam en het ondertekeningscertificaat overeenstemmen met de client-id die is gemaakt in Developer Console. Als de applicatie nog niet is gepubliceerd, controleer dan of het account waarmee u wilt inloggen, een testeraccount vermelden. Zie logboeken voor meer informatie. </string>
+    <string name = "gamehelper_license_failed"> Licentiecontrole mislukt. </string>
+    <string name = "gamehelper_unknown_error"> Onbekende fout. </string>
+    <string name = "button_text_next"> Volgende </string>
+    <string name = "button_text_restart"> Start opnieuw </string>
+    <string name = "button_text_achievements"> Prestaties </string>
+    <string name = "button_text_leaderboard"> Leaderboard </string>
+    <string name = "button_text_rate"> Beoordeel </string>
+    <string name = "button_text_more"> Meer </string>
+    <string name = "button_text_menu"> Menu </string>
+    <string name = "button_text_start"> Start </string>
+    <string name = "button_text_options"> Opties </string>
+    <string name = "button_text_exit"> Exit </string>
+    <string name = "vibrate_on"> Vibrate: On </string>
+    <string name = "vibrate_off"> Vibrate: Uit </string>
+    <string name = "sound_on"> Geluid: Aan </string>
+    <string name = "sound_off"> Geluid: Uit </string>
+    <string name = "text_header_level_select"> Selecteer Level </string>
+    <string name = "header_option_difficulty"> Vaardigheid: </string>
+    <string name = "header_option_mode"> Mode: </string>
+</resources>

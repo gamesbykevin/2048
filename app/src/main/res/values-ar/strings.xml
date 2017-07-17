@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sign_in_other_error">حدثت مشكلة أثناء تسجيل الدخول، يرجى إعادة المحاولة لاحقا.</string>
+    <string name="sign_in_failed">أخفق تسجيل الدخول. يرجى التحقق من اتصال الشبكة وإعادة المحاولة.</string>
+    <string name="app_misconfigured">تم تكوين التطبيق بشكل غير صحيح. تحقق من تطابق اسم الحزمة وشهادة التوقيع مع معرف العميل الذي تم إنشاؤه في وحدة تحكم مطوري البرامج. أيضا، إذا لم يتم نشر التطبيق بعد، تحقق من أن الحساب الذي تحاول تسجيل الدخول به مدرج كحساب اختباري. راجع السجلات للحصول على مزيد من المعلومات.</string>
+    <string name="license_failed">أخفق التحقق من الترخيص.</string>
+    <string name="unknown_error">خطأ غير معروف.</string>
+    <string name="gamehelper_sign_in_failed">أخفق تسجيل الدخول. يرجى التحقق من اتصال الشبكة وإعادة المحاولة.</string>
+    <string name="gamehelper_app_misconfigured">تم تكوين التطبيق بشكل غير صحيح. تحقق من تطابق اسم الحزمة وشهادة التوقيع مع معرف العميل الذي تم إنشاؤه في وحدة تحكم مطوري البرامج. أيضا، إذا لم يتم نشر التطبيق بعد، تحقق من أن الحساب الذي تحاول تسجيل الدخول به مدرج كحساب اختباري. راجع السجلات للحصول على مزيد من المعلومات.</string>
+    <string name="gamehelper_license_failed">أخفق التحقق من الترخيص.</string>
+    <string name="gamehelper_unknown_error">خطأ غير معروف.</string>
+    <string name="button_text_next">التالى</string>
+    <string name="button_text_restart">إعادة بدء</string>
+    <string name="button_text_achievements">الإنجازات</string>
+    <string name="button_text_leaderboard">المتصدرين</string>
+    <string name="button_text_rate">معدل</string>
+    <string name="button_text_more">أكثر من</string>
+    <string name="button_text_menu">قائمة طعام</string>
+    <string name="button_text_start">بداية</string>
+    <string name="button_text_options">خيارات</string>
+    <string name="button_text_exit">ىخرج</string>
+    <string name="vibrate_on">الاهتزاز: تشغيل</string>
+    <string name="vibrate_off">الاهتزاز: إيقاف</string>
+    <string name="sound_on">الصوت مفعل</string>
+    <string name="sound_off">الصوت مقفل</string>
+    <string name="text_header_level_select">اختار مستوى</string>
+    <string name="header_option_difficulty">مهارة:</string>
+    <string name="header_option_mode">الوضع:</string>
+</resources>

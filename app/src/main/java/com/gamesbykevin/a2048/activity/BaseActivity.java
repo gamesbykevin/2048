@@ -1,4 +1,4 @@
-package com.gamesbykevin.a2048;
+package com.gamesbykevin.a2048.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
 import com.gamesbykevin.a2048.util.UtilityHelper;
@@ -17,8 +18,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.Type;
-
-import static com.gamesbykevin.a2048.MainActivity.DEBUG;
 
 /**
  * Created by Kevin on 5/22/2017.

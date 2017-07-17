@@ -5,13 +5,12 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.gamesbykevin.a2048.MainActivity;
 import com.gamesbykevin.a2048.util.UtilityHelper;
 
 import java.util.Calendar;
 
-import static com.gamesbykevin.a2048.GameActivity.MANAGER;
-import static com.gamesbykevin.a2048.MainActivity.DEBUG;
+import static com.gamesbykevin.a2048.activity.GameActivity.MANAGER;
+import static com.gamesbykevin.a2048.activity.MainActivity.DEBUG;
 import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.LOADED;
 
 /**
@@ -64,7 +63,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
     private int frames = 0;
 
     //keep track of time for debug purposes
-    private Calendar calendar = Calendar.getInstance();
+    private long timestamp = System.currentTimeMillis();
 
     /**
      * Default dimensions this game was designed for
@@ -209,9 +208,9 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
 
         //log event id this loop is running slow
         if (remaining <= 0) {
-            UtilityHelper.logEvent("Slow: " + remaining);
-            UtilityHelper.logEvent("Update duration: " + (this.postUpdate - this.previousUpdate));
-            UtilityHelper.logEvent("Draw   duration: " + (this.postDraw - this.previousDraw));
+            //UtilityHelper.logEvent("Slow: " + remaining);
+            //UtilityHelper.logEvent("Update duration: " + (this.postUpdate - this.previousUpdate));
+            //UtilityHelper.logEvent("Draw   duration: " + (this.postDraw - this.previousDraw));
         }
 
         //make sure we sleep at least 1 millisecond
@@ -238,13 +237,13 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         frames++;
 
         //if 1 second has passed, print fps counter
-        if (System.currentTimeMillis() - calendar.getTimeInMillis() >= MILLISECONDS_PER_SECOND) {
+        if (DEBUG && System.currentTimeMillis() - timestamp >= MILLISECONDS_PER_SECOND) {
 
             //print progress
             UtilityHelper.logEvent("FPS: " + frames);
 
             //reset timer for next update
-            calendar = Calendar.getInstance();
+            timestamp = System.currentTimeMillis();
 
             //reset frame count
             frames = 0;
@@ -269,8 +268,8 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
             final float y = event.getRawY() * getOpenGlRenderer().scaleMotionY;
 
             //display log events
-            UtilityHelper.logEvent("raw:   (" + event.getRawX() + ", " + event.getRawY() + ")");
-            UtilityHelper.logEvent("scale: (" + x + ", " + y + ")");
+            //UtilityHelper.logEvent("raw:   (" + event.getRawX() + ", " + event.getRawY() + ")");
+            //UtilityHelper.logEvent("scale: (" + x + ", " + y + ")");
 
             //update game accordingly
             MANAGER.onTouchEvent(event.getAction(), x, y);
@@ -280,8 +279,8 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
             UtilityHelper.handleException(e);
         }
 
-        UtilityHelper.logEvent("Action: " + event.getAction());
-        UtilityHelper.logEvent("Action Masked: " + event.getActionMasked());
+        //UtilityHelper.logEvent("Action: " + event.getAction());
+        //UtilityHelper.logEvent("Action Masked: " + event.getActionMasked());
 
         //return true to keep receiving touch events
         return true;
