@@ -7,7 +7,6 @@ import com.gamesbykevin.androidframework.base.Entity;
 import javax.microedition.khronos.opengles.GL10;
 
 import static com.gamesbykevin.a2048.board.Board.BORDER_THICKNESS;
-import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.DIRTY_FLAG;
 
 /**
  * Created by Kevin on 5/29/2017.
@@ -102,9 +101,6 @@ public class Block extends EntityItem {
                 } else {
                     setDX(VELOCITY);
                 }
-
-                //flag render
-                DIRTY_FLAG = true;
             }
 
             //if the row does not match we need to move vertical
@@ -114,9 +110,6 @@ public class Block extends EntityItem {
                 } else {
                     setDY(VELOCITY);
                 }
-
-                //flag render
-                DIRTY_FLAG = true;
             }
 
             //update our location
@@ -192,9 +185,6 @@ public class Block extends EntityItem {
                         setCollapse(true);
                     }
                 }
-
-                //flag render
-                DIRTY_FLAG = true;
             }
         }
     }

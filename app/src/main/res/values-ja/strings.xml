@@ -5,6 +5,7 @@
     <string name = "app_misconfigured">アプリケーションが正しく構成されていません。パッケージ名と署名証明書がDeveloper Consoleで作成されたクライアントIDと一致することを確認します。また、アプリケーションがまだ公開されていない場合は、ログインしようとしているアカウントがテスターアカウントとしてリストされていることを確認してください。詳細はログを参照してください。</string>
     <string name = "license_failed">ライセンスの確認に失敗しました。</string>
     <string name = "unknown_error">不明なエラーです。</string>
+    <string name = "UNKNOWN_ERROR">不明なエラーです。</string>
     <string name = "gamehelper_sign_in_failed">サインインできませんでした。ネットワーク接続を確認して、もう一度試してください。</string>
     <string name = "gamehelper_app_misconfigured">アプリケーションが正しく設定されていません。パッケージ名と署名証明書がDeveloper Consoleで作成されたクライアントIDと一致することを確認します。また、アプリケーションがまだ公開されていない場合は、ログインしようとしているアカウントがテスターアカウントとしてリストされていることを確認してください。詳細はログを参照してください。</string>
     <string name = "gamehelper_license_failed">ライセンスの確認に失敗しました。</string>

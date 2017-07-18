@@ -75,6 +75,12 @@ public class MainActivity extends BaseGameActivity {
 
     public void onClickExit(View view) {
 
+        //no need to bypass login in the future
+        BYPASS_LOGIN = false;
+
+        //finish activity
+        super.finish();
+
         //close all activities
         ActivityCompat.finishAffinity(this);
 
@@ -84,7 +90,7 @@ public class MainActivity extends BaseGameActivity {
 
     @Override
     public void onSignInSucceeded() {
-        UtilityHelper.displayMessage(this, "Google Play login worked!");
+        //UtilityHelper.displayMessage(this, "Google Play login worked!");
 
         if (ACCESS_ACHIEVEMENT) {
 
@@ -101,7 +107,7 @@ public class MainActivity extends BaseGameActivity {
 
     @Override
     public void onSignInFailed() {
-        UtilityHelper.displayMessage(this, "Google play login failed!");
+        //UtilityHelper.displayMessage(this, "Google play login failed!");
 
         //bypass auto login
         BYPASS_LOGIN = true;

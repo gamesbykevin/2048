@@ -5,6 +5,7 @@
     <string name = "app_misconfigured"> Programmet är felaktigt konfigurerat. Kontrollera att paketets namn och signeringscertifikat matchar det klient-ID som skapats i utvecklarkonsolen. Om programmet inte är publicerat, kontrollera att kontot du försöker logga in med är listat som ett testerkonto. Se loggar för mer information. </string>
     <string name = "license_failed"> Licenskontroll misslyckades. </string>
     <string name = "unknown_error"> Okänt fel. </string>
+    <string name = "UNKNOWN_ERROR"> Okänt fel. </string>
     <string name = "gamehelper_sign_in_failed"> Misslyckades med att logga in. Kontrollera din nätverksanslutning och försök igen. </string>
     <string name = "gamehelper_app_misconfigured"> Programmet är felaktigt konfigurerat. Kontrollera att paketets namn och signeringscertifikat matchar det klient-ID som skapats i utvecklarkonsolen. Om programmet inte är publicerat, kontrollera att kontot du försöker logga in med är listat som ett testerkonto. Se loggar för mer information. </string>
     <string name = "gamehelper_license_failed"> Licenskontrollen misslyckades. </string>

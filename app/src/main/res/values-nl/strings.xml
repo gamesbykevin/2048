@@ -5,6 +5,7 @@
     <string name = "app_misconfigured"> De toepassing is onjuist geconfigureerd. Controleer of de pakketnaam en het ondertekeningscertificaat overeenstemmen met de client-id die is gemaakt in Developer Console. Als de applicatie nog niet is gepubliceerd, controleer dan of het account waarmee u wilt inloggen, een testeraccount vermelden. Zie logboeken voor meer informatie. </string>
     <string name = "license_failed"> Licentiecontrole is mislukt. </string>
     <string name = "unknown_error"> Onbekende fout. </string>
+    <string name = "UNKNOWN_ERROR"> Onbekende fout. </string>
     <string name = "gamehelper_sign_in_failed"> Mislukt om in te loggen. Controleer uw netwerkverbinding en probeer het opnieuw. </string>
     <string name = "gamehelper_app_misconfigured"> De applicatie is onjuist geconfigureerd. Controleer of de pakketnaam en het ondertekeningscertificaat overeenstemmen met de client-id die is gemaakt in Developer Console. Als de applicatie nog niet is gepubliceerd, controleer dan of het account waarmee u wilt inloggen, een testeraccount vermelden. Zie logboeken voor meer informatie. </string>
     <string name = "gamehelper_license_failed"> Licentiecontrole mislukt. </string>

@@ -85,8 +85,15 @@ public class CustomAdapter extends ArrayAdapter {
 
         //setup text description and image
         Level item = (Level)getItem(position);
-        holder.imgItem.setImageDrawable(item.isCompleted() ? imageGreen : imageRed);
-        holder.txtItem.setText(item.getTitle());
+
+        if (item.isCompleted()) {
+            holder.imgItem.setImageDrawable(imageGreen);
+            holder.txtItem.setText("");
+
+        } else {
+            holder.imgItem.setImageDrawable(imageRed);
+            holder.txtItem.setText(item.getTitle());
+        }
 
         //return the created item
         return itemView;

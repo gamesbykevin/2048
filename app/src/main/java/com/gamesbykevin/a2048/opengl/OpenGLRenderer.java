@@ -16,6 +16,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import static com.gamesbykevin.a2048.activity.GameActivity.MANAGER;
 import static com.gamesbykevin.a2048.board.Block.ANIMATION_DIMENSIONS;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_BACKGROUND_INDEX;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_BEST_INDEX;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_GAMEOVER_INDEX;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_LEVEL_INDEX;
@@ -64,26 +65,6 @@ public class OpenGLRenderer implements Renderer {
 
     public void onResume() {
         //re-load the textures if needed?
-    }
-
-    /**
-     * Called for each redraw of the view
-     * @param gl Object used for rendering textures
-     */
-    @Override
-    public void onDrawFrame(GL10 gl) {
-
-        //clears the screen and depth buffer.
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-
-        //reset the projection matrix
-        gl.glLoadIdentity();
-
-        //scale to our game dimensions to match the users screen
-        gl.glScalef(scaleRenderX, scaleRenderY, 0.0f);
-
-        //render game objects
-        MANAGER.draw(gl, TEXTURES);
     }
 
     /**
@@ -195,8 +176,8 @@ public class OpenGLRenderer implements Renderer {
 
     private void loadTextures(GL10 gl) {
 
-        //load 15 textures into our array
-        TEXTURES = new int[Block.VALUES.length + TOTAL_CHARACTERS + TOTAL_WORD_TEXTURES];
+        //load textures into our array
+        TEXTURES = new int[Block.VALUES.length + TOTAL_CHARACTERS + TOTAL_WORD_TEXTURES + 1];
 
         //get the sprite sheet containing all our animations
         Bitmap spriteSheet = BitmapFactory.decodeResource(activity.getResources(), R.drawable.blocks);
@@ -240,5 +221,27 @@ public class OpenGLRenderer implements Renderer {
         loadTexture(tmp, gl, TEXTURES, TEXTURE_WORD_GAMEOVER_INDEX);
         tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.time);
         loadTexture(tmp, gl, TEXTURES, TEXTURE_WORD_TIME_INDEX);
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.background);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_BACKGROUND_INDEX);
+    }
+
+    /**
+     * Called for each redraw of the view
+     * @param gl Object used for rendering textures
+     */
+    @Override
+    public void onDrawFrame(GL10 gl) {
+
+        //clears the screen and depth buffer.
+        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+
+        //reset the projection matrix
+        gl.glLoadIdentity();
+
+        //scale to our game dimensions to match the users screen
+        gl.glScalef(scaleRenderX, scaleRenderY, 0.0f);
+
+        //render game objects
+        MANAGER.draw(gl, TEXTURES);
     }
 }

@@ -5,6 +5,7 @@
     <string name = "app_misconfigured"> O aplicativo está incorretamente configurado. Verifique se o nome do pacote e o certificado de assinatura correspondem à ID do cliente criada no Console do desenvolvedor. Além disso, se o aplicativo ainda não estiver publicado, verifique se a conta com a qual você está tentando fazer login está listada como uma conta de testador. Consulte os logs para obter mais informações. </string>
     <string name = "license_failed"> A verificação da licença falhou. </string>
     <string name = "unknown_error"> erro desconhecido. </string>
+    <string name = "UNKNOWN_ERROR"> erro desconhecido. </string>
     <string name = "gamehelper_sign_in_failed"> Falha ao fazer login. Verifique sua conexão de rede e tente novamente. </string>
     <string name = "gamehelper_app_misconfigured"> O aplicativo está incorretamente configurado. Verifique se o nome do pacote e o certificado de assinatura correspondem à ID do cliente criada no Console do desenvolvedor. Além disso, se o aplicativo ainda não estiver publicado, verifique se a conta com a qual você está tentando fazer login está listada como uma conta de testador. Consulte os logs para obter mais informações. </string>
     <string name = "gamehelper_license_failed"> A verificação da licença falhou. </string>

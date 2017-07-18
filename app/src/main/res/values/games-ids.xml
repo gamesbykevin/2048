@@ -1,68 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_id">850125635001</string>
-    <string name="package_name">com.gamesbykevin.a2048</string>
+    <string translatable="false" name="app_id">850125635001</string>
+    <string translatable="false" name="package_name">com.gamesbykevin.a2048</string>
 
     <!-- ACHIEVEMENTS -->
-    <string name="achievement_complete_your_first_game_mode_original">CgkIufu--94YEAIQAw</string>
-    <string name="achievement_complete_your_first_game_mode_puzzle">CgkIufu--94YEAIQBA</string>
-    <string name="achievement_complete_your_first_game_mode_challenge">CgkIufu--94YEAIQBQ</string>
-    <string name="achievement_complete_your_first_game_mode_infinite">CgkIufu--94YEAIQBg</string>
-    <string name="achievement_complete_100_games_mode_original">CgkIufu--94YEAIQBw</string>
-    <string name="achievement_complete_100_games_mode_puzzle">CgkIufu--94YEAIQCA</string>
-    <string name="achievement_complete_100_games_mode_challenge">CgkIufu--94YEAIQCQ</string>
-    <string name="achievement_complete_100_games_mode_infinite">CgkIufu--94YEAIQCg</string>
-    <string name="achievement_beat_your_personal_best_mode_original">CgkIufu--94YEAIQCw</string>
-    <string name="achievement_beat_your_personal_best_mode_puzzle">CgkIufu--94YEAIQDA</string>
-    <string name="achievement_beat_your_personal_best_mode_challenge">CgkIufu--94YEAIQDQ</string>
-    <string name="achievement_beat_your_personal_best_mode_infinite">CgkIufu--94YEAIQDg</string>
-    <string name="achievement_complete_a_game_in_less_than_5_seconds_mode_puzzle">CgkIufu--94YEAIQDw</string>
-    <string name="achievement_complete_a_game_in_less_than_15_seconds_mode_puzzle">CgkIufu--94YEAIQEA</string>
-    <string name="achievement_complete_a_game_in_less_than_30_seconds_mode_puzzle">CgkIufu--94YEAIQEQ</string>
-    <string name="achievement_4096_block">CgkIufu--94YEAIQEg</string>
-    <string name="achievement_8192_block">CgkIufu--94YEAIQEw</string>
-    <string name="achievement_256_block_mode_challenge">CgkIufu--94YEAIQFA</string>
-    <string name="achievement_512_block_mode_challenge">CgkIufu--94YEAIQFQ</string>
-    <string name="achievement_create_a_4096_block_100_times_mode_challenge_infinite">CgkIufu--94YEAIQFw</string>
-    <string name="achievement_create_a_8192_block_100_times_mode_challenge_infinite">CgkIufu--94YEAIQGA</string>
-    <string name="achievement_win_original_easy">CgkIufu--94YEAIQLQ</string>
-    <string name="achievement_win_original_medium">CgkIufu--94YEAIQLg</string>
-    <string name="achievement_win_original_hard">CgkIufu--94YEAIQLw</string>
-    <string name="achievement_16384_block">CgkIufu--94YEAIQNA</string>
-    <string name="achievement_32768_block">CgkIufu--94YEAIQNQ</string>
-    <string name="achievement_65536_block">CgkIufu--94YEAIQNg</string>
-    <string name="achievement_131072_block">CgkIufu--94YEAIQNw</string>
-    <string name="achievement_262144_block">CgkIufu--94YEAIQOA</string>
-    <string name="achievement_524288_block">CgkIufu--94YEAIQOQ</string>
-    <string name="achievement_1048576_block">CgkIufu--94YEAIQOg</string>
+    <string translatable="false" name="achievement_complete_your_first_game_mode_original">CgkIufu--94YEAIQAw</string>
+    <string translatable="false" name="achievement_complete_your_first_game_mode_puzzle">CgkIufu--94YEAIQBA</string>
+    <string translatable="false" name="achievement_complete_your_first_game_mode_challenge">CgkIufu--94YEAIQBQ</string>
+    <string translatable="false" name="achievement_complete_your_first_game_mode_infinite">CgkIufu--94YEAIQBg</string>
+    <string translatable="false" name="achievement_complete_100_games_mode_original">CgkIufu--94YEAIQBw</string>
+    <string translatable="false" name="achievement_complete_100_games_mode_puzzle">CgkIufu--94YEAIQCA</string>
+    <string translatable="false" name="achievement_complete_100_games_mode_challenge">CgkIufu--94YEAIQCQ</string>
+    <string translatable="false" name="achievement_complete_100_games_mode_infinite">CgkIufu--94YEAIQCg</string>
+    <string translatable="false" name="achievement_beat_your_personal_best_mode_original">CgkIufu--94YEAIQCw</string>
+    <string translatable="false" name="achievement_beat_your_personal_best_mode_puzzle">CgkIufu--94YEAIQDA</string>
+    <string translatable="false" name="achievement_beat_your_personal_best_mode_challenge">CgkIufu--94YEAIQDQ</string>
+    <string translatable="false" name="achievement_beat_your_personal_best_mode_infinite">CgkIufu--94YEAIQDg</string>
+    <string translatable="false" name="achievement_complete_a_game_in_less_than_5_seconds_mode_puzzle">CgkIufu--94YEAIQDw</string>
+    <string translatable="false" name="achievement_complete_a_game_in_less_than_15_seconds_mode_puzzle">CgkIufu--94YEAIQEA</string>
+    <string translatable="false" name="achievement_complete_a_game_in_less_than_30_seconds_mode_puzzle">CgkIufu--94YEAIQEQ</string>
+    <string translatable="false" name="achievement_4096_block">CgkIufu--94YEAIQEg</string>
+    <string translatable="false" name="achievement_8192_block">CgkIufu--94YEAIQEw</string>
+    <string translatable="false" name="achievement_256_block_mode_challenge">CgkIufu--94YEAIQFA</string>
+    <string translatable="false" name="achievement_512_block_mode_challenge">CgkIufu--94YEAIQFQ</string>
+    <string translatable="false" name="achievement_create_a_4096_block_100_times_mode_challenge_infinite">CgkIufu--94YEAIQFw</string>
+    <string translatable="false" name="achievement_create_a_8192_block_100_times_mode_challenge_infinite">CgkIufu--94YEAIQGA</string>
+    <string translatable="false" name="achievement_win_original_easy">CgkIufu--94YEAIQLQ</string>
+    <string translatable="false" name="achievement_win_original_medium">CgkIufu--94YEAIQLg</string>
+    <string translatable="false" name="achievement_win_original_hard">CgkIufu--94YEAIQLw</string>
+    <string translatable="false" name="achievement_16384_block">CgkIufu--94YEAIQNA</string>
+    <string translatable="false" name="achievement_32768_block">CgkIufu--94YEAIQNQ</string>
+    <string translatable="false" name="achievement_65536_block">CgkIufu--94YEAIQNg</string>
+    <string translatable="false" name="achievement_131072_block">CgkIufu--94YEAIQNw</string>
+    <string translatable="false" name="achievement_262144_block">CgkIufu--94YEAIQOA</string>
+    <string translatable="false" name="achievement_524288_block">CgkIufu--94YEAIQOQ</string>
+    <string translatable="false" name="achievement_1048576_block">CgkIufu--94YEAIQOg</string>
 
     <!-- LEADER BOARDS -->
-    <string name="leaderboard_challenge_easy">CgkIufu--94YEAIQAA</string>
-    <string name="leaderboard_challenge_medium">CgkIufu--94YEAIQHQ</string>
-    <string name="leaderboard_challenge_hard">CgkIufu--94YEAIQHg</string>
-    <string name="leaderboard_infinite_easy">CgkIufu--94YEAIQGQ</string>
-    <string name="leaderboard_infinite_medium">CgkIufu--94YEAIQHw</string>
-    <string name="leaderboard_infinite_hard">CgkIufu--94YEAIQIA</string>
-    <string name="leaderboard_original_easy">CgkIufu--94YEAIQGg</string>
-    <string name="leaderboard_original_medium">CgkIufu--94YEAIQGw</string>
-    <string name="leaderboard_original_hard">CgkIufu--94YEAIQHA</string>
+    <string translatable="false" name="leaderboard_challenge_easy">CgkIufu--94YEAIQAA</string>
+    <string translatable="false" name="leaderboard_challenge_medium">CgkIufu--94YEAIQHQ</string>
+    <string translatable="false" name="leaderboard_challenge_hard">CgkIufu--94YEAIQHg</string>
+    <string translatable="false" name="leaderboard_infinite_easy">CgkIufu--94YEAIQGQ</string>
+    <string translatable="false" name="leaderboard_infinite_medium">CgkIufu--94YEAIQHw</string>
+    <string translatable="false" name="leaderboard_infinite_hard">CgkIufu--94YEAIQIA</string>
+    <string translatable="false" name="leaderboard_original_easy">CgkIufu--94YEAIQGg</string>
+    <string translatable="false" name="leaderboard_original_medium">CgkIufu--94YEAIQGw</string>
+    <string translatable="false" name="leaderboard_original_hard">CgkIufu--94YEAIQHA</string>
 
     <!-- EVENTS -->
-    <string name="event_played_games">CgkIufu--94YEAIQIQ</string>
-    <string name="event_original_games_count">CgkIufu--94YEAIQIg</string>
-    <string name="event_puzzle_games_count">CgkIufu--94YEAIQIw</string>
-    <string name="event_challenge_games_count">CgkIufu--94YEAIQJA</string>
-    <string name="event_infinite_games_count">CgkIufu--94YEAIQJQ</string>
-    <string name="event_2048_block_count">CgkIufu--94YEAIQJg</string>
-    <string name="event_4096_block_count">CgkIufu--94YEAIQJw</string>
-    <string name="event_8192_block_count">CgkIufu--94YEAIQKA</string>
-    <string name="event_16384_block_count">CgkIufu--94YEAIQKQ</string>
-    <string name="event_32768_block_count">CgkIufu--94YEAIQKg</string>
-    <string name="event_65536_block_count">CgkIufu--94YEAIQLA</string>
-    <string name="event_131072_block_count">CgkIufu--94YEAIQMA</string>
-    <string name="event_262144_block_count">CgkIufu--94YEAIQMQ</string>
-    <string name="event_524288_block_count">CgkIufu--94YEAIQMg</string>
-    <string name="event_1048576_block_count">CgkIufu--94YEAIQMw</string>
+    <string translatable="false" name="event_played_games">CgkIufu--94YEAIQIQ</string>
+    <string translatable="false" name="event_original_games_count">CgkIufu--94YEAIQIg</string>
+    <string translatable="false" name="event_puzzle_games_count">CgkIufu--94YEAIQIw</string>
+    <string translatable="false" name="event_challenge_games_count">CgkIufu--94YEAIQJA</string>
+    <string translatable="false" name="event_infinite_games_count">CgkIufu--94YEAIQJQ</string>
+    <string translatable="false" name="event_2048_block_count">CgkIufu--94YEAIQJg</string>
+    <string translatable="false" name="event_4096_block_count">CgkIufu--94YEAIQJw</string>
+    <string translatable="false" name="event_8192_block_count">CgkIufu--94YEAIQKA</string>
+    <string translatable="false" name="event_16384_block_count">CgkIufu--94YEAIQKQ</string>
+    <string translatable="false" name="event_32768_block_count">CgkIufu--94YEAIQKg</string>
+    <string translatable="false" name="event_65536_block_count">CgkIufu--94YEAIQLA</string>
+    <string translatable="false" name="event_131072_block_count">CgkIufu--94YEAIQMA</string>
+    <string translatable="false" name="event_262144_block_count">CgkIufu--94YEAIQMQ</string>
+    <string translatable="false" name="event_524288_block_count">CgkIufu--94YEAIQMg</string>
+    <string translatable="false" name="event_1048576_block_count">CgkIufu--94YEAIQMw</string>
 </resources>
 

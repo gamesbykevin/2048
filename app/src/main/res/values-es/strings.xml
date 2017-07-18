@@ -5,6 +5,7 @@
     <string name = "sign_in_failed"> No se ha podido iniciar sesión. Por favor, compruebe la conexión de red y vuelve a intentarlo. </string>
     <string name = "app_misconfigured"> La aplicación no está configurado correctamente. Compruebe que el nombre del paquete y el certificado de firma coincide con el ID de cliente creado en la consola. Además, si la aplicación no se ha publicado, comprobar que la cuenta que está intentando acceder esté en la lista como una cuenta de probador. Ver registros para obtener más información. </string>
     <string name = "license_failed"> comprobación de la licencia. </string>
+    <string name = "unknown_error"> Error desconocido. </string>
     <string name = "UNKNOWN_ERROR"> Error desconocido. </string>
     <string name = "gamehelper_sign_in_failed"> No se ha podido iniciar sesión. Por favor, compruebe la conexión de red y vuelve a intentarlo. </string>
     <string name = "gamehelper_app_misconfigured"> La aplicación no está configurado correctamente. Compruebe que el nombre del paquete y el certificado de firma coincide con el ID de cliente creado en la consola. Además, si la aplicación no se ha publicado, comprobar que la cuenta que está intentando acceder esté en la lista como una cuenta de probador. Ver registros para obtener más información. </string>

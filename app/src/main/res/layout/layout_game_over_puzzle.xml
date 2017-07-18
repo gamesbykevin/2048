@@ -17,13 +17,15 @@
             <Button style="@style/ButtonMenu" android:text="@string/text_header_level_select" android:onClick="onClickLevelSelect" />
         </TableRow>
         <TableRow style="@style/RowMenu">
-            <Button style="@style/ButtonMenu" android:text="@string/button_text_rate" android:onClick="onClickRate" />
-        </TableRow>
-        <TableRow style="@style/RowMenu">
             <Button android:id="@+id/ButtonAchievement" style="@style/ButtonMenu" android:text="@string/button_text_achievements" android:onClick="onClickAchievements" />
         </TableRow>
+        <!--
         <TableRow style="@style/RowMenu">
             <Button style="@style/ButtonMenu" android:text="@string/button_text_more" android:onClick="onClickMore" />
+        </TableRow>
+        -->
+        <TableRow style="@style/RowMenu">
+            <Button style="@style/ButtonMenu" android:text="@string/button_text_rate" android:onClick="onClickRate" />
         </TableRow>
         <TableRow style="@style/RowMenu">
             <Button style="@style/ButtonMenu" android:text="@string/button_text_menu" android:onClick="onClickMenu" />

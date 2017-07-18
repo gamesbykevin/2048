@@ -194,7 +194,6 @@ public class GooglePlayServicesHelper {
         //if no blocks, we can't unlock any achievements
         boolean valid = false;
 
-
         for (int i = 8; i < VALUES.length; i++) {
             if (NEW_BLOCKS.get(VALUES[i]) > 0)
                 valid = true;

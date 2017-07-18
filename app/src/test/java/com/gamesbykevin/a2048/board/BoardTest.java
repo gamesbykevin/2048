@@ -1,6 +1,8 @@
 package com.gamesbykevin.a2048.board;
 
+import com.gamesbykevin.a2048.activity.GameActivity;
 import com.gamesbykevin.a2048.game.GameManagerHelper;
+import com.google.android.gms.games.Game;
 
 import org.junit.Test;
 
@@ -17,19 +19,25 @@ import static junit.framework.Assert.assertTrue;
 
 public class BoardTest extends Board {
 
+    private GameActivity activity = null;
+
+    public BoardTest() {
+        super(null);
+    }
+
     @Test
     public void BoardTest() {
 
         //testing the constructors
-        Board board = new Board(DEFAULT_COLUMNS, DEFAULT_ROWS);
-        board = new Board();
+        Board board = new Board(activity, DEFAULT_COLUMNS, DEFAULT_ROWS);
+        board = new Board(activity);
     }
 
     @Test
     public void setColsTest() {
 
         //create default size board
-        Board board = new Board();
+        Board board = new Board(activity);
 
         //assume default value is set
         assertTrue(board.getCols() == DEFAULT_COLUMNS);
@@ -38,7 +46,7 @@ public class BoardTest extends Board {
         int cols = 8;
 
         //create new instance with columns
-        board = new Board(cols, 1);
+        board = new Board(activity, cols, 1);
 
         //assume values match
         assertTrue(board.getCols() == cols);
@@ -57,7 +65,7 @@ public class BoardTest extends Board {
     public void setRowsTest() {
 
         //create default size board
-        Board board = new Board();
+        Board board = new Board(activity);
 
         //assume default value is set
         assertTrue(board.getRows() == DEFAULT_ROWS);
@@ -66,7 +74,7 @@ public class BoardTest extends Board {
         int rows = 8;
 
         //create new instance with rows
-        board = new Board(1, rows);
+        board = new Board(activity, 1, rows);
 
         //assume values match
         assertTrue(board.getRows() == rows);
@@ -85,7 +93,7 @@ public class BoardTest extends Board {
     public void resetTest() {
 
         //create new instance
-        Board board = new Board();
+        Board board = new Board(activity);
 
         //assign the score
         board.setScore(10000000);
@@ -104,7 +112,7 @@ public class BoardTest extends Board {
     public void setScoreTest() {
 
         //create new instance
-        Board board = new Board();
+        Board board = new Board(activity);
 
         //assume score is 0 to begin
         assertTrue(board.getScore() == 0);
@@ -124,7 +132,7 @@ public class BoardTest extends Board {
     public void getBlockTest() {
 
         //create new instance
-        Board board = new Board();
+        Board board = new Board(activity);
 
         //clear all blocks
         board.getBlocks().clear();
@@ -178,7 +186,7 @@ public class BoardTest extends Board {
     @Test
     public void spawnTest() {
         //create new instance
-        Board board = new Board();
+        Board board = new Board(activity);
 
         //clear all blocks
         board.getBlocks().clear();
@@ -203,7 +211,7 @@ public class BoardTest extends Board {
     public void addBlockTest() {
 
         //create new instance
-        Board board = new Board(DEFAULT_COLUMNS, DEFAULT_ROWS);
+        Board board = new Board(activity, DEFAULT_COLUMNS, DEFAULT_ROWS);
 
         //remove all blocks
         board.getBlocks().clear();
@@ -226,7 +234,7 @@ public class BoardTest extends Board {
     public void hasBlockTest() {
 
         //create new instance
-        Board board = new Board(DEFAULT_COLUMNS, DEFAULT_ROWS);
+        Board board = new Board(activity, DEFAULT_COLUMNS, DEFAULT_ROWS);
 
         //remove all blocks
         board.getBlocks().clear();
@@ -264,7 +272,7 @@ public class BoardTest extends Board {
     public void updateTest() {
 
         //create new instance
-        Board board = new Board();
+        Board board = new Board(activity);
 
         //call update many times to assume no error
         for (int i = 0; i < (FPS * 10); i++) {
@@ -276,7 +284,7 @@ public class BoardTest extends Board {
     public void hasTargetTest() {
 
         //create new instance
-        Board board = new Board();
+        Board board = new Board(activity);
 
         //assume all blocks are at their target
         assertTrue(board.hasTarget());

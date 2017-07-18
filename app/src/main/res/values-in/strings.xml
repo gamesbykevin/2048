@@ -5,6 +5,7 @@
     <string name = "app_misconfigured"> Aplikasi salah dikonfigurasi. Periksa apakah nama paket dan sertifikat penandatanganan cocok dengan ID klien yang dibuat di Konsol Pengembang. Selain itu, jika aplikasi belum dipublikasikan, periksa apakah akun yang Anda coba masuk dengan tercantum sebagai akun penguji. Lihat log untuk informasi lebih lanjut. </string>
     <string name = "license_failed"> Cek lisensi gagal. </string>
     <string name = "unknown_error"> Kesalahan tidak dikenal. </string>
+    <string name = "UNKNOWN_ERROR"> Kesalahan tidak dikenal. </string>
     <string name = "gamehelper_sign_in_failed"> Gagal masuk. Periksa koneksi jaringan Anda dan coba lagi. </string>
     <string name = "gamehelper_app_misconfigured"> Aplikasi salah dikonfigurasi. Periksa apakah nama paket dan sertifikat penandatanganan cocok dengan ID klien yang dibuat di Konsol Pengembang. Selain itu, jika aplikasi belum dipublikasikan, periksa apakah akun yang Anda coba masuk dengan tercantum sebagai akun penguji. Lihat log untuk informasi lebih lanjut. </string>
     <string name = "gamehelper_license_failed"> Cek lisensi gagal. </string>

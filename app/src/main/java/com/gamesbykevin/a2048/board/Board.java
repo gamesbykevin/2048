@@ -4,14 +4,15 @@ package com.gamesbykevin.a2048.board;
  * Created by Kevin on 5/26/2017.
  */
 
+import com.gamesbykevin.a2048.activity.GameActivity;
 import com.gamesbykevin.a2048.base.EntityItem;
 
 import static com.gamesbykevin.a2048.board.BoardHelper.SPAWN_VALUE_1;
 import static com.gamesbykevin.a2048.board.BoardHelper.SPAWN_VALUE_2;
 import static com.gamesbykevin.a2048.board.BoardHelper.getBoardDimensions;
-import static com.gamesbykevin.a2048.game.GameManager.GAME_OVER;
-import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.DIRTY_FLAG;
 
+import com.gamesbykevin.a2048.game.GameManager.Step;
+import com.gamesbykevin.a2048.services.GooglePlayServicesHelper;
 import com.gamesbykevin.androidframework.base.Cell;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import static com.gamesbykevin.a2048.game.GameManager.STEP;
 import static com.gamesbykevin.a2048.activity.GameActivity.getRandomObject;
 import static com.gamesbykevin.a2048.board.Block.BLOCK_DIMENSIONS;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.FRAME_DURATION;
@@ -67,14 +69,20 @@ public class Board {
     //list of available places to spawn a piece
     private List<Cell> available;
 
+    //our reference
+    private final GameActivity activity;
+
     /**
      * Default constructor
      */
-    public Board() {
-        this(getBoardDimensions(), getBoardDimensions());
+    public Board(final GameActivity activity) {
+        this(activity, getBoardDimensions(), getBoardDimensions());
     }
 
-    public Board(final int cols, final int rows) {
+    public Board(final GameActivity activity, final int cols, final int rows) {
+
+        //store the reference
+        this.activity = activity;
 
         //set the size of the board
         setCols(cols);
@@ -102,9 +110,6 @@ public class Board {
      * Reset the board and spawn blocks etc...
      */
     public void reset() {
-
-        //flag render
-        DIRTY_FLAG = true;
 
         //clear our blocks
         getBlocks().clear();
@@ -172,10 +177,6 @@ public class Board {
      * @param score The desired score
      */
     public void setScore(int score) {
-
-        //flag since score is changed
-        if (this.score != score)
-            DIRTY_FLAG = true;
 
         //assign score
         this.score = score;
@@ -317,15 +318,9 @@ public class Board {
      */
     public void update() {
 
-        //if the game is not over keep track of duration
-        if (!GAME_OVER) {
-
-            //each update the time added will be for each frame duration
+        //keep track of duration as long as the game isn't over
+        if (STEP != Step.GameOver)
             setDuration(getDuration() + FRAME_DURATION);
-
-            //flag render
-            DIRTY_FLAG = true;
-        }
 
         //are all of the blocks at their target
         final boolean hasTarget = hasTarget();
@@ -337,10 +332,13 @@ public class Board {
 
         //if we weren't at the target but am now, we can update the merged blocks
         if (!hasTarget && hasTarget()) {
-            BoardHelper.updateMerged(this);
 
-            //flag render
-            DIRTY_FLAG = true;
+            //attempt to combine the blocks and return true if new blocks were created
+            boolean result = BoardHelper.updateMerged(this);
+
+            //check if any new blocks are created for achievements
+            if (result)
+                GooglePlayServicesHelper.checkAchievementsNewBlocks(activity);
         }
     }
 

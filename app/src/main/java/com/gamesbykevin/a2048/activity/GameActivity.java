@@ -12,6 +12,7 @@ import android.widget.TableLayout;
 
 import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.game.GameManager;
+import com.gamesbykevin.a2048.game.GameManager.Step;
 import com.gamesbykevin.a2048.game.GameManagerHelper;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
@@ -27,10 +28,10 @@ import java.util.Random;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
+import static com.gamesbykevin.a2048.game.GameManager.STEP;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.updateDisplayStats;
 import static com.gamesbykevin.a2048.level.Stats.DIFFICULTY;
 import static com.gamesbykevin.a2048.level.Stats.MODE;
-import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.DIRTY_FLAG;
 
 public class GameActivity extends BaseGameActivity implements AdapterView.OnItemClickListener {
 
@@ -64,15 +65,15 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
     /**
      * Different steps in the game
      */
-    public enum Step {
+    public enum Screen {
         Loading,
         Ready,
         GameOver,
         LevelSelect
     }
 
-    //current step we are on
-    private Step step = Step.Loading;
+    //current screen we are on
+    private Screen screen = Screen.Loading;
 
     //our custom adapter that we bind to GridView
     private CustomAdapter customAdapter;
@@ -90,14 +91,11 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
         //create our game manager
         MANAGER = new GameManager(this);
 
+        //start loading step
+        STEP = Step.Loading;
+
         //first assign default level is 0
         STATS.setLevelIndex(0);
-
-        //flag reset
-        GameManagerHelper.RESET = true;
-
-        //turn dirty flag off
-        DIRTY_FLAG = false;
 
         //set the content view
         setContentView(R.layout.activity_game);
@@ -150,14 +148,11 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
         //update display stats
         updateDisplayStats();
 
-        //reset game
-        GameManagerHelper.RESET = true;
+        //reset the game
+        STEP = Step.Reset;
 
-        //flag false
-        DIRTY_FLAG = false;
-
-        //we are now ready
-        setStep(Step.Ready);
+        //show loading screen while we reset
+        setScreen(Screen.Loading);
     }
 
     /**
@@ -253,17 +248,17 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
         }
 
         //determine what screens are displayed
-        setStep(step);
+        setScreen(screen);
     }
 
-    public Step getStep() {
-        return this.step;
+    public Screen getScreen() {
+        return this.screen;
     }
 
-    public void setStep(final Step step) {
+    public void setScreen(final Screen screen) {
 
         //assign step
-        this.step = step;
+        this.screen = screen;
 
         //default all layouts to hidden
         for (int i = 0; i < layouts.size(); i++) {
@@ -271,7 +266,7 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
         }
 
         //only display the correct screens
-        switch (getStep()) {
+        switch (getScreen()) {
 
             //show loading screen
             case Loading:
@@ -330,13 +325,13 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
         if (MODE == Mode.Puzzle) {
 
             //if not on level select screen, go to it
-            if (getStep() != Step.LevelSelect) {
+            if (getScreen() != Screen.LevelSelect) {
 
                 //update list so it displays correct information
                 refreshLevelSelect();
 
                 //go to level select screen
-                setStep(Step.LevelSelect);
+                setScreen(Screen.LevelSelect);
 
                 //no need to continue here
                 return;
@@ -356,19 +351,15 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
         updateDisplayStats();
 
         //flag the game to reset
-        GameManagerHelper.RESET = true;
+        STEP = Step.Reset;
 
         //go back to the ready step
-        setStep(Step.Ready);
+        setScreen(Screen.Ready);
 
         //play sound effect
         super.playSoundEffect();
     }
 
-    /**
-     * Reset the board
-     * @param view
-     */
     public void onClickRestart(View view) {
 
         //always stay at level 0 since it isn't puzzle mode
@@ -378,10 +369,10 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
         updateDisplayStats();
 
         //flag the game to reset
-        GameManagerHelper.RESET = true;
+        STEP = Step.Reset;
 
         //go back to the ready step
-        setStep(Step.Ready);
+        setScreen(Screen.Ready);
 
         //play sound effect
         super.playSoundEffect();
@@ -390,7 +381,7 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
     public void onClickLevelSelect(View view) {
 
         //go back to level select screen
-        setStep(Step.LevelSelect);
+        setScreen(Screen.LevelSelect);
 
         //update level select
         refreshLevelSelect();
@@ -399,10 +390,6 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
         super.playSoundEffect();
     }
 
-    /**
-     * Go to the main game menu
-     * @param view
-     */
     public void onClickMenu(View view) {
 
         //go back to the main game menu
@@ -415,11 +402,11 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
 
     @Override
     public void onSignInSucceeded() {
-        UtilityHelper.displayMessage(this, "Google Play login worked!");
+        //UtilityHelper.displayMessage(this, "Google Play login worked!");
 
         if (ACCESS_LEADERBOARD) {
 
-            //if we came from hitting the leaderboard button display ui
+            //if we came from hitting the leader board button display ui
             displayLeaderboardUI();
 
             //flag back false
@@ -429,6 +416,6 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
 
     @Override
     public void onSignInFailed() {
-        UtilityHelper.displayMessage(this, "Google play login failed!");
+        //UtilityHelper.displayMessage(this, "Google play login failed!");
     }
 }

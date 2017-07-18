@@ -5,12 +5,13 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.gamesbykevin.a2048.game.GameManager;
+import com.gamesbykevin.a2048.game.GameManager.Step;
 import com.gamesbykevin.a2048.util.UtilityHelper;
-
-import java.util.Calendar;
 
 import static com.gamesbykevin.a2048.activity.GameActivity.MANAGER;
 import static com.gamesbykevin.a2048.activity.MainActivity.DEBUG;
+import static com.gamesbykevin.a2048.game.GameManager.STEP;
 import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.LOADED;
 
 /**
@@ -78,11 +79,6 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
     //store context to access resources
     private final Context activity;
 
-    /**
-     * Do we render again?
-     */
-    public static boolean DIRTY_FLAG = true;
-
     public OpenGLSurfaceView(Context activity) {
 
         //call overloaded constructor
@@ -139,7 +135,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
             this.thread.join();
 
         } catch (Exception e) {
-            UtilityHelper.handleException(e);
+            //UtilityHelper.handleException(e);
         }
     }
 
@@ -189,7 +185,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
                 control();
 
             } catch (Exception e) {
-                UtilityHelper.handleException(e);
+                //UtilityHelper.handleException(e);
             }
         }
     }
@@ -256,7 +252,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         try
         {
             //we can't continue game input if the game is over
-            if (MANAGER.GAME_OVER)
+            if (STEP == Step.GameOver)
                 return true;
 
             //we can't continue if the textures have not yet loaded
@@ -276,7 +272,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         }
         catch (Exception e)
         {
-            UtilityHelper.handleException(e);
+            //UtilityHelper.handleException(e);
         }
 
         //UtilityHelper.logEvent("Action: " + event.getAction());
@@ -311,18 +307,15 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
 
         try {
 
-            //if a change was made
-            if (DIRTY_FLAG) {
+            //only render when possible
+            if (!GameManager.canRender())
+                return;
 
-                //render game objects
-                requestRender();
-
-                //turn flag off
-                DIRTY_FLAG = false;
-            }
+            //render game objects
+            requestRender();
 
         } catch (Exception e) {
-            UtilityHelper.handleException(e);
+            //UtilityHelper.handleException(e);
         }
 
         //track time after draw

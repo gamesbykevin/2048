@@ -2,24 +2,23 @@ package com.gamesbykevin.a2048.game;
 
 import android.text.TextUtils;
 
-import com.gamesbykevin.a2048.activity.MainActivity;
 import com.gamesbykevin.a2048.base.EntityItem;
 import com.gamesbykevin.a2048.board.Board;
+import com.gamesbykevin.a2048.game.GameManager.Step;
 import com.gamesbykevin.a2048.util.StatDescription;
 import com.gamesbykevin.a2048.util.UtilityHelper;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import static com.gamesbykevin.a2048.activity.GameActivity.MANAGER;
 import static com.gamesbykevin.a2048.activity.GameActivity.STATS;
 import static com.gamesbykevin.a2048.board.Block.VALUES;
+import static com.gamesbykevin.a2048.game.GameManager.STEP;
 import static com.gamesbykevin.a2048.level.Stats.MODE;
 import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.TEXTURES;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.FPS;
+import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.HEIGHT;
+import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.WIDTH;
 
 /**
  * Created by Kevin on 7/3/2017.
@@ -31,11 +30,6 @@ public class GameManagerHelper {
      * The duration we wait until we show the game over screen
      */
     protected static final int GAME_OVER_FRAMES_DELAY = (FPS * 2);
-
-    /**
-     * Do we want to reset the game?
-     */
-    public static boolean RESET = false;
 
     /**
      * Size of the board while playing easy
@@ -103,6 +97,9 @@ public class GameManagerHelper {
     public static final int TEXTURE_WORD_SCORE_INDEX = 35;
     public static final int TEXTURE_WORD_GAMEOVER_INDEX = 36;
     public static final int TEXTURE_WORD_TIME_INDEX = 37;
+
+    //background image
+    public static final int TEXTURE_BACKGROUND_INDEX = 38;
 
     //how do we resize
     private static final float RATIO = 0.33f;
@@ -211,6 +208,7 @@ public class GameManagerHelper {
      */
     public static boolean isGameOver(Board board, Mode mode) {
 
+        //game over will vary depending on the game mode
         switch (mode) {
 
             case Puzzle:
@@ -220,8 +218,8 @@ public class GameManagerHelper {
 
             case Challenge:
 
-                //if time is expired, the game is over
-                if (CHALLENGE_DURATION - board.getDuration() <= 0) {
+                //if time is expired or if no valid moves exist, the game is over
+                if (CHALLENGE_DURATION - board.getDuration() <= 0 || !board.hasMove()) {
 
                     //set time to 00:00:00
                     board.setDuration(CHALLENGE_DURATION);
@@ -265,6 +263,14 @@ public class GameManagerHelper {
      * Render any text on screen using custom font
      * @param openGL Object used to render image
      */
+    public static void drawBackground(GL10 openGL) {
+        entity.render(openGL, 0, 0, WIDTH, HEIGHT, TEXTURES[TEXTURE_BACKGROUND_INDEX]);
+    }
+
+    /**
+     * Render any text on screen using custom font
+     * @param openGL Object used to render image
+     */
     public static void drawText(GL10 openGL, long duration) {
 
         //enable texture, alpha, and alpha blending which supports transparency
@@ -273,7 +279,7 @@ public class GameManagerHelper {
         openGL.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
         //if game over, notify the user
-        if (MANAGER.GAME_OVER)
+        if (STEP == Step.GameOver)
             entity.render(openGL, X_COORD_GAMEOVER, Y_COORD_GAMEOVER, WIDTH_GAMEOVER, HEIGHT_GAMEOVER, TEXTURES[TEXTURE_WORD_GAMEOVER_INDEX]);
 
         switch (MODE) {

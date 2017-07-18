@@ -5,6 +5,7 @@
     <string name = "app_misconfigured"> L\'application est mal configurée. Vérifiez que le nom du package et le certificat de signature correspondent à l\'ID du client créée dans Developer Console. En outre, si l\'application n\'est pas encore publiée, vérifiez que le compte auquel vous essayez de vous connecter est répertorié comme un compte testeur. Voir les journaux pour plus d\'informations. </string>
     <string name = "license_failed"> La vérification de la licence a échoué. </string>
     <string name = "unknown_error"> Erreur inconnue. </string>
+    <string name = "UNKNOWN_ERROR"> Erreur inconnue. </string>
     <string name = "gamehelper_sign_in_failed"> Impossible de se connecter. Veuillez vérifier votre connexion réseau et réessayer. </string>
     <string name = "gamehelper_app_misconfigured"> L\'application est mal configurée. Vérifiez que le nom du package et le certificat de signature correspondent à l\'ID du client créée dans Developer Console. En outre, si l\'application n\'est pas encore publiée, vérifiez que le compte auquel vous essayez de vous connecter est répertorié comme un compte testeur. Voir les journaux pour plus d\'informations. </string>
     <string name = "gamehelper_license_failed"> La vérification de la licence a échoué. </string>

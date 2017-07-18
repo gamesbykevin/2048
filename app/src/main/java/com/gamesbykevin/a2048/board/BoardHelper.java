@@ -3,6 +3,7 @@ package com.gamesbykevin.a2048.board;
 import com.gamesbykevin.a2048.game.GameManager;
 import com.gamesbykevin.a2048.game.GameManagerHelper;
 import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
+import com.gamesbykevin.a2048.services.GooglePlayServicesHelper;
 import com.gamesbykevin.a2048.util.UtilityHelper;
 import com.gamesbykevin.androidframework.base.Cell;
 
@@ -225,7 +226,7 @@ public class BoardHelper {
      * If more than 1 block is at the same location/value it will be merged into 1 block and double the value
      * @param board The board containing the blocks we want to check
      */
-    protected final static void updateMerged(Board board) {
+    protected final static boolean updateMerged(Board board) {
 
         //reset our block counts to 0
         for (int i = 0; i < VALUES.length; i++) {
@@ -234,6 +235,9 @@ public class BoardHelper {
 
         //get the list of blocks from our board
         List<Block> blocks = board.getBlocks();
+
+        //did we create any new blocks?
+        boolean result = false;
 
         for (int i = 0; i < blocks.size(); i++) {
 
@@ -272,9 +276,13 @@ public class BoardHelper {
 
                     //keep track of blocks created for achievements
                     for (int index = 0; index < VALUES.length; index++) {
-                        if (block.getValue() == VALUES[index])
+                        if (block.getValue() == VALUES[index]) {
                             NEW_BLOCKS.put(VALUES[index], NEW_BLOCKS.get(VALUES[index]) + 1);
+                        }
                     }
+
+                    //flag a new block has been created
+                    result = true;
 
                     //flag the block to expand
                     block.setExpand(true);
@@ -293,6 +301,8 @@ public class BoardHelper {
                 }
             }
         }
+
+        return result;
     }
 
     /**

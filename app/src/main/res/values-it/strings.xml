@@ -5,6 +5,7 @@
     <string name = "app_misconfigured"> L\'applicazione è configurata in modo errato. Verifica che il nome del pacchetto e il certificato di firma corrispondano all\'ID client creato in Console per gli sviluppatori. Inoltre, se l\'applicazione non è ancora pubblicata, verificare che l\'account con cui si desidera eseguire l\'accesso è elencato come un account tester. Vedi i registri per ulteriori informazioni. </string>
     <string name = "license_failed"> Il controllo della licenza non è riuscito. </string>
     <string name = "unknown_error"> Errore sconosciuto. </string>
+    <string name = "UNKNOWN_ERROR"> Errore sconosciuto. </string>
     <string name = "gamehelper_sign_in_failed"> Impossibile accedere. Controllare la connessione di rete e riprovare. </string>
     <string name = "gamehelper_app_misconfigured"> L\'applicazione è configurata in modo errato. Verifica che il nome del pacchetto e il certificato di firma corrispondano all\'ID client creato in Console per gli sviluppatori. Inoltre, se l\'applicazione non è ancora pubblicata, verificare che l\'account con cui si desidera eseguire l\'accesso è elencato come un account tester. Vedi i registri per ulteriori informazioni. </string>
     <string name = "gamehelper_license_failed"> Il controllo della licenza non è riuscito. </string>

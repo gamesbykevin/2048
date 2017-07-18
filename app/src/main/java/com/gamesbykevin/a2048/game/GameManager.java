@@ -15,10 +15,10 @@ import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
 import com.gamesbykevin.a2048.services.GooglePlayServicesHelper;
 import com.gamesbykevin.a2048.util.UtilityHelper;
 
+import static com.gamesbykevin.a2048.activity.GameActivity.Screen;
 import static com.gamesbykevin.a2048.activity.GameActivity.STATS;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.GAME_OVER_FRAMES_DELAY;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.ORIGINAL_MODE_GOAL_VALUE;
-import static com.gamesbykevin.a2048.game.GameManagerHelper.RESET;
 import static com.gamesbykevin.a2048.level.Stats.MODE;
 import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.LOADED;
 
@@ -49,8 +49,18 @@ public class GameManager {
     //which way are we merging
     private Merge merge = null;
 
-    //do we want to try and merge
-    private boolean flagMerge = false;
+    public enum Step {
+        Start,
+        Reset,
+        Loading,
+        GameOver,
+        InitiateMerge,
+        Merging,
+        Updating
+    }
+
+    //what step are we on?
+    public static Step STEP = Step.Loading;
 
     /**
      * The pixel length the user needs to swipe a motion event in order to detect up/down/left/right
@@ -59,9 +69,6 @@ public class GameManager {
 
     //keep track so we know when to display the game over screen
     private int frames = 0;
-
-    //is the game over
-    public static boolean GAME_OVER = false;
 
     /**
      * Default constructor
@@ -72,10 +79,7 @@ public class GameManager {
         this.activity = activity;
 
         //create a new game board
-        this.board = new Board();
-
-        //default false
-        GAME_OVER = false;
+        this.board = new Board(activity);
     }
 
     public void onResume() {
@@ -84,16 +88,8 @@ public class GameManager {
 
     public boolean onTouchEvent(final int action, final float x, final float y) {
 
-        //don't continue if we are in the process of merging
-        if (flagMerge || merge != null)
-            return true;
-
-        //if the game is over we can't continue
-        if (GAME_OVER)
-            return true;
-
-        //can't continue if we are resetting the game or not ready yet
-        if (RESET || activity.getStep() != GameActivity.Step.Ready)
+        //don't continue if we aren't ready yet
+        if (STEP != Step.Updating)
             return true;
 
         //determine the appropriate action
@@ -162,10 +158,9 @@ public class GameManager {
                         }
                     }
 
-                    //flag that we want to merge next game update
-                    flagMerge = true;
+                    //set the next step to initiate the merge
+                    STEP = Step.InitiateMerge;
                 }
-
                 break;
         }
 
@@ -177,163 +172,160 @@ public class GameManager {
      */
     public void update() throws Exception {
 
-        //do we want to reset the game?
-        if (RESET) {
+        switch (STEP) {
 
-            //flag false
-            RESET = false;
+            //we are loading
+            case Loading:
 
-            //reset the board to restart
-            getBoard().reset();
+                //if the textures have finished loading
+                if (LOADED) {
 
-            //default false
-            GAME_OVER = false;
+                    switch (MODE) {
 
-            //if puzzle mode, generate board with the specified seed
-            if (MODE == Mode.Puzzle) {
+                        case Puzzle:
 
-                //generate random board
-                BoardHelper.generatePuzzle(
-                    getBoard(),
-                    STATS.getLevel().getSeed()
-                );
-            }
+                            //if loaded display level select screen
+                            activity.setScreen(Screen.LevelSelect);
 
-            //no need to continue at this point
-            return;
-        }
+                            //go to start step
+                            STEP = Step.Start;
+                            break;
 
-        //store the game over status
-        boolean gameOver = GAME_OVER;
+                        case Original:
+                        case Challenge:
+                        case Infinite:
 
-        //if we aren't ready, check if the textures have loaded
-        if (activity.getStep() == GameActivity.Step.Loading) {
+                            //display loading screen while we reset
+                            activity.setScreen(Screen.Loading);
 
-            //check if the textures have loaded
-            if (LOADED) {
+                            //reset the board
+                            STEP = Step.Reset;
+                            break;
+
+                        default:
+                            throw new RuntimeException("Mode: " + MODE.toString() + " is not handled");
+                    }
+
+                }
+                break;
+
+            //don't do anything
+            case Start:
+                break;
+
+            //we are resetting the board
+            case Reset:
+
+                //reset the board to restart
+                getBoard().reset();
+
+                //if puzzle mode, generate board with the specified seed
+                if (MODE == Mode.Puzzle)
+                    BoardHelper.generatePuzzle(getBoard(), STATS.getLevel().getSeed());
 
                 //update the text displayed on the screen
                 GameManagerHelper.updateDisplayStats();
 
-                switch (MODE) {
+                //after resetting, next step is updating
+                STEP = Step.Updating;
 
-                    case Puzzle:
-                        activity.setStep(GameActivity.Step.LevelSelect);
-                        break;
+                //we can go to ready now
+                activity.setScreen(Screen.Ready);
+                break;
 
-                    case Original:
-                    case Challenge:
-                    case Infinite:
-                        activity.setStep(GameActivity.Step.Ready);
-                        break;
+            case InitiateMerge:
 
-                    default:
-                        throw new RuntimeException("Mode: " + MODE.toString() + " is not handled");
+                //continue to update the board
+                getBoard().update();
+
+                //update the blocks accordingly on where we want to head
+                BoardHelper.merge(getBoard(), this.merge, true);
+
+                //we can go to updating
+                STEP = Step.Merging;
+                break;
+
+            case Merging:
+
+                //continue to update the board
+                getBoard().update();
+
+                //check if the blocks are at their target
+                if (getBoard().hasTarget()) {
+
+                    //now that the blocks are at their target we can spawn (if applicable)
+                    if (MODE != Mode.Puzzle)
+                        getBoard().spawn();
+
+                    //continue updating
+                    STEP = Step.Updating;
                 }
-            }
+                break;
 
-            //no need to continue at this point
-            return;
-        }
+            case Updating:
 
-        //do we need to check for a merge
-        if (flagMerge && this.merge != null) {
+                //if the game is over, move to the next step
+                if (GameManagerHelper.isGameOver(getBoard(), MODE)) {
 
-            //update the blocks accordingly on where we want to head
-            BoardHelper.merge(getBoard(), this.merge, true);
+                    //move to game over step
+                    STEP = Step.GameOver;
 
-            //after merging, if all blocks are already at the target nothing will happen
-            if (getBoard().hasTarget())
-                this.merge = null;
+                    //vibrate the phone
+                    activity.vibrate();
 
-            //flag false now that we are complete
-            flagMerge = false;
+                    //reset frames timer
+                    frames = 0;
 
-        } else {
+                    //display message
+                    //UtilityHelper.logEvent("GAME OVER!!!");
 
-            //if the blocks are at their target, we can merge again and spawn a new block
-            if (this.merge != null && getBoard().hasTarget()) {
+                    //update our achievements
+                    GooglePlayServicesHelper.checkCompletedGame(activity, getBoard());
 
-                //we can merge again
-                this.merge = null;
+                    //did we beat a personal best
+                    boolean record = false;
 
-                //we don't spawn blocks for puzzle mode
-                if (MODE != Mode.Puzzle) {
+                    //if original mode, make sure they have 2048 value
+                    if (MODE == Mode.Original) {
 
-                    //spawn a new block
-                    getBoard().spawn();
-                }
-            }
-
-            //check if the game is over
-            GAME_OVER = GameManagerHelper.isGameOver(getBoard(), MODE);
-
-            //if the game wasn't over previously, but now is
-            if (!gameOver && GAME_OVER) {
-
-                //vibrate the phone
-                activity.vibrate();
-
-                //reset frames timer
-                frames = 0;
-
-                //UtilityHelper.logEvent("GAME OVER!!!");
-
-                //update our achievements
-                GooglePlayServicesHelper.checkCompletedGame(activity, getBoard());
-
-                //did we beat a personal best
-                boolean record = false;
-
-                //if original mode, make sure they have 2048 value
-                if (MODE == Mode.Original) {
-
-                    //make sure they solved the board to check if we beat a record
-                    if (getBoard().hasValue(ORIGINAL_MODE_GOAL_VALUE))
+                        //make sure they solved the board to check if we beat a record
+                        if (getBoard().hasValue(ORIGINAL_MODE_GOAL_VALUE))
+                            record = STATS.markComplete(getBoard().getDuration(), getBoard().getScore());
+                    } else {
+                        //did we set a record
                         record = STATS.markComplete(getBoard().getDuration(), getBoard().getScore());
-                } else {
-                    //did we set a record
-                    record = STATS.markComplete(getBoard().getDuration(), getBoard().getScore());
+                    }
+
+                    //if puzzle mode, check if we completed a level quickly
+                    if (MODE == Mode.Puzzle)
+                        GooglePlayServicesHelper.checkAchievementsPuzzleTime(activity, getBoard());
+
+                    //if we beat a previous best, check achievements
+                    if (record)
+                        GooglePlayServicesHelper.checkAchievementsNewRecord(activity);
                 }
 
-                //if puzzle mode, check if we completed a level quickly
-                if (MODE == Mode.Puzzle)
-                    GooglePlayServicesHelper.checkAchievementsPuzzleTime(activity, getBoard());
+                //continue to update the board
+                getBoard().update();
+                break;
 
-                //if we beat a previous best, check achievements
-                if (record)
-                    GooglePlayServicesHelper.checkAchievementsNewRecord(activity);
-            }
+            case GameOver:
 
-            //update the state of the blocks on the board no matter what
-            getBoard().update();
-
-            //check if any new blocks are created for achievements
-            GooglePlayServicesHelper.checkAchievementsNewBlocks(activity);
-
-            //if the game is over, track the time elapsed
-            if (GAME_OVER) {
+                //continue to update the board
+                getBoard().update();
 
                 //keep counting if enough time has not yet passed
-                if (!canShowGameOverScreen()) {
+                if (frames < GAME_OVER_FRAMES_DELAY) {
 
                     //keep track of frames elapsed
                     frames++;
 
                     //if we are now ready to display go ahead and do it
-                    if (canShowGameOverScreen())
-                        activity.setStep(GameActivity.Step.GameOver);
+                    if (frames >= GAME_OVER_FRAMES_DELAY)
+                        activity.setScreen(Screen.GameOver);
                 }
-            }
+                break;
         }
-    }
-
-    /**
-     * Can we show the game over screen?
-     * @return true if game over and enough time has elapsed, false otherwise
-     */
-    public boolean canShowGameOverScreen() {
-        return (GAME_OVER && frames >= GAME_OVER_FRAMES_DELAY);
     }
 
     /**
@@ -351,13 +343,13 @@ public class GameManager {
     public void draw(GL10 openGL, final int[] textures) {
 
         try {
-            //don't display if we are resetting
-            if (RESET || !LOADED)
+
+            //make sure we can render
+            if (!canRender())
                 return;
 
-            //only render when ready, or game over to prevent screen flicker
-            if (activity.getStep() != GameActivity.Step.Ready && activity.getStep() != GameActivity.Step.GameOver)
-                return;
+            //render background
+            GameManagerHelper.drawBackground(openGL);
 
             //assign the appropriate textures
             getBoard().assignTextures(textures);
@@ -369,7 +361,29 @@ public class GameManager {
             GameManagerHelper.drawText(openGL, getBoard().getDuration());
 
         } catch (Exception e) {
-            UtilityHelper.handleException(e);
+            //UtilityHelper.handleException(e);
+        }
+    }
+
+    public static boolean canRender() {
+
+        switch (STEP) {
+
+            //only render in open gl for these steps
+            case Merging:
+            case Updating:
+            case GameOver:
+            case InitiateMerge:
+                return true;
+
+            //don't display for these
+            case Loading:
+            case Reset:
+            case Start:
+                return false;
+
+            default:
+                throw new RuntimeException("Step not handled here: " + STEP.toString());
         }
     }
 }

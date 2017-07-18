@@ -6,6 +6,7 @@
     <string name = "app_misconfigured"> Die Anwendung ist falsch konfiguriert. Überprüfen Sie, ob der Paketname und das Signaturzertifikat mit der in der Developer Console erstellten Client-ID übereinstimmen. Auch wenn die Anwendung noch nicht veröffentlicht ist, überprüfen Sie, ob das Konto, mit dem Sie sich anmelden möchten, als Testerkonto aufgeführt ist. Weitere Informationen finden Sie unter Protokolle. </string>
     <string name = "license_failed"> Lizenzprüfung fehlgeschlagen </string>
     <string name = "unknown_error"> Unbekannter Fehler </string>
+    <string name = "UNKNOWN_ERROR"> Unbekannter Fehler </string>
     <string name = "gamehelper_sign_in_failed"> konnte sich nicht anmelden. Bitte überprüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut. </string>
     <string name = "gamehelper_app_misconfigured"> Die Anwendung ist falsch konfiguriert. Überprüfen Sie, ob der Paketname und das Signaturzertifikat mit der in der Developer Console erstellten Client-ID übereinstimmen. Auch wenn die Anwendung noch nicht veröffentlicht ist, überprüfen Sie, ob das Konto, mit dem Sie sich anmelden möchten, als Testerkonto aufgeführt ist. Weitere Informationen finden Sie unter Protokolle. </string>
     <string name = "gamehelper_license_failed"> Lizenzprüfung fehlgeschlagen </string>

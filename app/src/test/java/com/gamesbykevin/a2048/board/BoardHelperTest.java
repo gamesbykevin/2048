@@ -1,5 +1,6 @@
 package com.gamesbykevin.a2048.board;
 
+import com.gamesbykevin.a2048.activity.GameActivity;
 import com.gamesbykevin.a2048.game.GameManager;
 import com.gamesbykevin.a2048.game.GameManagerHelper;
 
@@ -20,12 +21,15 @@ import static junit.framework.Assert.assertTrue;
 
 import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
+import com.google.android.gms.games.GamesActivityResultCodes;
 
 /**
  * Created by Kevin on 7/15/2017.
  */
 
 public class BoardHelperTest extends BoardHelper {
+
+    private GameActivity activity = null;
 
     @Test
     public void generatePuzzleTest() {
@@ -46,7 +50,7 @@ public class BoardHelperTest extends BoardHelper {
 
                         for (int i = 0; i < LEVELS; i++) {
 
-                            Board board = new Board();
+                            Board board = new Board(activity);
                             BoardHelper.generatePuzzle(board, i);
 
                             for (int x = i + 1; x < LEVELS; x++) {
@@ -59,7 +63,7 @@ public class BoardHelperTest extends BoardHelper {
                                 System.out.println("Difficulty: " + DIFFICULTY.toString());
                                 System.out.println("Seeds: " + i + " & " + x);
 
-                                Board tmp = new Board();
+                                Board tmp = new Board(activity);
                                 BoardHelper.generatePuzzle(tmp, x);
 
                                 //now check to make sure the levels aren't the same
@@ -167,7 +171,7 @@ public class BoardHelperTest extends BoardHelper {
 
                     Board board;
 
-                    board = new Board();
+                    board = new Board(activity);
 
                     //fill up the whole board spawning a block everywhere
                     for (int i = 0; i < board.getCols() * board.getRows(); i++) {

@@ -28,9 +28,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     public static final String URL_YOUTUBE = "https://youtube.com/gamesbykevin";
     public static final String URL_FACEBOOK = "https://facebook.com/gamesbykevin";
     public static final String URL_TWITTER = "https://twitter.com/gamesbykevin";
+    public static final String URL_INSTAGRAM = "https://www.instagram.com/gamesbykevin";
     public static final String URL_HELP = "http://gamesbykevin.com";
     public static final String URL_WEBSITE = "http://gamesbykevin.com";
-    public static final String URL_RATE = "https://play.google.com/store/apps/details?id=com.gamesbykevin.sokoban";
+    public static final String URL_RATE = "https://play.google.com/store/apps/details?id=com.gamesbykevin.a2048";
 
     //where we store our game option selections
     private static SharedPreferences preferences;
@@ -203,7 +204,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 getSoundSelection().start();
             }
         } catch (Exception e) {
-            UtilityHelper.handleException(e);
+            //UtilityHelper.handleException(e);
         }
     }
 
@@ -229,6 +230,14 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public void onClickTwitter(View view) {
         openUrl(URL_TWITTER);
+    }
+
+    /**
+     * Open the twitter web page
+     * @param view Current view
+     */
+    public void onClickInstagram(View view) {
+        openUrl(URL_INSTAGRAM);
     }
 
     /**

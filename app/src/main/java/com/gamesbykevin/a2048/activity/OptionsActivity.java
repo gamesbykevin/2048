@@ -68,7 +68,7 @@ public class OptionsActivity extends BaseActivity {
         } catch (Exception ex) {
 
             //handle exception
-            UtilityHelper.handleException(ex);
+            //UtilityHelper.handleException(ex);
         }
 
         //call parent function
