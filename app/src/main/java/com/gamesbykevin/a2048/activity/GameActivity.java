@@ -29,7 +29,6 @@ import java.util.Random;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static com.gamesbykevin.a2048.game.GameManager.STEP;
-import static com.gamesbykevin.a2048.game.GameManagerHelper.updateDisplayStats;
 import static com.gamesbykevin.a2048.level.Stats.DIFFICULTY;
 import static com.gamesbykevin.a2048.level.Stats.MODE;
 
@@ -144,9 +143,6 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
             //assign the level selected (technically won't be called since puzzle mode only has level select)
             STATS.setLevelIndex(0);
         }
-
-        //update display stats
-        updateDisplayStats();
 
         //reset the game
         STEP = Step.Reset;
@@ -347,9 +343,6 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
         //move to the next index
         STATS.nextLevelIndex();
 
-        //update display stats
-        updateDisplayStats();
-
         //flag the game to reset
         STEP = Step.Reset;
 
@@ -364,9 +357,6 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
 
         //always stay at level 0 since it isn't puzzle mode
         STATS.setLevelIndex(0);
-
-        //update display stats
-        updateDisplayStats();
 
         //flag the game to reset
         STEP = Step.Reset;
