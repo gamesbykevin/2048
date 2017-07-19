@@ -13,14 +13,12 @@ import android.widget.TableLayout;
 import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.game.GameManager;
 import com.gamesbykevin.a2048.game.GameManager.Step;
-import com.gamesbykevin.a2048.game.GameManagerHelper;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Difficulty;
 import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
 import com.gamesbykevin.a2048.level.Stats;
 import com.gamesbykevin.a2048.opengl.OpenGLSurfaceView;
 import com.gamesbykevin.a2048.services.BaseGameActivity;
 import com.gamesbykevin.a2048.ui.CustomAdapter;
-import com.gamesbykevin.a2048.util.UtilityHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +109,27 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
 
         //update level select screen
         refreshLevelSelect();
+    }
+
+    private void playSound() {
+        //determine what music to play
+        switch (MODE) {
+            case Original:
+                super.playSound(R.raw.original);
+                break;
+
+            case Puzzle:
+                super.playSound(R.raw.puzzle);
+                break;
+
+            case Infinite:
+                super.playSound(R.raw.infinite);
+                break;
+
+            case Challenge:
+                super.playSound(R.raw.challenge);
+                break;
+        }
     }
 
     /**
@@ -204,6 +223,9 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
 
         //flag for recycling
         glSurfaceView = null;
+
+        //stop all sound
+        stopSound();
     }
 
     @Override
@@ -211,6 +233,9 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
 
         //call parent
         super.onResume();
+
+        //resume sound playing
+        playSound();
 
         //if the game was previously paused create a new view
         if (this.paused) {
@@ -348,9 +373,6 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
 
         //go back to the ready step
         setScreen(Screen.Ready);
-
-        //play sound effect
-        super.playSoundEffect();
     }
 
     public void onClickRestart(View view) {
@@ -363,9 +385,6 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
 
         //go back to the ready step
         setScreen(Screen.Ready);
-
-        //play sound effect
-        super.playSoundEffect();
     }
 
     public void onClickLevelSelect(View view) {
@@ -375,9 +394,6 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
 
         //update level select
         refreshLevelSelect();
-
-        //play sound effect
-        super.playSoundEffect();
     }
 
     public void onClickMenu(View view) {
@@ -385,9 +401,6 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
         //go back to the main game menu
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-
-        //play sound effect
-        super.playSoundEffect();
     }
 
     @Override

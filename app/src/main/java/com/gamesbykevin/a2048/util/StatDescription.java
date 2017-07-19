@@ -2,11 +2,13 @@ package com.gamesbykevin.a2048.util;
 
 import com.gamesbykevin.a2048.base.EntityItem;
 import com.gamesbykevin.a2048.board.Block;
+import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
 
 import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import static com.gamesbykevin.a2048.level.Stats.MODE;
 import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.TEXTURES;
 
 /**
@@ -67,6 +69,15 @@ public class StatDescription extends EntityItem {
         return this.statValue;
     }
 
+    public void setDescription(long newStatValue, boolean time, boolean reset) {
+
+        //reset stat value
+        if (reset)
+            this.statValue = -1;
+
+        setDescription(newStatValue, time);
+    }
+
     public void setDescription(long newStatValue, boolean time)
     {
         if (getStatValue() == newStatValue)
@@ -81,21 +92,30 @@ public class StatDescription extends EntityItem {
             int seconds = (int)(statValue / 1000) % 60;
             int millis  = (int)(statValue % 1000);
 
-            //BUILDER.delete(0, BUILDER.length());
             BUILDER.setLength(0);
 
-            if (minutes < 10)
-                BUILDER.append("0");
+            if (MODE == Mode.Challenge) {
 
-            BUILDER.append(minutes);
-            BUILDER.append(":");
+                if (seconds < 10)
+                    BUILDER.append("0");
 
-            if (seconds < 10)
-                BUILDER.append("0");
+                BUILDER.append(seconds);
 
-            BUILDER.append(seconds);
-            BUILDER.append(".");
-            BUILDER.append(millis);
+            } else {
+
+                if (minutes < 10)
+                    BUILDER.append("0");
+
+                BUILDER.append(minutes);
+                BUILDER.append(":");
+
+                if (seconds < 10)
+                    BUILDER.append("0");
+
+                BUILDER.append(seconds);
+                BUILDER.append(".");
+                BUILDER.append(millis);
+            }
 
             //get our description
             setDescription(BUILDER.toString(), time);

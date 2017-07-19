@@ -135,7 +135,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
             this.thread.join();
 
         } catch (Exception e) {
-            //UtilityHelper.handleException(e);
+            UtilityHelper.handleException(e);
         }
     }
 
@@ -185,7 +185,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
                 control();
 
             } catch (Exception e) {
-                //UtilityHelper.handleException(e);
+                UtilityHelper.handleException(e);
             }
         }
     }
@@ -272,7 +272,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
         }
         catch (Exception e)
         {
-            //UtilityHelper.handleException(e);
+            UtilityHelper.handleException(e);
         }
 
         //UtilityHelper.logEvent("Action: " + event.getAction());
@@ -315,7 +315,7 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
             requestRender();
 
         } catch (Exception e) {
-            //UtilityHelper.handleException(e);
+            UtilityHelper.handleException(e);
         }
 
         //track time after draw

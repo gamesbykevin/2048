@@ -71,7 +71,7 @@
         <item name="android:textIsSelectable">false</item>
         <item name="android:textStyle">normal</item>
         <item name="android:background">@drawable/button</item>
-        <item name="android:soundEffectsEnabled">false</item>
+        <item name="android:soundEffectsEnabled">true</item>
     </style>
 
     <style name="RowMenu">
@@ -92,6 +92,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:layout_marginLeft">15dp</item>
         <item name="android:layout_marginRight">15dp</item>
+        <item name="android:soundEffectsEnabled">true</item>
     </style>
 
     <style name="TableSocial">

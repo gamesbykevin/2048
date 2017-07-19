@@ -16,6 +16,9 @@ public class OptionsActivity extends BaseActivity {
     //our multi state toggle buttons
     private MultiStateToggleButton buttonDifficulty, buttonMode;
 
+    //has the activity been paused
+    private boolean paused = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +40,28 @@ public class OptionsActivity extends BaseActivity {
         buttonVibrate.setChecked(getBooleanValue(R.string.vibrate_file_key));
         this.buttonMode.setIndex(getObjectValue(R.string.mode_file_key, Mode.class));
         this.buttonDifficulty.setIndex(getObjectValue(R.string.difficulty_file_key, Difficulty.class));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        //stop sound
+        super.stopSound();
+
+        //flag paused
+        paused = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //play sound
+        super.playSound(R.raw.title);
+
+        //flag false
+        paused = false;
     }
 
     /**
@@ -84,50 +109,29 @@ public class OptionsActivity extends BaseActivity {
         if (button.isChecked()) {
             super.vibrate(true);
         }
-
-        //play sound effect
-        playSoundEffect();
     }
 
     public void onClickSound(View view) {
 
         //get the button
-        //ToggleButton button = (ToggleButton)view.findViewById(R.id.ToggleButtonSound);
+        ToggleButton button = (ToggleButton)view.findViewById(R.id.ToggleButtonSound);
 
-        //play sound effect
-        playSoundEffect();
+        if (button.isChecked()) {
+            super.playSound(R.raw.title);
+        } else {
+            super.stopSound();
+        }
     }
 
     public void onClickMode(View view) {
 
         //move to the next option
         this.buttonMode.select();
-
-        //play sound effect
-        playSoundEffect();
     }
 
     public void onClickDifficulty(View view) {
 
         //move to the next option
         this.buttonDifficulty.select();
-
-        //play sound effect
-        playSoundEffect();
-    }
-
-    /**
-     * Play the sound effect based on the button setting
-     */
-    @Override
-    public void playSoundEffect() {
-
-        //obtain the sound button reference
-        ToggleButton button = (ToggleButton)findViewById(R.id.ToggleButtonSound);
-
-        //make sure the sound is enabled before we play
-        if (button.isChecked()) {
-            getSoundSelection().start();
-        }
     }
 }

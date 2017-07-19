@@ -36,6 +36,9 @@ public class MainActivity extends BaseGameActivity {
     protected void onDestroy() {
         super.onDestroy();
 
+        //recycle resources
+        super.dispose();
+
         //log out of google play services
         super.signOut();
     }
@@ -43,11 +46,17 @@ public class MainActivity extends BaseGameActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
+        //stop all sound
+        super.stopSound();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        //play title screen
+        super.playSound(R.raw.title);
     }
 
     @Override
@@ -68,9 +77,6 @@ public class MainActivity extends BaseGameActivity {
         //start options activity
         Intent intent = new Intent(this, OptionsActivity.class);
         startActivity(intent);
-
-        //play sound effect
-        super.playSoundEffect();
     }
 
     public void onClickExit(View view) {

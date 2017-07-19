@@ -1,7 +1,5 @@
 package com.gamesbykevin.a2048.game;
 
-import android.text.TextUtils;
-
 import com.gamesbykevin.a2048.base.EntityItem;
 import com.gamesbykevin.a2048.board.Board;
 import com.gamesbykevin.a2048.game.GameManager.Step;
@@ -89,7 +87,7 @@ public class GameManagerHelper {
     private static StatDescription STAT_LEVEL = new StatDescription();
 
     //total number of words we will be displaying
-    public static final int TOTAL_WORD_TEXTURES = 5;
+    public static final int TOTAL_WORD_TEXTURES = 7;
 
     //index for each word in the texture array
     public static final int TEXTURE_WORD_BEST_INDEX = 33;
@@ -97,9 +95,8 @@ public class GameManagerHelper {
     public static final int TEXTURE_WORD_SCORE_INDEX = 35;
     public static final int TEXTURE_WORD_GAMEOVER_INDEX = 36;
     public static final int TEXTURE_WORD_TIME_INDEX = 37;
-
-    //background image
     public static final int TEXTURE_BACKGROUND_INDEX = 38;
+    public static final int TEXTURE_WORD_WIN_INDEX = 39;
 
     //how do we resize
     private static final float RATIO = 0.33f;
@@ -121,6 +118,12 @@ public class GameManagerHelper {
     private static final int Y_COORD_GAMEOVER = 625;
     private static final int WIDTH_GAMEOVER = 400;
     private static final int HEIGHT_GAMEOVER = 75;
+
+    //where to render game over
+    private static final int X_COORD_WIN = 90;
+    private static final int Y_COORD_WIN = 625;
+    private static final int WIDTH_WIN = 299;
+    private static final int HEIGHT_WIN = 84;
 
     //where to render time
     private static final int X_COORD_TIME = 20;
@@ -145,6 +148,9 @@ public class GameManagerHelper {
     //object used to render texture words
     private static EntityItem entity = new EntityItem();
 
+    //did we win
+    public static boolean WIN = false;
+
     public static void updateDisplayStats() {
 
         //set coordinates etc... for the text we are rendering based on game mode
@@ -156,12 +162,12 @@ public class GameManagerHelper {
                 STAT_CURRENT.setX(X_COORD_RESULTS);
                 STAT_CURRENT.setAnchorX(STAT_CURRENT.getX());
                 STAT_CURRENT.setY(Y_COORD_RESULTS);
-                STAT_CURRENT.setDescription(0, true);
+                STAT_CURRENT.setDescription(0, true, true);
 
                 STAT_RECORD.setX(X_COORD_RECORD);
                 STAT_RECORD.setAnchorX(STAT_RECORD.getX());
                 STAT_RECORD.setY(Y_COORD_RECORD);
-                STAT_RECORD.setDescription(STATS.getLevel().getDuration(), true);
+                STAT_RECORD.setDescription(STATS.getLevel().getDuration(), true, true);
 
                 //if puzzle render level #
                 if (MODE == Mode.Puzzle) {
@@ -178,13 +184,13 @@ public class GameManagerHelper {
                 STAT_CURRENT.setX(X_COORD_RESULTS);
                 STAT_CURRENT.setAnchorX(STAT_CURRENT.getX());
                 STAT_CURRENT.setY(Y_COORD_RESULTS);
-                STAT_CURRENT.setDescription(MANAGER.getBoard().getScore(), false);
+                STAT_CURRENT.setDescription(MANAGER.getBoard().getScore(), false, true);
 
                 //render the record as well
                 STAT_RECORD.setX(X_COORD_RECORD);
                 STAT_RECORD.setAnchorX(STAT_RECORD.getX());
                 STAT_RECORD.setY(Y_COORD_RECORD);
-                STAT_RECORD.setDescription(STATS.getLevel().getScore(), false);
+                STAT_RECORD.setDescription(STATS.getLevel().getScore(), false, true);
 
                 //if challenge render the remaining time
                 if (MODE == Mode.Challenge) {
@@ -214,12 +220,20 @@ public class GameManagerHelper {
             case Puzzle:
 
                 //if there is one block left, the game is over
-                return (board.getBlocks().size() == 1);
+                if (board.getBlocks().size() == 1) {
+                    WIN = true;
+                    return true;
+                } else {
+                    return false;
+                }
 
             case Challenge:
 
                 //if time is expired or if no valid moves exist, the game is over
                 if (CHALLENGE_DURATION - board.getDuration() <= 0 || !board.hasMove()) {
+
+                    //game is over
+                    WIN = false;
 
                     //set time to 00:00:00
                     board.setDuration(CHALLENGE_DURATION);
@@ -235,8 +249,13 @@ public class GameManagerHelper {
 
             case Infinite:
 
-                //continue until no more moves are left
-                return (!board.hasMove());
+                //if no more moves game over
+                if (!board.hasMove()) {
+                    WIN = false;
+                    return true;
+                } else {
+                    return false;
+                }
 
             /**
              * Original the game continues until there are no more moves available
@@ -244,12 +263,16 @@ public class GameManagerHelper {
             case Original:
 
                 //if we don't have any more moves the game is over
-                if (!board.hasMove())
+                if (!board.hasMove()) {
+                    WIN = false;
                     return true;
+                }
 
                 //if one block has 2048 the game is over
-                if (board.hasValue(ORIGINAL_MODE_GOAL_VALUE))
+                if (board.hasValue(ORIGINAL_MODE_GOAL_VALUE)) {
+                    WIN = true;
                     return true;
+                }
 
                 //the game isn't over
                 return false;
@@ -279,9 +302,13 @@ public class GameManagerHelper {
         openGL.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
         //if game over, notify the user
-        if (STEP == Step.GameOver)
-            entity.render(openGL, X_COORD_GAMEOVER, Y_COORD_GAMEOVER, WIDTH_GAMEOVER, HEIGHT_GAMEOVER, TEXTURES[TEXTURE_WORD_GAMEOVER_INDEX]);
-
+        if (STEP == Step.GameOver) {
+            if (WIN) {
+                entity.render(openGL, X_COORD_WIN, Y_COORD_WIN, WIDTH_WIN, HEIGHT_WIN, TEXTURES[TEXTURE_WORD_WIN_INDEX]);
+            } else {
+                entity.render(openGL, X_COORD_GAMEOVER, Y_COORD_GAMEOVER, WIDTH_GAMEOVER, HEIGHT_GAMEOVER, TEXTURES[TEXTURE_WORD_GAMEOVER_INDEX]);
+            }
+        }
         switch (MODE) {
 
             case Puzzle:

@@ -361,7 +361,7 @@ public class GameManager {
             GameManagerHelper.drawText(openGL, getBoard().getDuration());
 
         } catch (Exception e) {
-            //UtilityHelper.handleException(e);
+            UtilityHelper.handleException(e);
         }
     }
 

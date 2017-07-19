@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 
 /**
  * Created by Kevin on 5/22/2017.
@@ -39,8 +40,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     //our vibrate object
     private static Vibrator vibrator;
 
-    //the object to play the sound selection
-    private static MediaPlayer soundSelection;
+    //collection of music
+    private static HashMap<Integer, MediaPlayer> MUSIC;
 
     //the intent used to open web urls
     private Intent intent;
@@ -85,9 +86,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (this.vibrator == null)
             this.vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 
-        //get the object to play the sound effect
-        if (this.soundSelection == null)
-            this.soundSelection = MediaPlayer.create(this, R.raw.selection);
+        //if null
+        if (MUSIC == null) {
+
+            //create new list
+            MUSIC = new HashMap<>();
+            loadSound(R.raw.challenge);
+            loadSound(R.raw.infinite);
+            loadSound(R.raw.original);
+            loadSound(R.raw.puzzle);
+            loadSound(R.raw.title);
+        }
+    }
+
+    private void loadSound(final int resId) {
+        MUSIC.put(resId, MediaPlayer.create(this, resId));
     }
 
     private void storeDefaultPreferences() {
@@ -103,14 +116,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         //make it final by committing the change
         editor.commit();
-    }
-
-    /**
-     * Get the sound selection object
-     * @return The media player object to play the sound
-     */
-    protected MediaPlayer getSoundSelection() {
-        return this.soundSelection;
     }
 
     /**
@@ -191,20 +196,71 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Play the sound effect based on the shared preferences setting
-     */
-    public void playSoundEffect() {
+    public void playSound(final int resId) {
+        playSound(resId, false);
+    }
+
+    public void playSound(final int resId, boolean restart) {
 
         try {
-            //make sure the sound is enabled via shared preferences
-            if (getBooleanValue(R.string.sound_file_key)) {
+            //we can't play if the sound is not enabled
+            if (!getBooleanValue(R.string.sound_file_key))
+                return;
 
-                //start playing sound
-                getSoundSelection().start();
-            }
+            //stop all sound in case any other is playing
+            stopSound();
+
+            //if restarting go to beginning of sound
+            if (restart)
+                MUSIC.get(resId).seekTo(0);
+
+            //we want our sound to loop
+            MUSIC.get(resId).setLooping(true);
+
+            //resume playing
+            MUSIC.get(resId).start();
         } catch (Exception e) {
-            //UtilityHelper.handleException(e);
+            UtilityHelper.handleException(e);
+        }
+    }
+
+    /**
+     * Release all resources in BaseActivity
+     */
+    public void dispose() {
+
+        //set null
+        preferences = null;
+        vibrator = null;
+        GSON = null;
+
+        //stop, kill all sound
+        destroySound();
+    }
+
+    private void destroySound() {
+        for (Integer resId : MUSIC.keySet()) {
+            stopSound(resId);
+            MUSIC.get(resId).release();
+        }
+
+        MUSIC.clear();
+        MUSIC = null;
+    }
+
+    public void stopSound() {
+        for (Integer key : MUSIC.keySet()) {
+            stopSound(key);
+        }
+    }
+
+    public void stopSound(final int resId) {
+        try {
+            //get the song and stop if playing
+            if (MUSIC.get(resId).isPlaying() || MUSIC.get(resId).isLooping())
+                MUSIC.get(resId).pause();
+        } catch (Exception e) {
+            UtilityHelper.handleException(e);
         }
     }
 
@@ -266,9 +322,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected void openUrl(final String url) {
 
-        //play sound effect
-        playSoundEffect();
-
         //if not established create the intent
         if (this.intent == null) {
             this.intent = new Intent(Intent.ACTION_VIEW);
@@ -279,5 +332,33 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         //start the activity opening the app / web browser
         startActivity(this.intent);
+    }
+
+    @Override
+    protected void onStart() {
+
+        //call parent
+        super.onStart();
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        //call parent
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+
+        //call parent
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+
+        //call parent
+        super.onResume();
     }
 }

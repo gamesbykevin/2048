@@ -121,7 +121,7 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
             Games.Achievements.unlock(getApiClient(), achievementId);
             //UtilityHelper.logEvent("Achievement unlocked " + achievementId);
         } catch (Exception e) {
-            //UtilityHelper.handleException(e);
+            UtilityHelper.handleException(e);
         }
     }
 
@@ -132,7 +132,7 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
             Games.Achievements.increment(getApiClient(), achievementId, incrementValue);
             //UtilityHelper.logEvent("Achievement incremented " + achievementId);
         } catch (Exception e) {
-            //UtilityHelper.handleException(e);
+            UtilityHelper.handleException(e);
         }
     }
 
@@ -147,7 +147,7 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
             Games.Events.increment(getApiClient(), eventId, incrementValue);
             //UtilityHelper.logEvent("Event tracked " + eventId);
         } catch (Exception e) {
-            //UtilityHelper.handleException(e);
+            UtilityHelper.handleException(e);
         }
     }
 
@@ -158,7 +158,7 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
             Games.Leaderboards.submitScore(getApiClient(), leaderboardId, score);
             //UtilityHelper.logEvent("Score submitted:  " + leaderboardId);
         } catch (Exception e) {
-            //UtilityHelper.handleException(e);
+            UtilityHelper.handleException(e);
         }
     }
 
@@ -224,9 +224,6 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
             //flag that we want to open the achievements
             ACCESS_ACHIEVEMENT = true;
         }
-
-        //play sound effect
-        super.playSoundEffect();
     }
 
     public void onClickLeaderboard(View view) {
@@ -243,9 +240,6 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
             //flag that we want to open the achievements
             ACCESS_LEADERBOARD = true;
         }
-
-        //play sound effect
-        super.playSoundEffect();
     }
 
     protected void displayAchievementUI() {

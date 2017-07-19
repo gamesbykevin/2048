@@ -19,7 +19,7 @@ public class UtilityHelper {
             return;
 
         //log as error
-        Log.e("2048", exception.getMessage());
+        Log.e("2048", exception.getMessage(), exception);
 
         //handle process
         exception.printStackTrace();

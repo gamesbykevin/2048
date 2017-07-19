@@ -22,6 +22,7 @@ import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_GAMEOVE
 import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_LEVEL_INDEX;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_SCORE_INDEX;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_TIME_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_WIN_INDEX;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.TOTAL_WORD_TEXTURES;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.HEIGHT;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.WIDTH;
@@ -167,7 +168,7 @@ public class OpenGLRenderer implements Renderer {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            UtilityHelper.handleException(e);
         }
 
         //return our texture id
@@ -177,7 +178,7 @@ public class OpenGLRenderer implements Renderer {
     private void loadTextures(GL10 gl) {
 
         //load textures into our array
-        TEXTURES = new int[Block.VALUES.length + TOTAL_CHARACTERS + TOTAL_WORD_TEXTURES + 1];
+        TEXTURES = new int[Block.VALUES.length + TOTAL_CHARACTERS + TOTAL_WORD_TEXTURES];
 
         //get the sprite sheet containing all our animations
         Bitmap spriteSheet = BitmapFactory.decodeResource(activity.getResources(), R.drawable.blocks);
@@ -223,6 +224,8 @@ public class OpenGLRenderer implements Renderer {
         loadTexture(tmp, gl, TEXTURES, TEXTURE_WORD_TIME_INDEX);
         tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.background);
         loadTexture(tmp, gl, TEXTURES, TEXTURE_BACKGROUND_INDEX);
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.win);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_WORD_WIN_INDEX);
     }
 
     /**
