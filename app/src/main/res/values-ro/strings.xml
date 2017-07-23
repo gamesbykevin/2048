@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> A apărut o problemă la conectare, încercați din nou mai târziu. </string>
+    <string name = "sign_in_failed"> Nu s-a putut conecta. Verificați conexiunea la rețea și încercați din nou. </string>
+    <string name = "app_misconfigured"> Aplicația este configurată incorect. Verificați dacă numele pachetului și certificatul de semnare corespund codului client creat în Consola pentru dezvoltatori. De asemenea, dacă aplicația nu este încă publicată, verificați dacă contul în care încercați să vă conectați este afișat ca un cont de tester. Vedeți jurnalele pentru mai multe informații. </string>
+    <string name = "license_failed"> Verificarea licenței a eșuat. </string>
+    <string name = "unknown_error"> Eroare necunoscută. </string>
+    <string name = "UNKNOWN_ERROR"> Eroare necunoscută. </string>
+    <string name = "gamehelper_sign_in_failed"> Nu s-a putut conecta. Verificați conexiunea la rețea și încercați din nou. </string>
+    <string name = "gamehelper_app_misconfigured"> Aplicația este configurată incorect. Verificați dacă numele pachetului și certificatul de semnare corespund codului client creat în Consola pentru dezvoltatori. De asemenea, dacă aplicația nu este încă publicată, verificați dacă contul în care încercați să vă conectați este afișat ca un cont de tester. Vedeți jurnalele pentru mai multe informații. </string>
+    <string name = "gamehelper_license_failed"> Verificarea licenței a eșuat. </string>
+    <string name = "gamehelper_unknown_error"> Eroare necunoscută. </string>
+    <string name = "button_text_next"> Următorul </string>
+    <string name = "button_text_restart"> Reporniți </string>
+    <string name = "button_text_achievements"> Realizări </string>
+    <string name = "button_text_leaderboard"> Leaderboard </string>
+    <string name = "button_text_rate"> Rate </string>
+    <string name = "button_text_more"> Mai mult </string>
+    <string name = "button_text_menu"> Meniu </string>
+    <string name = "button_text_start"> Start </string>
+    <string name = "button_text_options"> Opțiuni </string>
+    <string name = "button_text_exit"> Exit </string>
+    <string name = "vibrate_on"> Vibrați: activat </string>
+    <string name = "vibrate_off"> Vibrați: Oprit </string>
+    <string name = "sound_on"> Sunet: Activat </string>
+    <string name = "sound_off"> Sunet: Oprit </string>
+    <string name = "text_header_level_select"> Selectați nivelul </string>
+    <string name = "header_option_difficulty"> Abilitate: </string>
+    <string name = "header_option_mode"> Mod: </string>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> Při přihlašování došlo k problému. Zkuste to prosím znovu později. </string>
+    <string name = "sign_in_failed"> Nepodařilo se přihlásit. Zkontrolujte prosím síťové připojení a zkuste to znovu. </string>
+    <string name = "app_misconfigured"> Aplikace je nesprávně nakonfigurována. Zkontrolujte, zda název balíčku a podpisový certifikát odpovídají ID klienta vytvořenému v konzole pro vývojáře. Pokud aplikace ještě není zveřejněna, zkontrolujte, zda se účet, se kterým se pokoušíte přihlásit, je uveden jako účet testeru. Další informace naleznete v protokolech. </string>
+    <string name = "license_failed"> Kontrola licence se nezdařila. </string>
+    <string name = "unknown_error"> Neznámá chyba. </string>
+    <string name = "UNKNOWN_ERROR"> Neznámá chyba. </string>
+    <string name = "gamehelper_sign_in_failed"> Přihlášení se nepodařilo. Zkontrolujte prosím síťové připojení a zkuste to znovu. </string>
+    <string name = "gamehelper_app_misconfigured"> Aplikace je nesprávně nakonfigurována. Zkontrolujte, zda název balíčku a podpisový certifikát odpovídají ID klienta vytvořenému v konzole pro vývojáře. Pokud aplikace ještě není zveřejněna, zkontrolujte, zda se účet, se kterým se pokoušíte přihlásit, je uveden jako účet testeru. Další informace naleznete v protokolech. </string>
+    <string name = "gamehelper_license_failed"> Kontrola licence se nezdařila. </string>
+    <string name = "gamehelper_unknown_error"> Neznámá chyba. </string>
+    <string name = "button_text_next"> Další </string>
+    <string name = "button_text_restart"> Restartovat </string>
+    <string name = "button_text_achievements"> Úspěchy </string>
+    <string name = "button_text_leaderboard"> Leaderboard </string>
+    <string name = "button_text_rate"> Hodnotit </string>
+    <string name = "button_text_more"> Více </string>
+    <string name = "button_text_menu"> Menu </string>
+    <string name = "button_text_start"> Start </string>
+    <string name = "button_text_options"> Možnosti </string>
+    <string name = "button_text_exit"> Ukončit </string>
+    <string name = "vibrate_on"> Vibrace: Zapnuto </string>
+    <string name = "vibrate_off"> Vibrace: Vypnuto </string>
+    <string name = "sound_on"> Zvuk: Zapnuto </string>
+    <string name = "sound_off"> Zvuk: Vypnuto </string>
+    <string name = "text_header_level_select"> Vyberte úroveň </string>
+    <string name = "header_option_difficulty"> Zručnost: </string>
+    <string name = "header_option_mode"> Režim: </string>
+</resources>

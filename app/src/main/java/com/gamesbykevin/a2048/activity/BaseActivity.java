@@ -229,16 +229,21 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public void dispose() {
 
-        //set null
-        preferences = null;
-        vibrator = null;
-        GSON = null;
+        try {
+            //set objects null
+            preferences = null;
+            vibrator = null;
+            GSON = null;
 
-        //stop, kill all sound
-        destroySound();
+            //stop, kill all sound
+            destroySound();
+        } catch (Exception e) {
+            UtilityHelper.handleException(e);
+        }
     }
 
     private void destroySound() {
+
         for (Integer resId : MUSIC.keySet()) {
             stopSound(resId);
             MUSIC.get(resId).release();

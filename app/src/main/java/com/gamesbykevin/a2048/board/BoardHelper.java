@@ -228,10 +228,15 @@ public class BoardHelper {
      */
     protected final static boolean updateMerged(Board board) {
 
+        //clear the list
+        NEW_BLOCKS.clear();
+
+        /*
         //reset our block counts to 0
         for (int i = 0; i < VALUES.length; i++) {
             NEW_BLOCKS.put(VALUES[i], 0);
         }
+        */
 
         //get the list of blocks from our board
         List<Block> blocks = board.getBlocks();
@@ -246,6 +251,10 @@ public class BoardHelper {
 
             //check if any other blocks are at the same location so we can merge and update the score
             for (int j = 0; j < blocks.size(); j++) {
+
+                //don't compare the same block
+                if (i == j)
+                    continue;
 
                 //check the potential match
                 final Block tmp = blocks.get(j);
@@ -277,7 +286,15 @@ public class BoardHelper {
                     //keep track of blocks created for achievements
                     for (int index = 0; index < VALUES.length; index++) {
                         if (block.getValue() == VALUES[index]) {
-                            NEW_BLOCKS.put(VALUES[index], NEW_BLOCKS.get(VALUES[index]) + 1);
+
+                            //get the current value
+                            Integer value = NEW_BLOCKS.get(VALUES[index]);
+
+                            //if there is no previous value default 0
+                            if (value == null)
+                                value = 0;
+
+                            NEW_BLOCKS.put(VALUES[index], value + 1);
                         }
                     }
 
@@ -290,7 +307,7 @@ public class BoardHelper {
                     //add to our total score
                     board.setScore(board.getScore() + block.getValue());
 
-                    //remove the extra block
+                    //remove block
                     blocks.remove(j);
 
                     //move back index

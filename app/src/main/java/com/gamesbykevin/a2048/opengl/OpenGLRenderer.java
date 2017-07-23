@@ -17,6 +17,17 @@ import javax.microedition.khronos.opengles.GL10;
 import static com.gamesbykevin.a2048.activity.GameActivity.MANAGER;
 import static com.gamesbykevin.a2048.board.Block.ANIMATION_DIMENSIONS;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_BACKGROUND_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_DIFFICULTY_EASY_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_DIFFICULTY_HARD_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_DIFFICULTY_MEDIUM_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_MODE_CHALLENGE_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_MODE_INFINITE_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_MODE_ORIGINAL_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_MODE_PUZZLE_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_RULES_CHALLENGE_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_RULES_INFINITE_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_RULES_ORIGINAL_INDEX;
+import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_RULES_PUZZLE_INDEX;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_BEST_INDEX;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_GAMEOVER_INDEX;
 import static com.gamesbykevin.a2048.game.GameManagerHelper.TEXTURE_WORD_LEVEL_INDEX;
@@ -226,6 +237,30 @@ public class OpenGLRenderer implements Renderer {
         loadTexture(tmp, gl, TEXTURES, TEXTURE_BACKGROUND_INDEX);
         tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.win);
         loadTexture(tmp, gl, TEXTURES, TEXTURE_WORD_WIN_INDEX);
+
+
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.mode_original);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_MODE_ORIGINAL_INDEX);
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.rules_original);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_RULES_ORIGINAL_INDEX);
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.mode_puzzle);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_MODE_PUZZLE_INDEX);
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.rules_puzzle);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_RULES_PUZZLE_INDEX);
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.mode_challenge);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_MODE_CHALLENGE_INDEX);
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.rules_challenge);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_RULES_CHALLENGE_INDEX);
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.mode_infinite);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_MODE_INFINITE_INDEX);
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.rules_infinite);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_RULES_INFINITE_INDEX);
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.difficulty_easy);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_DIFFICULTY_EASY_INDEX);
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.difficulty_medium);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_DIFFICULTY_MEDIUM_INDEX);
+        tmp = BitmapFactory.decodeResource(activity.getResources(), R.drawable.difficulty_hard);
+        loadTexture(tmp, gl, TEXTURES, TEXTURE_DIFFICULTY_HARD_INDEX);
     }
 
     /**

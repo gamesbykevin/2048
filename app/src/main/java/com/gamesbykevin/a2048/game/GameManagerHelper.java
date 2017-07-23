@@ -12,6 +12,7 @@ import static com.gamesbykevin.a2048.activity.GameActivity.MANAGER;
 import static com.gamesbykevin.a2048.activity.GameActivity.STATS;
 import static com.gamesbykevin.a2048.board.Block.VALUES;
 import static com.gamesbykevin.a2048.game.GameManager.STEP;
+import static com.gamesbykevin.a2048.level.Stats.DIFFICULTY;
 import static com.gamesbykevin.a2048.level.Stats.MODE;
 import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.TEXTURES;
 import static com.gamesbykevin.a2048.opengl.OpenGLSurfaceView.FPS;
@@ -87,7 +88,7 @@ public class GameManagerHelper {
     private static StatDescription STAT_LEVEL = new StatDescription();
 
     //total number of words we will be displaying
-    public static final int TOTAL_WORD_TEXTURES = 7;
+    public static final int TOTAL_WORD_TEXTURES = 18;
 
     //index for each word in the texture array
     public static final int TEXTURE_WORD_BEST_INDEX = 33;
@@ -97,6 +98,17 @@ public class GameManagerHelper {
     public static final int TEXTURE_WORD_TIME_INDEX = 37;
     public static final int TEXTURE_BACKGROUND_INDEX = 38;
     public static final int TEXTURE_WORD_WIN_INDEX = 39;
+    public static final int TEXTURE_MODE_ORIGINAL_INDEX = 40;
+    public static final int TEXTURE_RULES_ORIGINAL_INDEX = 41;
+    public static final int TEXTURE_MODE_PUZZLE_INDEX = 42;
+    public static final int TEXTURE_RULES_PUZZLE_INDEX = 43;
+    public static final int TEXTURE_MODE_CHALLENGE_INDEX = 44;
+    public static final int TEXTURE_RULES_CHALLENGE_INDEX = 45;
+    public static final int TEXTURE_MODE_INFINITE_INDEX = 46;
+    public static final int TEXTURE_RULES_INFINITE_INDEX = 47;
+    public static final int TEXTURE_DIFFICULTY_EASY_INDEX = 48;
+    public static final int TEXTURE_DIFFICULTY_MEDIUM_INDEX = 49;
+    public static final int TEXTURE_DIFFICULTY_HARD_INDEX = 50;
 
     //how do we resize
     private static final float RATIO = 0.33f;
@@ -144,6 +156,43 @@ public class GameManagerHelper {
     private static final int Y_COORD_LEVEL = Y_COORD_RESULTS + (int)(HEIGHT_TIME * 1.3);
     private static final int WIDTH_LEVEL = (int)(297 * RATIO);
     private static final int HEIGHT_LEVEL = (int)(101 * RATIO);
+
+    //resize below differently
+    private static final float RATIO_DESC = 0.85f;
+
+    //where to render game mode
+    private static final int X_COORD_MODE = 15;
+    private static final int Y_COORD_MODE = Y_COORD_GAMEOVER - 15;
+    private static final int WIDTH_MODE_ORIGINAL = (int)(298 * RATIO_DESC);
+    private static final int HEIGHT_MODE_ORIGINAL = (int)(56 * RATIO_DESC);
+    private static final int WIDTH_MODE_PUZZLE = (int)(267 * RATIO_DESC);
+    private static final int HEIGHT_MODE_PUZZLE = (int)(56 * RATIO_DESC);
+    private static final int WIDTH_MODE_CHALLENGE = (int)(345 * RATIO_DESC);
+    private static final int HEIGHT_MODE_CHALLENGE = (int)(56 * RATIO_DESC);
+    private static final int WIDTH_MODE_INFINITE = (int)(272 * RATIO_DESC);
+    private static final int HEIGHT_MODE_INFINITE = (int)(56 * RATIO_DESC);
+
+    //where to render game difficulty
+    private static final int X_COORD_DIFFICULTY = X_COORD_MODE;
+    private static final int Y_COORD_DIFFICULTY = Y_COORD_MODE + HEIGHT_MODE_ORIGINAL;
+    private static final int WIDTH_DIFFICULTY_EASY = (int)(311 * RATIO_DESC);
+    private static final int HEIGHT_DIFFICULTY_EASY = (int)(56 * RATIO_DESC);
+    private static final int WIDTH_DIFFICULTY_MEDIUM = (int)(356 * RATIO_DESC);
+    private static final int HEIGHT_DIFFICULTY_MEDIUM = (int)(56 * RATIO_DESC);
+    private static final int WIDTH_DIFFICULTY_HARD = (int)(316 * RATIO_DESC);
+    private static final int HEIGHT_DIFFICULTY_HARD = (int)(56 * RATIO_DESC);
+
+    //where to render game rules
+    private static final int X_COORD_RULES = X_COORD_MODE;
+    private static final int Y_COORD_RULES = Y_COORD_DIFFICULTY + HEIGHT_MODE_ORIGINAL;
+    private static final int WIDTH_RULES_ORIGINAL = (int)(511 * RATIO_DESC);
+    private static final int HEIGHT_RULES_ORIGINAL = (int)(56 * RATIO_DESC);
+    private static final int WIDTH_RULES_PUZZLE = (int)(523 * RATIO_DESC);
+    private static final int HEIGHT_RULES_PUZZLE = (int)(56 * RATIO_DESC);
+    private static final int WIDTH_RULES_CHALLENGE = (int)(561 * RATIO_DESC);
+    private static final int HEIGHT_RULES_CHALLENGE = (int)(57 * RATIO_DESC);
+    private static final int WIDTH_RULES_INFINITE = (int)(480 * RATIO_DESC);
+    private static final int HEIGHT_RULES_INFINITE = (int)(56 * RATIO_DESC);
 
     //object used to render texture words
     private static EntityItem entity = new EntityItem();
@@ -308,7 +357,54 @@ public class GameManagerHelper {
             } else {
                 entity.render(openGL, X_COORD_GAMEOVER, Y_COORD_GAMEOVER, WIDTH_GAMEOVER, HEIGHT_GAMEOVER, TEXTURES[TEXTURE_WORD_GAMEOVER_INDEX]);
             }
+        } else {
+
+            //display the mode and rules
+            switch (MODE) {
+                case Original:
+                    entity.render(openGL, X_COORD_MODE, Y_COORD_MODE, WIDTH_MODE_ORIGINAL, HEIGHT_MODE_ORIGINAL, TEXTURES[TEXTURE_MODE_ORIGINAL_INDEX]);
+                    entity.render(openGL, X_COORD_RULES, Y_COORD_RULES, WIDTH_RULES_ORIGINAL, HEIGHT_RULES_ORIGINAL, TEXTURES[TEXTURE_RULES_ORIGINAL_INDEX]);
+                    break;
+
+                case Puzzle:
+                    entity.render(openGL, X_COORD_MODE, Y_COORD_MODE, WIDTH_MODE_PUZZLE, HEIGHT_MODE_PUZZLE, TEXTURES[TEXTURE_MODE_PUZZLE_INDEX]);
+                    entity.render(openGL, X_COORD_RULES, Y_COORD_RULES, WIDTH_RULES_PUZZLE, HEIGHT_RULES_PUZZLE, TEXTURES[TEXTURE_RULES_PUZZLE_INDEX]);
+                    break;
+
+                case Challenge:
+                    entity.render(openGL, X_COORD_MODE, Y_COORD_MODE, WIDTH_MODE_CHALLENGE, HEIGHT_MODE_CHALLENGE, TEXTURES[TEXTURE_MODE_CHALLENGE_INDEX]);
+                    entity.render(openGL, X_COORD_RULES, Y_COORD_RULES, WIDTH_RULES_CHALLENGE, HEIGHT_RULES_CHALLENGE, TEXTURES[TEXTURE_RULES_CHALLENGE_INDEX]);
+                    break;
+
+                case Infinite:
+                    entity.render(openGL, X_COORD_MODE, Y_COORD_MODE, WIDTH_MODE_INFINITE, HEIGHT_MODE_INFINITE, TEXTURES[TEXTURE_MODE_INFINITE_INDEX]);
+                    entity.render(openGL, X_COORD_RULES, Y_COORD_RULES, WIDTH_RULES_INFINITE, HEIGHT_RULES_INFINITE, TEXTURES[TEXTURE_RULES_INFINITE_INDEX]);
+                    break;
+
+                default:
+                    throw new RuntimeException("Mode not handled here: " + MODE.toString());
+            }
+
+            //display the difficulty
+            switch (DIFFICULTY) {
+                case Easy:
+                    entity.render(openGL, X_COORD_DIFFICULTY, Y_COORD_DIFFICULTY, WIDTH_DIFFICULTY_EASY, HEIGHT_DIFFICULTY_EASY, TEXTURES[TEXTURE_DIFFICULTY_EASY_INDEX]);
+                    break;
+
+                case Medium:
+                    entity.render(openGL, X_COORD_DIFFICULTY, Y_COORD_DIFFICULTY, WIDTH_DIFFICULTY_MEDIUM, HEIGHT_DIFFICULTY_MEDIUM, TEXTURES[TEXTURE_DIFFICULTY_MEDIUM_INDEX]);
+                    break;
+
+                case Hard:
+                    entity.render(openGL, X_COORD_DIFFICULTY, Y_COORD_DIFFICULTY, WIDTH_DIFFICULTY_HARD, HEIGHT_DIFFICULTY_HARD, TEXTURES[TEXTURE_DIFFICULTY_HARD_INDEX]);
+                    break;
+
+                default:
+                    throw new RuntimeException("Difficulty not handled here: " + DIFFICULTY.toString());
+            }
         }
+
+
         switch (MODE) {
 
             case Puzzle:

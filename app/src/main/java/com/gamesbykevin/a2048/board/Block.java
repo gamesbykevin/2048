@@ -75,6 +75,12 @@ public class Block extends EntityItem {
         //create new target
         this.target = new Cell();
 
+        //reset values
+        reset();
+    }
+
+    public void reset() {
+
         //assign the size at which we will render the  block
         setWidth(BLOCK_DIMENSIONS);
         setHeight(BLOCK_DIMENSIONS);

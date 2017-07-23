@@ -14,7 +14,13 @@ public class MainActivity extends BaseGameActivity {
     /**
      * Do we debug the application?
      */
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
+
+    /**
+     * Is this for deployment to amazon store?
+     * Amazon doesn't support google play services
+     */
+    public static final boolean AMAZON = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

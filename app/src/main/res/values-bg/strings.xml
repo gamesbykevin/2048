@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> Възникна проблем при влизане, моля, опитайте отново по-късно. </string>
+    <string name = "sign_in_failed"> Неуспешно влизане. Моля, проверете мрежовата връзка и опитайте отново. </string>
+    <string name = "app_misconfigured"> Приложението е неправилно конфигурирано. Проверете дали името на пакета и сертификатът за подпис съответстват на идентификационния номер на клиента, създаден в конзолата за програмисти. Също така, ако приложението все още не е публикувано, проверете дали профилът, с който се опитвате да влезете, е посочен като акаунт за тестер. За повече информация вижте регистрационните файлове. </string>
+    <string name = "license_failed"> Проверката на лиценза не бе успешна. </string>
+    <string name = "unknown_error"> Неизвестна грешка. </string>
+    <string name = "UNKNOWN_ERROR"> Неизвестна грешка. </string>
+    <string name = "gamehelper_sign_in_failed"> Неуспешно влизане. Моля, проверете мрежовата връзка и опитайте отново. </string>
+    <string name = "gamehelper_app_misconfigured"> Приложението е неправилно конфигурирано. Проверете дали името на пакета и сертификатът за подпис съответстват на идентификационния номер на клиента, създаден в конзолата за програмисти. Също така, ако приложението все още не е публикувано, проверете дали профилът, с който се опитвате да влезете, е посочен като акаунт за тестер. За повече информация вижте регистрационните файлове. </string>
+    <string name = "gamehelper_license_failed"> Проверката на лиценза не бе успешна. </string>
+    <string name = "gamehelper_unknown_error"> Неизвестна грешка. </string>
+    <string name = "button_text_next"> Напред </string>
+    <string name = "button_text_restart"> Рестартиране </string>
+    <string name = "button_text_achievements"> Постижения </string>
+    <string name = "button_text_leaderboard"> клавиатура </string>
+    <string name = "button_text_rate"> Оцени </string>
+    <string name = "button_text_more"> Още </string>
+    <string name = "button_text_menu"> Меню </string>
+    <string name = "button_text_start"> Старт </string>
+    <string name = "button_text_options"> Опции </string>
+    <string name = "button_text_exit"> Изход </string>
+    <string name = "vibrate_on"> Вибрация: включена </string>
+    <string name = "vibrate_off"> Вибрация: Изключена </string>
+    <string name = "sound_on"> Звук: включен </string>
+    <string name = "sound_off"> Звук: изключен </string>
+    <string name = "text_header_level_select"> Изберете ниво </string>
+    <string name = "header_option_difficulty"> Умение: </string>
+    <string name = "header_option_mode"> Режим: </string>
+</resources>

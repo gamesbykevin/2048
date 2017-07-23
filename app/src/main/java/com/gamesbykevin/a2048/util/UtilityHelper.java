@@ -4,6 +4,9 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.crash.FirebaseCrash;
+
+import static com.gamesbykevin.a2048.activity.MainActivity.AMAZON;
 import static com.gamesbykevin.a2048.activity.MainActivity.DEBUG;
 
 /**
@@ -14,15 +17,28 @@ public class UtilityHelper {
 
     public static void handleException(final Exception exception) {
 
-        //if not debugging, don't continue
-        if (!DEBUG)
-            return;
+        //if debugging print to log cat
+        if (DEBUG) {
 
-        //log as error
-        Log.e("2048", exception.getMessage(), exception);
+            //log as error
+            Log.e("2048", exception.getMessage(), exception);
 
-        //handle process
-        exception.printStackTrace();
+            //handle process
+            exception.printStackTrace();
+
+        } else {
+
+            try {
+                //if this app isn't for amazon log in fire base
+                if (!AMAZON) {
+                    //report exception to fire base
+                    FirebaseCrash.report(exception);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public static void logEvent(final String message) {

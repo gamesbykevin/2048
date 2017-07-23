@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> มีปัญหาเกี่ยวกับการลงชื่อเข้าใช้โปรดลองอีกครั้งในภายหลัง </string>
+    <string name = "sign_in_failed"> ไม่สามารถลงชื่อเข้าใช้โปรดตรวจสอบการเชื่อมต่อเครือข่ายของคุณและลองอีกครั้ง </string>
+    <string name = "app_misconfigured"> โปรแกรมประยุกต์ถูกกำหนดค่าไม่ถูกต้อง ตรวจสอบว่าชื่อแพ็กเกจและใบรับรองการเซ็นชื่อตรงกับรหัสลูกค้าที่สร้างขึ้นในคอนโซลนักพัฒนาซอฟต์แวร์ นอกจากนี้หากแอปพลิเคชันยังไม่ได้เผยแพร่โปรดตรวจสอบว่าบัญชีที่คุณกำลังพยายามลงชื่อเข้าใช้มีอยู่ในบัญชีทดสอบ ดูบันทึกสำหรับข้อมูลเพิ่มเติม </string>
+    <string name = "license_failed"> การตรวจสอบใบอนุญาตล้มเหลว </string>
+    <string name = "unknown_error"> ข้อผิดพลาดที่ไม่รู้จัก </string>
+    <string name = "UNKNOWN_ERROR"> ข้อผิดพลาดที่ไม่รู้จัก </string>
+    <string name = "gamehelper_sign_in_failed"> ไม่สามารถลงชื่อเข้าใช้โปรดตรวจสอบการเชื่อมต่อเครือข่ายของคุณและลองอีกครั้ง </string>
+    <string name = "gamehelper_app_misconfigured"> โปรแกรมประยุกต์ถูกกำหนดค่าไม่ถูกต้อง ตรวจสอบว่าชื่อแพ็กเกจและใบรับรองการเซ็นชื่อตรงกับรหัสลูกค้าที่สร้างขึ้นในคอนโซลนักพัฒนาซอฟต์แวร์ นอกจากนี้หากแอปพลิเคชันยังไม่ได้เผยแพร่โปรดตรวจสอบว่าบัญชีที่คุณกำลังพยายามลงชื่อเข้าใช้มีอยู่ในบัญชีทดสอบ ดูบันทึกสำหรับข้อมูลเพิ่มเติม </string>
+    <string name = "gamehelper_license_failed"> การตรวจสอบใบอนุญาตล้มเหลว </string>
+    <string name = "gamehelper_unknown_error"> ข้อผิดพลาดที่ไม่รู้จัก </string>
+    <string name = "button_text_next"> ถัดไป </string>
+    <string name = "button_text_restart"> เริ่มใหม่ </string>
+    <string name = "button_text_achievements"> ความสำเร็จ </string>
+    <string name = "button_text_leaderboard"> ลีดเดอร์บอร์ด </string>
+    <string name = "button_text_rate"> อัตรา </string>
+    <string name = "button_text_more"> เพิ่มเติม </string>
+    <string name = "button_text_menu"> เมนู </string>
+    <string name = "button_text_start"> เริ่ม </string>
+    <string name = "button_text_options"> ตัวเลือก </string>
+    <string name = "button_text_exit"> ออก </string>
+    <string name = "vibrate_on"> สั่น: เปิด </string>
+    <string name = "vibrate_off"> สั่นสะเทือน: ปิด </string>
+    <string name = "sound_on"> เสียง: เปิด </string>
+    <string name = "sound_off"> เสียง: ปิด </string>
+    <string name = "text_header_level_select"> เลือกระดับ </string>
+    <string name = "header_option_difficulty"> ทักษะ: </string>
+    <string name = "header_option_mode"> โหมด: </string>
+</resources>

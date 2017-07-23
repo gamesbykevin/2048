@@ -4,6 +4,7 @@ import com.gamesbykevin.a2048.activity.GameActivity;
 import com.gamesbykevin.a2048.R;
 import com.gamesbykevin.a2048.board.Board;
 import com.gamesbykevin.a2048.util.UtilityHelper;
+import com.gamesbykevin.a2048.game.GameManagerHelper.Mode;
 
 import static com.gamesbykevin.a2048.board.Block.VALUES;
 import static com.gamesbykevin.a2048.board.BoardHelper.NEW_BLOCKS;
@@ -191,39 +192,83 @@ public class GooglePlayServicesHelper {
         if (!activity.getApiClient().isConnected())
             return;
 
+        //if empty, no new blocks
+        if (NEW_BLOCKS.isEmpty())
+            return;
+
         //if no blocks, we can't unlock any achievements
         boolean valid = false;
 
         for (int i = 8; i < VALUES.length; i++) {
-            if (NEW_BLOCKS.get(VALUES[i]) > 0)
+
+            //get current value
+            Integer value = NEW_BLOCKS.get(VALUES[i]);
+
+            //we need at least one to continue
+            if (value != null && value > 0) {
                 valid = true;
+                break;
+            }
         }
 
         //if no new blocks, don't continue
         if (!valid)
             return;
 
-        //track events for total blocks created
-        if (NEW_BLOCKS.get(VALUES[11]) > 0)
-            activity.trackEvent(R.string.event_2048_block_count, NEW_BLOCKS.get(VALUES[11]));
-        if (NEW_BLOCKS.get(VALUES[12]) > 0)
-            activity.trackEvent(R.string.event_4096_block_count, NEW_BLOCKS.get(VALUES[12]));
-        if (NEW_BLOCKS.get(VALUES[13]) > 0)
-            activity.trackEvent(R.string.event_8192_block_count, NEW_BLOCKS.get(VALUES[13]));
-        if (NEW_BLOCKS.get(VALUES[14]) > 0)
-            activity.trackEvent(R.string.event_16384_block_count, NEW_BLOCKS.get(VALUES[14]));
-        if (NEW_BLOCKS.get(VALUES[15]) > 0)
-            activity.trackEvent(R.string.event_32768_block_count, NEW_BLOCKS.get(VALUES[15]));
-        if (NEW_BLOCKS.get(VALUES[16]) > 0)
-            activity.trackEvent(R.string.event_65536_block_count, NEW_BLOCKS.get(VALUES[16]));
-        if (NEW_BLOCKS.get(VALUES[17]) > 0)
-            activity.trackEvent(R.string.event_131072_block_count, NEW_BLOCKS.get(VALUES[17]));
-        if (NEW_BLOCKS.get(VALUES[18]) > 0)
-            activity.trackEvent(R.string.event_262144_block_count, NEW_BLOCKS.get(VALUES[18]));
-        if (NEW_BLOCKS.get(VALUES[19]) > 0)
-            activity.trackEvent(R.string.event_524288_block_count, NEW_BLOCKS.get(VALUES[19]));
-        if (NEW_BLOCKS.get(VALUES[20]) > 0)
-            activity.trackEvent(R.string.event_1048576_block_count, NEW_BLOCKS.get(VALUES[20]));
+        //get the number of blocks for each type
+        Integer blocks_256 = NEW_BLOCKS.get(VALUES[8]);
+        Integer blocks_512 = NEW_BLOCKS.get(VALUES[9]);
+        Integer blocks_2048 = NEW_BLOCKS.get(VALUES[11]);
+        Integer blocks_4096 = NEW_BLOCKS.get(VALUES[12]);
+        Integer blocks_8192 = NEW_BLOCKS.get(VALUES[13]);
+        Integer blocks_16384 = NEW_BLOCKS.get(VALUES[14]);
+        Integer blocks_32768 = NEW_BLOCKS.get(VALUES[15]);
+        Integer blocks_65536 = NEW_BLOCKS.get(VALUES[16]);
+        Integer blocks_131072 = NEW_BLOCKS.get(VALUES[17]);
+        Integer blocks_262144 = NEW_BLOCKS.get(VALUES[18]);
+        Integer blocks_524288 = NEW_BLOCKS.get(VALUES[19]);
+        Integer blocks_1048576 = NEW_BLOCKS.get(VALUES[20]);
+
+        //if there was no blocks created, then we don't need to continue
+        if ((blocks_256 == null || blocks_256 < 1) &&
+            (blocks_512 == null || blocks_512 < 1) &&
+            (blocks_2048 == null || blocks_2048 < 1) &&
+            (blocks_4096 == null || blocks_4096 < 1) &&
+            (blocks_8192 == null || blocks_8192 < 1) &&
+            (blocks_16384 == null || blocks_16384 < 1) &&
+            (blocks_32768 == null || blocks_32768 < 1) &&
+            (blocks_65536 == null || blocks_65536 < 1) &&
+            (blocks_131072 == null || blocks_131072 < 1) &&
+            (blocks_262144 == null || blocks_262144 < 1) &&
+            (blocks_524288 == null || blocks_524288 < 1) &&
+            (blocks_1048576 == null || blocks_1048576 < 1))
+            return;
+
+        //block progress don't count for puzzle mode for these events
+        if (MODE != Mode.Puzzle) {
+
+            //track events for total blocks created
+            if (blocks_2048 != null && blocks_2048 > 0)
+                activity.trackEvent(R.string.event_2048_block_count, blocks_2048);
+            if (blocks_4096 != null && blocks_4096 > 0)
+                activity.trackEvent(R.string.event_4096_block_count, blocks_4096);
+            if (blocks_8192 != null && blocks_8192 > 0)
+                activity.trackEvent(R.string.event_8192_block_count, blocks_8192);
+            if (blocks_16384 != null && blocks_16384 > 0)
+                activity.trackEvent(R.string.event_16384_block_count, blocks_16384);
+            if (blocks_32768 != null && blocks_32768 > 0)
+                activity.trackEvent(R.string.event_32768_block_count, blocks_32768);
+            if (blocks_65536 != null && blocks_65536 > 0)
+                activity.trackEvent(R.string.event_65536_block_count, blocks_65536);
+            if (blocks_131072 != null && blocks_131072 > 0)
+                activity.trackEvent(R.string.event_131072_block_count, blocks_131072);
+            if (blocks_262144 != null && blocks_262144 > 0)
+                activity.trackEvent(R.string.event_262144_block_count, blocks_262144);
+            if (blocks_524288 != null && blocks_524288 > 0)
+                activity.trackEvent(R.string.event_524288_block_count, blocks_524288);
+            if (blocks_1048576 != null && blocks_1048576 > 0)
+                activity.trackEvent(R.string.event_1048576_block_count, blocks_1048576);
+        }
 
         switch (MODE) {
 
@@ -233,41 +278,41 @@ public class GooglePlayServicesHelper {
                 break;
 
             case Challenge:
-                if (NEW_BLOCKS.get(VALUES[8]) > 0)
+                if (blocks_256 != null && blocks_256 > 0)
                     activity.unlockAchievement(R.string.achievement_256_block_mode_challenge);
-                if (NEW_BLOCKS.get(VALUES[9]) > 0)
+                if (blocks_512 != null && blocks_512 > 0)
                     activity.unlockAchievement(R.string.achievement_512_block_mode_challenge);
-                if (NEW_BLOCKS.get(VALUES[12]) > 0)
-                    activity.incrementAchievement(R.string.achievement_create_a_4096_block_100_times_mode_challenge_infinite, NEW_BLOCKS.get(VALUES[12]));
-                if (NEW_BLOCKS.get(VALUES[13]) > 0)
-                    activity.incrementAchievement(R.string.achievement_create_a_8192_block_100_times_mode_challenge_infinite, NEW_BLOCKS.get(VALUES[13]));
+                if (blocks_4096 != null && blocks_4096 > 0)
+                    activity.incrementAchievement(R.string.achievement_create_a_4096_block_100_times_mode_challenge_infinite, blocks_4096);
+                if (blocks_8192 != null && blocks_8192 > 0)
+                    activity.incrementAchievement(R.string.achievement_create_a_8192_block_100_times_mode_challenge_infinite, blocks_8192);
                 break;
 
             case Infinite:
 
-                if (NEW_BLOCKS.get(VALUES[12]) > 0) {
+                if (blocks_4096 != null && blocks_4096 > 0) {
                     activity.unlockAchievement(R.string.achievement_4096_block);
-                    activity.incrementAchievement(R.string.achievement_create_a_4096_block_100_times_mode_challenge_infinite, NEW_BLOCKS.get(VALUES[12]));
+                    activity.incrementAchievement(R.string.achievement_create_a_4096_block_100_times_mode_challenge_infinite, blocks_4096);
                 }
 
-                if (NEW_BLOCKS.get(VALUES[13]) > 0) {
+                if (blocks_8192 != null && blocks_8192 > 0) {
                     activity.unlockAchievement(R.string.achievement_8192_block);
-                    activity.incrementAchievement(R.string.achievement_create_a_8192_block_100_times_mode_challenge_infinite, NEW_BLOCKS.get(VALUES[13]));
+                    activity.incrementAchievement(R.string.achievement_create_a_8192_block_100_times_mode_challenge_infinite, blocks_8192);
                 }
 
-                if (NEW_BLOCKS.get(VALUES[14]) > 0)
+                if (blocks_16384 != null && blocks_16384 > 0)
                     activity.unlockAchievement(R.string.achievement_16384_block);
-                if (NEW_BLOCKS.get(VALUES[15]) > 0)
+                if (blocks_32768 != null && blocks_32768 > 0)
                     activity.unlockAchievement(R.string.achievement_32768_block);
-                if (NEW_BLOCKS.get(VALUES[16]) > 0)
+                if (blocks_65536 != null && blocks_65536 > 0)
                     activity.unlockAchievement(R.string.achievement_65536_block);
-                if (NEW_BLOCKS.get(VALUES[17]) > 0)
+                if (blocks_131072 != null && blocks_131072 > 0)
                     activity.unlockAchievement(R.string.achievement_131072_block);
-                if (NEW_BLOCKS.get(VALUES[18]) > 0)
+                if (blocks_262144 != null && blocks_262144 > 0)
                     activity.unlockAchievement(R.string.achievement_262144_block);
-                if (NEW_BLOCKS.get(VALUES[19]) > 0)
+                if (blocks_524288 != null && blocks_524288 > 0)
                     activity.unlockAchievement(R.string.achievement_524288_block);
-                if (NEW_BLOCKS.get(VALUES[20]) > 0)
+                if (blocks_1048576 != null && blocks_1048576 > 0)
                     activity.unlockAchievement(R.string.achievement_1048576_block);
                 break;
 
@@ -275,9 +320,7 @@ public class GooglePlayServicesHelper {
                 throw new RuntimeException("Mode: " + MODE.toString() + " not handled here");
         }
 
-        //reset count back to 0
-        for (int i = 0; i < VALUES.length; i++) {
-            NEW_BLOCKS.put(VALUES[i], 0);
-        }
+        //reset back to nothing
+        NEW_BLOCKS.clear();
     }
 }

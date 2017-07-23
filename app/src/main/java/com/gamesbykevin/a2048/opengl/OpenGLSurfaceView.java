@@ -21,6 +21,11 @@ import static com.gamesbykevin.a2048.opengl.OpenGLRenderer.LOADED;
 public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
 
     /**
+     * Frames per second
+     */
+    public static final int FPS = 90;
+
+    /**
      * The version of open GL we are using
      */
     public static final int OPEN_GL_VERSION = 1;
@@ -42,11 +47,6 @@ public class OpenGLSurfaceView extends GLSurfaceView implements Runnable {
     private long previousDraw;
     private long postUpdate;
     private long postDraw;
-
-    /**
-     * Frames per second
-     */
-    public static final int FPS = 90;
 
     /**
      * The duration of each frame (milliseconds)

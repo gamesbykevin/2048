@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> Đã xảy ra sự cố khi đăng nhập, vui lòng thử lại sau. </string>
+    <string name = "sign_in_failed"> Không thể đăng nhập Vui lòng kiểm tra kết nối mạng của bạn và thử lại. </string>
+    <string name = "app_misconfigured"> Ứng dụng được định cấu hình không chính xác. Kiểm tra xem tên gói và chứng chỉ đăng ký có khớp với ID khách hàng được tạo trong Bảng điều khiển dành cho nhà phát triển hay không. Ngoài ra, nếu ứng dụng chưa được xuất bản, hãy kiểm tra xem tài khoản bạn đang cố đăng nhập có được liệt kê như là một tài khoản người kiểm tra. Xem nhật ký để biết thêm thông tin. </string>
+    <string name = "license_failed"> Kiểm tra giấy phép không thành công. </string>
+    <string name = "unknown_error"> Lỗi không xác định. </string>
+    <string name = "UNKNOWN_ERROR"> Lỗi không xác định. </string>
+    <string name = "gamehelper_sign_in_failed"> Không thể đăng nhập Vui lòng kiểm tra kết nối mạng của bạn và thử lại. </string>
+    <string name = "gamehelper_app_misconfigured"> Ứng dụng được định cấu hình không chính xác. Kiểm tra xem tên gói và chứng chỉ đăng ký có khớp với ID khách hàng được tạo trong Bảng điều khiển dành cho nhà phát triển hay không. Ngoài ra, nếu ứng dụng chưa được xuất bản, hãy kiểm tra xem tài khoản bạn đang cố đăng nhập có được liệt kê như là một tài khoản người kiểm tra. Xem nhật ký để biết thêm thông tin. </string>
+    <string name = "gamehelper_license_failed"> Kiểm tra giấy phép không thành công. </string>
+    <string name = "gamehelper_unknown_error"> lỗi không xác định. </string>
+    <string name = "button_text_next"> Tiếp theo </string>
+    <string name = "button_text_restart"> Khởi động lại </string>
+    <string name = "button_text_achievements"> Thành tích </string>
+    <string name = "button_text_leaderboard"> Hình chữ nhật dài </string>
+    <string name = "button_text_rate"> Xếp hạng </string>
+    <string name = "button_text_more"> Thêm </string>
+    <string name = "button_text_menu"> Menu </string>
+    <string name = "button_text_start"> Bắt đầu </string>
+    <string name = "button_text_options"> Tùy chọn </string>
+    <string name = "button_text_exit"> Thoát </string>
+    <string name = "vibrate_on"> Rung: Bật </string>
+    <string name = "vibrate_off"> Rung: Tắt </string>
+    <string name = "sound_on"> Âm thanh: Trên </string>
+    <string name = "sound_off"> Âm thanh: Tắt </string>
+    <string name = "text_header_level_select"> Chọn Cấp </string>
+    <string name = "header_option_difficulty"> Kỹ năng: </string>
+    <string name = "header_option_mode"> Chế độ: </string>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> Der var et problem med login, prøv igen senere. </string>
+    <string name = "sign_in_failed"> Kunne ikke logge ind. Kontroller din netværksforbindelse og prøv igen. </string>
+    <string name = "app_misconfigured"> Programmet er forkert konfigureret. Kontroller, at pakkenavnet og underskriftscertifikatet matcher klient-id\'et, der er oprettet i Developer Console. Hvis applikationen endnu ikke er offentliggjort, skal du kontrollere, at den konto, du forsøger at logge ind med, er angivet som en testerkonto. Se logfiler for mere information. </string>
+    <string name = "license_failed"> Licenskontrollen mislykkedes. </string>
+    <string name = "unknown_error"> Ukendt fejl. </string>
+    <string name = "UNKNOWN_ERROR"> Ukendt fejl. </string>
+    <string name = "gamehelper_sign_in_failed"> Kunne ikke logge ind. Kontroller din netværksforbindelse og prøv igen. </string>
+    <string name = "gamehelper_app_misconfigured"> Programmet er forkert konfigureret. Kontroller, at pakkenavnet og underskriftscertifikatet matcher klient-id\'et, der er oprettet i Developer Console. Hvis applikationen endnu ikke er offentliggjort, skal du kontrollere, at den konto, du forsøger at logge ind med, er angivet som en testerkonto. Se logfiler for mere information. </string>
+    <string name = "gamehelper_license_failed"> Licenscheck mislykkedes. </string>
+    <string name = "gamehelper_unknown_error"> Ukendt fejl. </string>
+    <string name = "button_text_next"> Næste </string>
+    <string name = "button_text_restart"> Genstart </string>
+    <string name = "button_text_achievements"> Achievements </string>
+    <string name = "button_text_leaderboard"> Leaderboard </string>
+    <string name = "button_text_rate"> Rate </string>
+    <string name = "button_text_more"> Mere </string>
+    <string name = "button_text_menu"> Menu </string>
+    <string name = "button_text_start"> Start </string>
+    <string name = "button_text_options"> Valg </string>
+    <string name = "button_text_exit"> Afslut </string>
+    <string name = "vibrate_on"> Vibrate: On </string>
+    <string name = "vibrate_off"> Vibrate: Off </string>
+    <string name = "sound_on"> Lyd: På </string>
+    <string name = "sound_off"> Lyd: Fra </string>
+    <string name = "text_header_level_select"> Vælg niveau </string>
+    <string name = "header_option_difficulty"> Færdighed: </string>
+    <string name = "header_option_mode"> Mode: </string>
+</resources>

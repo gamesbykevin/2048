@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "850125635001",
+    "firebase_url": "https://no-ads-38765207.firebaseio.com",
+    "project_id": "no-ads-38765207",
+    "storage_bucket": "no-ads-38765207.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:850125635001:android:d23fcc7508083e81",
+        "android_client_info": {
+          "package_name": "com.gamesbykevin.a2048"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "850125635001-dr48v01fp3jadb1nh1pr8j98s7m19akd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gamesbykevin.a2048",
+            "certificate_hash": "7e883276024513846baa030ef413a72059597dde"
+          }
+        },
+        {
+          "client_id": "850125635001-r4rfjef6v04uf9kndjuj3e4u0k017ok0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfqZ0JA9S1ItCQmdocxtG2_QW2aglo0nY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "850125635001-r4rfjef6v04uf9kndjuj3e4u0k017ok0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

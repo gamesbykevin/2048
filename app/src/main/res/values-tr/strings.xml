@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> Oturum açma ile ilgili bir sorun oluştu, lütfen daha sonra tekrar deneyin. </string>
+    <string name = "sign_in_failed"> Oturum açılamadı. Lütfen ağ bağlantınızı kontrol edin ve tekrar deneyin. </string>
+    <string name = "app_misconfigured"> Uygulama yanlış yapılandırıldı. Paket adı ve imza sertifikasının Geliştirici Konsolu\'nda oluşturulan istemci kimliğiyle eşleştiğini kontrol edin. Ayrıca, uygulama henüz yayınlanmıyorsa, oturum açmaya çalıştığınız hesabın test kullanıcısı hesabı olarak listelenip listelenmediğini kontrol edin. Daha fazla bilgi için günlüklere bakın. </string>
+    <string name = "license_failed"> Lisans kontrolü başarısız oldu. </string>
+    <string name = "unknown_error"> Bilinmeyen bir hata. </string>
+    <string name = "UNKNOWN_ERROR"> Bilinmeyen bir hata. </string>
+    <string name = "gamehelper_sign_in_failed"> Oturum açılamadı. Lütfen ağ bağlantınızı kontrol edin ve tekrar deneyin. </string>
+    <string name = "gamehelper_app_misconfigured"> Uygulama yanlış yapılandırıldı. Paket adı ve imza sertifikasının Geliştirici Konsolu\'nda oluşturulan istemci kimliğiyle eşleştiğini kontrol edin. Ayrıca, uygulama henüz yayınlanmıyorsa, oturum açmaya çalıştığınız hesabın test kullanıcısı hesabı olarak listelenip listelenmediğini kontrol edin. Daha fazla bilgi için günlüklere bakın. </string>
+    <string name = "gamehelper_license_failed"> Lisans kontrolü başarısız oldu. </string>
+    <string name = "gamehelper_unknown_error"> Bilinmeyen bir hata. </string>
+    <string name = "button_text_next"> Sonraki </string>
+    <string name = "button_text_restart"> Yeniden başlat </string>
+    <string name = "button_text_achievements"> Başarılar </string>
+    <string name = "button_text_leaderboard"> Liderlik panosu </string>
+    <string name = "button_text_rate"> Oran </string>
+    <string name = "button_text_more"> Daha Fazla </string>
+    <string name = "button_text_menu"> Menü </string>
+    <string name = "button_text_start"> Başlat </string>
+    <string name = "button_text_options"> Seçenekler </string>
+    <string name = "button_text_exit"> Çıkış </string>
+    <string name = "vibrate_on"> Titreşim: Açık </string>
+    <string name = "vibrate_off"> Titreşim: Kapalı </string>
+    <string name = "sound_on"> Ses: Açık </string>
+    <string name = "sound_off"> Ses: Kapalı </string>
+    <string name = "text_header_level_select"> Seviye Seç </string>
+    <string name = "header_option_difficulty"> Beceri: </string>
+    <string name = "header_option_mode"> Mod: </string>
+</resources>

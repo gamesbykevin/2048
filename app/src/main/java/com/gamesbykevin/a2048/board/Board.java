@@ -201,10 +201,14 @@ public class Board {
         //check each block in the list
         for (int i = 0; i < getBlocks().size(); i++) {
             if (getBlocks().get(i).hasLocation(col, row))
-                return getBlocks().get(i);
+                return getBlock(i);
         }
 
         return null;
+    }
+
+    public Block getBlock(final int index) {
+        return getBlocks().get(index);
     }
 
     /**
@@ -216,12 +220,16 @@ public class Board {
         //create the list that will contain our available blocks
         if (available == null)
             available = new ArrayList<>();
+
+        //reset list
         available.clear();
 
         //check every location to see what is available
         for (int col = 0; col < getCols(); col++) {
             for (int row = 0; row < getRows(); row++) {
                 if (!hasBlock(col, row)) {
+
+                    //add to the list
                     available.add(new Cell(col, row));
                 }
             }
@@ -275,7 +283,9 @@ public class Board {
      * @param value Desired value of the new block
      */
     public void addBlock(int col, int row, int value) {
-       Block block = new Block();
+
+        //try to reuse an existing block
+        Block block = new Block();
 
         //assign the location
         block.setCol(col);
@@ -288,7 +298,7 @@ public class Board {
         //assign the block value as well
         block.setValue(value);
 
-        //add block to the list
+        //add it to the list
         getBlocks().add(block);
     }
 
@@ -298,10 +308,11 @@ public class Board {
      * @param row Row
      * @return true if a block exists at the specified space, false otherwise
      */
-    public boolean hasBlock(final int col, final int row) {
+    protected boolean hasBlock(final int col, final int row) {
 
         //check all the blocks
         for (int i = 0; i < getBlocks().size(); i++) {
+
             Cell cell = getBlocks().get(i);
 
             //if the column and row matches, return true

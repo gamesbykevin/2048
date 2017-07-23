@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> Postoji problem sa prijavljivanjem, pokušajte ponovo kasnije. </string>
+    <string name = "sign_in_failed"> Nije uspelo da se prijavite. Proverite mrežnu vezu i pokušajte ponovo. </string>
+    <string name = "app_misconfigured"> Aplikacija je pogrešno konfigurisana. Proverite da li se ime paketa i potpisni sertifikat podudaraju sa ID klijenta kreiranim u konzoli za razvijanje. Takođe, ako aplikacija još nije objavljena, proverite da li se nalog sa kojim se prijavljujete nalazi na listi naloga testera. Pogledajte evidencije za više informacija. </string>
+    <string name = "license_failed"> Provera licence nije uspela. </string>
+    <string name = "unknown_error"> Nepoznata greška. </string>
+    <string name = "UNKNOWN_ERROR"> Nepoznata greška. </string>
+    <string name = "gamehelper_sign_in_failed"> Neuspešno se prijaviti. Proverite mrežnu vezu i pokušajte ponovo. </string>
+    <string name = "gamehelper_app_misconfigured"> Aplikacija je pogrešno konfigurisana. Proverite da li se ime paketa i potpisni sertifikat podudaraju sa ID klijenta kreiranim u konzoli za razvijanje. Takođe, ako aplikacija još nije objavljena, proverite da li se nalog sa kojim se prijavljujete nalazi na listi naloga testera. Pogledajte evidencije za više informacija. </string>
+    <string name = "gamehelper_license_failed"> Provera licence nije uspela. </string>
+    <string name = "gamehelper_unknown_error"> Nepoznata greška. </string>
+    <string name = "button_text_next"> Sledeće </string>
+    <string name = "button_text_restart"> Ponovo pokreni </string>
+    <string name = "button_text_achievements"> Dostignuća </string>
+    <string name = "button_text_leaderboard"> Leaderboard </string>
+    <string name = "button_text_rate"> Oceni </string>
+    <string name = "button_text_more"> Više </string>
+    <string name = "button_text_menu"> Meni </string>
+    <string name = "button_text_start"> Počni </string>
+    <string name = "button_text_options"> Opcije </string>
+    <string name = "button_text_exit"> Izađi </string>
+    <string name = "vibrate_on"> Vibriranje: Uključeno </string>
+    <string name = "vibrate_off"> Vibracija: Isključeno </string>
+    <string name = "sound_on"> Zvuk: Uključen </string>
+    <string name = "sound_off"> Zvuk: Isključeno </string>
+    <string name = "text_header_level_select"> Izaberite nivo </string>
+    <string name = "header_option_difficulty"> Veština: </string>
+    <string name = "header_option_mode"> Režim: </string>
+</resources>

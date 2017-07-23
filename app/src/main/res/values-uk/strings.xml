@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> Виникла проблема з входом, будь ласка, повторіть спробу пізніше. </string>
+    <string name = "sign_in_failed"> Не вдалося ввійти. Перевірте з\'єднання з мережею та повторіть спробу. </string>
+    <string name = "app_misconfigured"> Програма неправильно налаштована. Переконайтеся, що назву пакета та сертифікат підписання відповідають ідентифікатору клієнта, створеному на Консолі розробника. Також, якщо додаток ще не опубліковано, перевірте, чи обліковий запис, на який ви намагаєтеся ввійти, вказано як обліковий запис тестера. Щоб отримати докладнішу інформацію, перегляньте журнали. </string>
+    <string name = "license_failed"> Перевірка ліцензії не виконана. </string>
+    <string name = "unknown_error"> Невідома помилка. </string>
+    <string name = "UNKNOWN_ERROR"> Невідома помилка. </string>
+    <string name = "gamehelper_sign_in_failed"> Не вдалося ввійти. Перевірте з\'єднання з мережею та повторіть спробу. </string>
+    <string name = "gamehelper_app_misconfigured"> Програма неправильно налаштована. Переконайтеся, що назву пакета та сертифікат підписання відповідають ідентифікатору клієнта, створеному на Консолі розробника. Також, якщо додаток ще не опубліковано, перевірте, чи обліковий запис, на який ви намагаєтеся ввійти, вказано як обліковий запис тестера. Щоб отримати докладнішу інформацію, перегляньте журнали. </string>
+    <string name = "gamehelper_license_failed"> Не вдалося перевірити ліцензію. </string>
+    <string name = "gamehelper_unknown_error"> Невідома помилка. </string>
+    <string name = "button_text_next"> Далі </string>
+    <string name = "button_text_restart"> Перезапустити </string>
+    <string name = "button_text_achievements"> Досягнення </string>
+    <string name = "button_text_leaderboard"> Лінійка </string>
+    <string name = "button_text_rate"> Оцінити </string>
+    <string name = "button_text_more"> Більше </string>
+    <string name = "button_text_menu"> Меню </string>
+    <string name = "button_text_start"> Початок </string>
+    <string name = "button_text_options"> Параметри </string>
+    <string name = "button_text_exit"> Вихід </string>
+    <string name = "vibrate_on"> Вібросигнал: On </string>
+    <string name = "vibrate_off"> Вібрація: вимкнено </string>
+    <string name = "sound_on"> Звук: Увімкнено </string>
+    <string name = "sound_off"> Звук: вимкнено </string>
+    <string name = "text_header_level_select"> Виберіть рівень </string>
+    <string name = "header_option_difficulty"> Майстерність: </string>
+    <string name = "header_option_mode"> Режим: </string>
+</resources>

@@ -48,6 +48,7 @@ import com.google.android.gms.games.request.GameRequest;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.Plus.PlusOptions;
 
+import static com.gamesbykevin.a2048.activity.MainActivity.AMAZON;
 import static com.gamesbykevin.a2048.services.BaseGameActivity.BYPASS_LOGIN;
 
 public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
@@ -364,7 +365,7 @@ public class GameHelper implements GoogleApiClient.ConnectionCallbacks,
         debugLog("onStart");
         assertConfigured("onStart");
 
-        if (mConnectOnStart && !BYPASS_LOGIN) {
+        if (mConnectOnStart && !BYPASS_LOGIN && !AMAZON) {
             if (mGoogleApiClient.isConnected()) {
                 Log.w(TAG, "GameHelper: client was already connected on onStart()");
             } else {
