@@ -171,7 +171,11 @@ public abstract class BaseGameActivity extends BaseActivity implements GameHelpe
     }
 
     protected void signOut() {
-        mHelper.signOut();
+        try {
+            mHelper.signOut();
+        } catch (Exception e) {
+            UtilityHelper.handleException(e);
+        }
     }
 
     protected void showAlert(String message) {

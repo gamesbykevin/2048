@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "sign_in_other_error"> Nagkaroon ng isyu sa pag-sign in, pakisubukang muli sa ibang pagkakataon. </string>
+    <string name = "sign_in_failed"> Nabigong mag-sign in. Mangyaring suriin ang iyong koneksyon sa network at subukang muli. </string>
+    <string name = "app_misconfigured"> Maling na-configure ang application. Suriin na tumutugma ang pangalan ng package at sertipiko ng pag-sign sa client ID na nilikha sa Developer Console. Gayundin, kung ang application ay hindi pa nai-publish, suriin na ang account na sinusubukan mong mag-sign in ay nakalista bilang isang tester account. Tingnan ang mga log para sa higit pang impormasyon. </string>
+    <string name = "license_failed"> Nabigo ang pag-check ng lisensya. </string>
+    <string name = "unknown_error"> Hindi kilalang error. </string>
+    <string name = "UNKNOWN_ERROR"> Hindi kilalang error. </string>
+    <string name = "gamehelper_sign_in_failed"> Nabigong mag-sign in. Mangyaring suriin ang iyong koneksyon sa network at subukang muli. </string>
+    <string name = "gamehelper_app_misconfigured"> Maling na-configure ang application. Suriin na tumutugma ang pangalan ng package at sertipiko ng pag-sign sa client ID na nilikha sa Developer Console. Gayundin, kung ang application ay hindi pa nai-publish, suriin na ang account na sinusubukan mong mag-sign in ay nakalista bilang isang tester account. Tingnan ang mga log para sa higit pang impormasyon. </string>
+    <string name = "gamehelper_license_failed"> Nabigo ang pag-check ng lisensya. </string>
+    <string name = "gamehelper_unknown_error"> Hindi kilalang error. </string>
+    <string name = "button_text_next"> Susunod </string>
+    <string name = "button_text_restart"> I-restart ang </string>
+    <string name = "button_text_achievements"> Mga nakamit </string>
+    <string name = "button_text_leaderboard"> Leaderboard </string>
+    <string name = "button_text_rate"> Rate </string>
+    <string name = "button_text_more"> Higit pa </string>
+    <string name = "button_text_menu"> Menu </string>
+    <string name = "button_text_start"> Magsimula </string>
+    <string name = "button_text_options"> Mga Pagpipilian </string>
+    <string name = "button_text_exit"> Lumabas </string>
+    <string name = "vibrate_on"> Vibrate: On </string>
+    <string name = "vibrate_off"> Vibrate: Off </string>
+    <string name = "sound_on"> Tunog: Sa </string>
+    <string name = "sound_off"> Tunog: Off </string>
+    <string name = "text_header_level_select"> Piliin ang Antas </string>
+    <string name = "header_option_difficulty"> Kasanayan: </string>
+    <string name = "header_option_mode"> Mode: </string>
+</resources>

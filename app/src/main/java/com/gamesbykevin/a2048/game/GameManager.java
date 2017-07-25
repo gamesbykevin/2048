@@ -239,10 +239,14 @@ public class GameManager {
                 getBoard().update();
 
                 //update the blocks accordingly on where we want to head
-                BoardHelper.merge(getBoard(), this.merge, true);
+                boolean result = BoardHelper.merge(getBoard(), this.merge, true);
 
-                //we can go to updating
-                STEP = Step.Merging;
+                //if a change was made, we can continue with the next step
+                if (result) {
+                    STEP = Step.Merging;
+                } else {
+                    STEP = Step.Updating;
+                }
                 break;
 
             case Merging:

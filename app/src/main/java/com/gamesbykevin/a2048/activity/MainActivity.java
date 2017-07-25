@@ -40,13 +40,11 @@ public class MainActivity extends BaseGameActivity {
 
     @Override
     protected void onDestroy() {
+
         super.onDestroy();
 
         //recycle resources
         super.dispose();
-
-        //log out of google play services
-        super.signOut();
     }
 
     @Override

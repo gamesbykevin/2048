@@ -91,8 +91,12 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
         //start loading step
         STEP = Step.Loading;
 
+        //create a new instance of our level items, if it doesn't yet exist
+        if (STATS == null)
+            GameActivity.STATS = new Stats(this);
+
         //first assign default level is 0
-        STATS.setLevelIndex(0);
+        getStats().setLevelIndex(0);
 
         //set the content view
         setContentView(R.layout.activity_game);
@@ -151,16 +155,20 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
     @Override
     public void onItemClick(final AdapterView<?> arg0, final View view, final int position, final long id)
     {
+        //create a new instance of our level items, if it doesn't yet exist
+        if (STATS == null)
+            GameActivity.STATS = new Stats(this);
+
         //if puzzle mode, generate board with the specified seed
         if (MODE == Mode.Puzzle) {
 
             //assign the level selected
-            STATS.setLevelIndex(STATS.getLevels().get(position).getLevelIndex());
+            getStats().setLevelIndex(STATS.getLevels().get(position).getLevelIndex());
 
         } else {
 
             //assign the level selected (technically won't be called since puzzle mode only has level select)
-            STATS.setLevelIndex(0);
+            getStats().setLevelIndex(0);
         }
 
         //reset the game
@@ -378,13 +386,22 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
     public void onClickRestart(View view) {
 
         //always stay at level 0 since it isn't puzzle mode
-        STATS.setLevelIndex(0);
+        getStats().setLevelIndex(0);
 
         //flag the game to reset
         STEP = Step.Reset;
 
         //go back to the ready step
         setScreen(Screen.Ready);
+    }
+
+    private Stats getStats() {
+
+        //create a new instance of our level items, if it doesn't yet exist
+        if (STATS == null)
+            GameActivity.STATS = new Stats(this);
+
+        return STATS;
     }
 
     public void onClickLevelSelect(View view) {

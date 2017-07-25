@@ -13,6 +13,7 @@ import static com.gamesbykevin.a2048.board.BoardHelper.getBoardDimensions;
 
 import com.gamesbykevin.a2048.game.GameManager.Step;
 import com.gamesbykevin.a2048.services.GooglePlayServicesHelper;
+import com.gamesbykevin.a2048.util.UtilityHelper;
 import com.gamesbykevin.androidframework.base.Cell;
 
 import java.util.ArrayList;
@@ -198,17 +199,29 @@ public class Board {
      */
     public Block getBlock(int col, int row) {
 
-        //check each block in the list
-        for (int i = 0; i < getBlocks().size(); i++) {
-            if (getBlocks().get(i).hasLocation(col, row))
-                return getBlock(i);
+        try {
+            //check each block in the list
+            for (int i = 0; i < getBlocks().size(); i++) {
+
+                //make sure the index stays in bounds, this shouldn't happen
+                if (i >= getBlocks().size())
+                    continue;
+
+                //get the current block
+                Block block = getBlocks().get(i);
+
+                //this should not happen
+                if (block == null)
+                    continue;
+
+                if (block.hasLocation(col, row))
+                    return block;
+            }
+        } catch (Exception e) {
+            UtilityHelper.handleException(e);
         }
 
         return null;
-    }
-
-    public Block getBlock(final int index) {
-        return getBlocks().get(index);
     }
 
     /**

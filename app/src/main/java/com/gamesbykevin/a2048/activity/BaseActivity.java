@@ -244,12 +244,22 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void destroySound() {
 
-        for (Integer resId : MUSIC.keySet()) {
-            stopSound(resId);
-            MUSIC.get(resId).release();
+        //make sure the hash map exists before we recycle it
+        if (MUSIC != null) {
+
+            for (Integer resId : MUSIC.keySet()) {
+
+                //make sure the audio exists before we recycle it
+                if (MUSIC.get(resId) != null) {
+                    stopSound(resId);
+                    MUSIC.get(resId).release();
+                    MUSIC.put(resId, null);
+                }
+            }
+
+            MUSIC.clear();
         }
 
-        MUSIC.clear();
         MUSIC = null;
     }
 

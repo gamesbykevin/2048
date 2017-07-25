@@ -56,27 +56,24 @@ public class BoardHelper {
      * @param board The board we are merging
      * @param merge The direction of the merge
      * @param combine Do we combine similar blocks?
+     * @return true if any blocks were moved / merged, false otherwise
      */
-    public static void merge(Board board, GameManager.Merge merge, boolean combine) {
+    public static boolean merge(Board board, GameManager.Merge merge, boolean combine) {
 
-        //merge the board accordingly
+        //merge the board accordingly and return the result
         switch (merge) {
 
             case North:
-                mergeVertical(board, combine, false);
-                break;
+                return mergeVertical(board, combine, false);
 
             case South:
-                mergeVertical(board, combine, true);
-                break;
+                return mergeVertical(board, combine, true);
 
             case West:
-                mergeHorizontal(board, combine, false);
-                break;
+                return mergeHorizontal(board, combine, false);
 
             case East:
-                mergeHorizontal(board, combine, true);
-                break;
+                return mergeHorizontal(board, combine, true);
 
             default:
                 throw new RuntimeException("Merge not handled here: " + merge.toString());
@@ -88,8 +85,12 @@ public class BoardHelper {
      * @param board The board containing the blocks we want to merge
      * @param combine If the blocks match do we combine them together?
      * @param east true if you want to merge east, false we will merge west
+     * @return true if any blocks were moved / merged, false otherwise
      */
-    private static void mergeHorizontal(Board board, boolean combine, boolean east) {
+    private static boolean mergeHorizontal(Board board, boolean combine, boolean east) {
+
+        //did we move/merge any blocks?
+        boolean result = false;
 
         //check every row
         for (int row = 0; row < board.getRows(); row++) {
@@ -122,6 +123,9 @@ public class BoardHelper {
                 //if the block value matches the previous we can merge
                 if (block.getValue() == previousValue && combine) {
 
+                    //flag that a change occurred
+                    result = true;
+
                     //update the target of the current block
                     block.setColTarget(columnMerge);
 
@@ -135,6 +139,10 @@ public class BoardHelper {
                     columnNoMerge = columnMerge;
 
                 } else {
+
+                    //flag that a change occurred
+                    if (block.getCol() != columnNoMerge)
+                        result = true;
 
                     //update the target of the current block
                     block.setColTarget(columnNoMerge);
@@ -150,6 +158,8 @@ public class BoardHelper {
                 }
             }
         }
+
+        return result;
     }
 
     /**
@@ -157,8 +167,12 @@ public class BoardHelper {
      * @param board The board containing the blocks we want to merge
      * @param combine If the blocks match do we combine them together?
      * @param south true if you want to merge south, false we will merge north
+     * @return true if any blocks were moved / merged, false otherwise
      */
-    private static void mergeVertical(Board board, boolean combine, boolean south) {
+    private static boolean mergeVertical(Board board, boolean combine, boolean south) {
+
+        //did we move/merge any blocks?
+        boolean result = false;
 
         //check each column
         for (int col = 0; col < board.getCols(); col++) {
@@ -191,6 +205,9 @@ public class BoardHelper {
                 //if the block value matches the previous we can merge
                 if (block.getValue() == previousValue && combine) {
 
+                    //flag that a change occurred
+                    result = true;
+
                     //update the target of the current block
                     block.setRowTarget(rowMerge);
 
@@ -204,6 +221,10 @@ public class BoardHelper {
                     rowNoMerge = rowMerge;
 
                 } else {
+
+                    //flag that a change occurred
+                    if (block.getRow() != rowNoMerge)
+                        result = true;
 
                     //update the target of the current block
                     block.setRowTarget(rowNoMerge);
@@ -219,6 +240,8 @@ public class BoardHelper {
                 }
             }
         }
+
+        return result;
     }
 
     /**
@@ -230,13 +253,6 @@ public class BoardHelper {
 
         //clear the list
         NEW_BLOCKS.clear();
-
-        /*
-        //reset our block counts to 0
-        for (int i = 0; i < VALUES.length; i++) {
-            NEW_BLOCKS.put(VALUES[i], 0);
-        }
-        */
 
         //get the list of blocks from our board
         List<Block> blocks = board.getBlocks();
