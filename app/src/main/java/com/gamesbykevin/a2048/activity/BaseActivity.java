@@ -264,16 +264,21 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void stopSound() {
-        for (Integer key : MUSIC.keySet()) {
-            stopSound(key);
+        if (MUSIC != null && !MUSIC.isEmpty()) {
+            for (Integer key : MUSIC.keySet()) {
+                stopSound(key);
+            }
         }
     }
 
     public void stopSound(final int resId) {
         try {
-            //get the song and stop if playing
-            if (MUSIC.get(resId).isPlaying() || MUSIC.get(resId).isLooping())
-                MUSIC.get(resId).pause();
+            //make sure the values are there etc...
+            if (MUSIC != null && !MUSIC.isEmpty() && MUSIC.get(resId) != null) {
+                //get the song and stop if playing
+                if (MUSIC.get(resId).isPlaying() || MUSIC.get(resId).isLooping())
+                    MUSIC.get(resId).pause();
+            }
         } catch (Exception e) {
             UtilityHelper.handleException(e);
         }

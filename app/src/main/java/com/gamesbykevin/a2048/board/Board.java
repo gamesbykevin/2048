@@ -107,6 +107,26 @@ public class Board {
         reset();
     }
 
+    //cleanup
+    public void dispose() {
+        if (blocks != null) {
+            blocks.clear();
+            blocks = null;
+        }
+
+        block = null;
+
+        if (background != null) {
+            background.dispose();
+            background = null;
+        }
+
+        if (available != null) {
+            available.clear();
+            available =  null;
+        }
+    }
+
     /**
      * Reset the board and spawn blocks etc...
      */
@@ -199,14 +219,14 @@ public class Board {
      */
     public Block getBlock(int col, int row) {
 
-        try {
-            //check each block in the list
-            for (int i = 0; i < getBlocks().size(); i++) {
+        //check each block in the list
+        for (int i = 0; i < getBlocks().size(); i++) {
 
-                //make sure the index stays in bounds, this shouldn't happen
-                if (i >= getBlocks().size())
-                    continue;
+            //make sure the index stays in bounds, this shouldn't happen
+            if (i >= getBlocks().size())
+                continue;
 
+            try {
                 //get the current block
                 Block block = getBlocks().get(i);
 
@@ -216,9 +236,9 @@ public class Board {
 
                 if (block.hasLocation(col, row))
                     return block;
+            } catch (Exception e) {
+                UtilityHelper.handleException(e);
             }
-        } catch (Exception e) {
-            UtilityHelper.handleException(e);
         }
 
         return null;
@@ -447,15 +467,19 @@ public class Board {
         for (int col = 0; col < getCols(); col++) {
             for (int row = 0; row < getRows(); row++) {
 
-                //get the current block
-                Block block = getBlock(col, row);
+                try {
+                    //get the current block
+                    Block block = getBlock(col, row);
 
-                //if the block doesn't exist here, skip to the next
-                if (block == null)
-                    continue;
+                    //if the block doesn't exist here, skip to the next
+                    if (block == null)
+                        continue;
 
-                //assign the appropriate texture
-                block.assignTextures(textures);
+                    //assign the appropriate texture
+                    block.assignTextures(textures);
+                } catch (Exception e) {
+                    UtilityHelper.handleException(e);
+                }
             }
         }
     }
@@ -465,9 +489,6 @@ public class Board {
      * @param gl Surface used for rendering pixels
      */
     public void draw(GL10 gl) throws Exception {
-
-        //render the border
-        //?
 
         //render the background tiles
         for (int col = 0; col < getCols(); col++) {
@@ -492,34 +513,50 @@ public class Board {
         //render all the blocks that aren't expanding/collapsing
         for (int i = 0; i < getBlocks().size(); i++) {
 
-            //get the current block
-            final Block tmp = getBlocks().get(i);
+            try {
+                //get the current block
+                final Block tmp = getBlocks().get(i);
 
-            //skip blocks that are in transition
-            if (tmp.hasExpand() || tmp.hasCollapse())
-                continue;
+                //if null don't continue
+                if (tmp == null)
+                    continue;
 
-            //update block attributes
-            block.updateBlock(tmp);
+                //skip blocks that are in transition
+                if (tmp.hasExpand() || tmp.hasCollapse())
+                    continue;
 
-            //render the block
-            block.render(gl);
+                //update block attributes
+                block.updateBlock(tmp);
+
+                //render the block
+                block.render(gl);
+            } catch (Exception e) {
+                UtilityHelper.handleException(e);
+            }
         }
 
         //now render all the blocks that are expanding/collapsing so they appear on the top
         for (int i = 0; i < getBlocks().size(); i++) {
 
-            final Block tmp = getBlocks().get(i);
+            try {
+                final Block tmp = getBlocks().get(i);
 
-            //skip blocks that aren't in transition
-            if (!tmp.hasExpand() && !tmp.hasCollapse())
-                continue;
+                //if null don't continue
+                if (tmp == null)
+                    continue;
 
-            //update block attributes
-            block.updateBlock(tmp);
+                //skip blocks that aren't in transition
+                if (!tmp.hasExpand() && !tmp.hasCollapse())
+                    continue;
 
-            //render the block
-            block.render(gl);
+                //update block attributes
+                block.updateBlock(tmp);
+
+                //render the block
+                block.render(gl);
+            } catch (Exception e) {
+                UtilityHelper.handleException(e);
+            }
         }
     }
 }

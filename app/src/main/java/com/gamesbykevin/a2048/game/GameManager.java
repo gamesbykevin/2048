@@ -86,6 +86,16 @@ public class GameManager {
         //do anything here?
     }
 
+    public void dispose() {
+
+        this.merge = null;
+
+        if (board != null) {
+            board.dispose();
+            board = null;
+        }
+    }
+
     public boolean onTouchEvent(final int action, final float x, final float y) {
 
         //don't continue if we aren't ready yet

@@ -164,7 +164,6 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
 
             //assign the level selected
             getStats().setLevelIndex(STATS.getLevels().get(position).getLevelIndex());
-
         } else {
 
             //assign the level selected (technically won't be called since puzzle mode only has level select)
@@ -215,6 +214,10 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
         super.onDestroy();
 
         //cleanup resources
+        if (MANAGER != null) {
+            MANAGER.dispose();
+            MANAGER = null;
+        }
     }
 
     @Override
@@ -359,6 +362,10 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
                 //update list so it displays correct information
                 refreshLevelSelect();
 
+                //navigate to our current position
+                GridView levelSelectGrid = (GridView)findViewById(R.id.levelSelectGrid);
+                levelSelectGrid.setSelection(getStats().getLevelIndex());
+
                 //go to level select screen
                 setScreen(Screen.LevelSelect);
 
@@ -411,6 +418,10 @@ public class GameActivity extends BaseGameActivity implements AdapterView.OnItem
 
         //update level select
         refreshLevelSelect();
+
+        //navigate to our current position
+        GridView levelSelectGrid = (GridView)findViewById(R.id.levelSelectGrid);
+        levelSelectGrid.setSelection(getStats().getLevelIndex());
     }
 
     public void onClickMenu(View view) {
